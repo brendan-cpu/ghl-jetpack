@@ -1,0 +1,2625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHL Jetpack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+<!-- ═══ AUTH GATE ═══ -->
+<div id="license-gate">
+  <div class="lg-box">
+    <div class="lg-logo">
+      <div class="lg-logo-icon"><img src="assets/index-logo.png" style="width:36px;height:36px;object-fit:contain;"></div>
+      <div>
+        <div class="lg-logo-title">GHL Jetpack</div>
+        <div class="lg-logo-sub">GHL University · Growing Entrepreneur</div>
+      </div>
+    </div>
+    <hr class="lg-divider">
+
+    <!-- Sign In Panel -->
+    <div id="auth-panel-signin">
+      <div class="lg-heading" style="margin-bottom:14px">Sign In</div>
+      <div class="lg-field">
+        <label>Email</label>
+        <input class="lg-input" type="email" id="auth-email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="lg-field" style="margin-top:10px">
+        <label>Password</label>
+        <div class="lg-input-wrap">
+          <input class="lg-input" type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password">
+          <button class="lg-eye" onclick="toggleVis('auth-password')">👁</button>
+        </div>
+      </div>
+      <div class="lg-error" id="lg-error"></div>
+      <button class="lg-btn" id="lg-btn" onclick="handleSignIn()" style="margin-top:14px">Sign In →</button>
+      <div class="lg-divider-or">or</div>
+      <button class="lg-google-btn" onclick="handleGoogleSignIn()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
+      <div class="lg-footer" style="margin-top:12px">
+        Don't have an account? <a href="#" onclick="showAuthPanel('signup')" style="color:var(--yellow)">Create one</a><br>
+        <a href="#" onclick="handleMagicLink()" style="color:var(--w50);font-size:9px">Send magic link instead</a>
+      </div>
+    </div>
+
+    <!-- Sign Up Panel -->
+    <div id="auth-panel-signup" style="display:none">
+      <div class="lg-heading" style="margin-bottom:14px">Create Account</div>
+      <div class="lg-field">
+        <label>Full Name</label>
+        <input class="lg-input" type="text" id="auth-name" placeholder="Your name" autocomplete="name">
+      </div>
+      <div class="lg-field" style="margin-top:10px">
+        <label>Email</label>
+        <input class="lg-input" type="email" id="auth-email-up" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="lg-field" style="margin-top:10px">
+        <label>Password</label>
+        <div class="lg-input-wrap">
+          <input class="lg-input" type="password" id="auth-password-up" placeholder="Min 8 characters" autocomplete="new-password">
+          <button class="lg-eye" onclick="toggleVis('auth-password-up')">👁</button>
+        </div>
+      </div>
+      <div class="lg-error" id="lg-error-up"></div>
+      <button class="lg-btn" id="lg-btn-up" onclick="handleSignUp()" style="margin-top:14px">Create Account →</button>
+      <div class="lg-divider-or">or</div>
+      <button class="lg-google-btn" onclick="handleGoogleSignIn()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
+      <div class="lg-footer" style="margin-top:12px">
+        Already have an account? <a href="#" onclick="showAuthPanel('signin')" style="color:var(--yellow)">Sign in</a>
+      </div>
+    </div>
+
+    <!-- Magic Link Sent Panel -->
+    <div id="auth-panel-magic" style="display:none;text-align:center;padding:10px 0">
+      <div style="font-size:32px;margin-bottom:12px">📬</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:8px">Check your email</div>
+      <div style="font-size:11px;color:var(--w50);line-height:1.6">We sent a magic link to your email.<br>Click it to sign in instantly.</div>
+      <div style="margin-top:16px"><a href="#" onclick="showAuthPanel('signin')" style="color:var(--yellow);font-size:10px">Back to sign in</a></div>
+    </div>
+
+    <!-- Verify Email Panel -->
+    <div id="auth-panel-verify" style="display:none;text-align:center;padding:10px 0">
+      <div style="font-size:32px;margin-bottom:12px">✉️</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:8px">Verify your email</div>
+      <div style="font-size:11px;color:var(--w50);line-height:1.6">We sent a confirmation link to your email.<br>Click it to activate your account, then sign in.</div>
+      <div style="margin-top:16px"><a href="#" onclick="showAuthPanel('signin')" style="color:var(--yellow);font-size:10px">Back to sign in</a></div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══ PRICING MODAL ═══ -->
+<div id="pricing-modal">
+  <div class="pm-box" style="position:relative">
+    <button class="pm-close" onclick="closePricing()">✕</button>
+    <div class="pm-header">
+      <div class="pm-title">Upgrade GHL Jetpack</div>
+      <div class="pm-sub">Unlock more tools and automation for your GHL business</div>
+    </div>
+    <div class="pm-billing-toggle">
+      <span id="pm-lbl-mo" class="active">Monthly</span>
+      <div class="pm-toggle-track" id="pm-toggle" onclick="toggleBilling()">
+        <div class="pm-toggle-thumb"></div>
+      </div>
+      <span id="pm-lbl-yr">Annual</span>
+      <span class="pm-save-badge">Save 20%</span>
+    </div>
+    <div class="pm-cards">
+      <!-- BASIC -->
+      <div class="pm-card">
+        <div class="pm-card-name">Basic</div>
+        <div class="pm-card-price">
+          <span class="amount" id="pm-price-basic">$27</span>
+          <span class="period" id="pm-period-basic">/mo</span>
+        </div>
+        <div class="pm-card-desc">Core business profile builder for GHL users just getting started.</div>
+        <div class="pm-card-features">
+          <div class="pm-card-feature"><span class="check">✓</span> Foundational Docs</div>
+          <div class="pm-card-feature"><span class="check">✓</span> Core Setup Builder</div>
+          <div class="pm-card-feature"><span class="cross">✗</span> Launchpads</div>
+          <div class="pm-card-feature"><span class="cross">✗</span> Marketing Engine</div>
+        </div>
+        <button class="pm-card-btn secondary" id="pm-btn-basic" onclick="startCheckout('basic')">Get Basic</button>
+      </div>
+      <!-- PRO -->
+      <div class="pm-card featured">
+        <div class="pm-card-badge">MOST POPULAR</div>
+        <div class="pm-card-name">Pro</div>
+        <div class="pm-card-price">
+          <span class="amount" id="pm-price-pro">$67</span>
+          <span class="period" id="pm-period-pro">/mo</span>
+        </div>
+        <div class="pm-card-desc">Full launchpad suite to build and launch your offers fast.</div>
+        <div class="pm-card-features">
+          <div class="pm-card-feature"><span class="check">✓</span> Foundational Docs</div>
+          <div class="pm-card-feature"><span class="check">✓</span> Core Setup Builder</div>
+          <div class="pm-card-feature"><span class="check">✓</span> All 3 Launchpads</div>
+          <div class="pm-card-feature"><span class="cross">✗</span> Marketing Engine</div>
+        </div>
+        <button class="pm-card-btn primary" id="pm-btn-pro" onclick="startCheckout('pro')">Get Pro</button>
+      </div>
+      <!-- AGENCY -->
+      <div class="pm-card">
+        <div class="pm-card-name">Agency</div>
+        <div class="pm-card-price">
+          <span class="amount" id="pm-price-agency">$147</span>
+          <span class="period" id="pm-period-agency">/mo</span>
+        </div>
+        <div class="pm-card-desc">Everything + full marketing engine and white-label options.</div>
+        <div class="pm-card-features">
+          <div class="pm-card-feature"><span class="check">✓</span> Foundational Docs</div>
+          <div class="pm-card-feature"><span class="check">✓</span> Core Setup Builder</div>
+          <div class="pm-card-feature"><span class="check">✓</span> All 3 Launchpads</div>
+          <div class="pm-card-feature"><span class="check">✓</span> Marketing Engine</div>
+        </div>
+        <button class="pm-card-btn secondary" id="pm-btn-agency" onclick="startCheckout('agency')">Get Agency</button>
+      </div>
+    </div>
+    <div class="pm-footer">🔒 Secure checkout via Stripe · Cancel anytime · All prices in USD</div>
+  </div>
+</div>
+
+<!-- ═══ CREDENTIALS MODAL ═══ -->
+<div id="cred-modal" style="display:none">
+  <div class="cred-modal-box">
+    <div class="cred-modal-header">
+      <div class="cred-modal-icon"><img src="assets/index-logo.png" style="width:36px;height:36px;object-fit:contain;"></div>
+      <div>
+        <div class="cred-modal-title">GHL Jetpack</div>
+        <div class="cred-modal-sub">GHL University · Growing Entrepreneur</div>
+      </div>
+      <button id="cred-close-btn" onclick="closeCredModal()" style="display:none;margin-left:auto;background:none;border:none;color:var(--w50);font-size:18px;cursor:pointer;padding:4px 8px;line-height:1;border-radius:4px;transition:color 0.15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--w50)'">✕</button>
+    </div>
+    <div class="cred-modal-body">
+
+      <div>
+        <div class="cred-section-label">① Claude AI</div>
+        <div class="cred-field">
+          <label>Anthropic API Key</label>
+          <div class="cred-input-wrap">
+            <input class="cred-input" type="password" id="inp-claude" placeholder="sk-ant-api03-…" autocomplete="off">
+            <button class="eye-btn" onclick="toggleVis('inp-claude')">👁</button>
+          </div>
+          <div class="cred-hint">Stored in your browser only · <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div>
+        </div>
+      </div>
+
+      <div class="cred-divider"></div>
+
+      <div>
+        <div class="cred-section-label">② GoHighLevel Sub-Account</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="cred-field">
+            <label>Private Integration Token</label>
+            <div class="cred-input-wrap">
+              <input class="cred-input" type="password" id="inp-ghl-token" placeholder="eyJhbGc…" autocomplete="off">
+              <button class="eye-btn" onclick="toggleVis('inp-ghl-token')">👁</button>
+            </div>
+            <div class="cred-hint">GHL → Settings → Integrations → Private Integrations → Create</div>
+          </div>
+          <div class="cred-field">
+            <label>Location ID</label>
+            <div class="cred-input-wrap">
+              <input class="cred-input" type="text" id="inp-ghl-location" placeholder="abc123xyz…" style="padding-right:12px">
+            </div>
+            <div class="cred-hint">GHL → Settings → Business Profile → scroll to Location ID</div>
+          </div>
+          <div class="cred-field">
+            <label>Agency White-Label URL <span style="color:var(--w30);font-weight:400">(optional)</span></label>
+            <div class="cred-input-wrap">
+              <input class="cred-input" type="text" id="inp-ghl-url" placeholder="app.youragency.com" autocomplete="off" style="padding-right:12px">
+            </div>
+            <div class="cred-hint">Your white-labeled GHL domain · Leave blank to use app.gohighlevel.com</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cred-error" id="cred-error"></div>
+
+      <button class="btn-verify" id="btn-verify" onclick="verifyCreds()">Verify & Enter Builder →</button>
+      <div class="cred-footnote">Credentials never leave your browser · Stored locally only</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN APP ═══ -->
+<div id="app" style="display:none">
+
+  <!-- Top Nav -->
+  <div id="topnav">
+    <div class="brand">
+      <div class="brand-icon"><img src="assets/index-logo.png" style="width:30px;height:30px;object-fit:contain;"></div>
+      <div>
+        <div class="brand-name">GHL Jetpack</div><span id="tier-badge" class="tier-badge" style="display:none;margin-left:8px"></span><button id="upgrade-btn" onclick="openPricing()" style="display:none;margin-left:10px;background:var(--yellow);color:#000;border:none;border-radius:6px;padding:4px 12px;font-size:9px;font-weight:800;font-family:var(--font);cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;">Upgrade</button><button id="billing-btn" onclick="openBillingPortal()" style="display:none;margin-left:6px;background:rgba(255,255,255,0.08);color:var(--w50);border:1px solid var(--border2);border-radius:6px;padding:4px 12px;font-size:9px;font-weight:700;font-family:var(--font);cursor:pointer;">Manage Plan</button>
+        <div class="brand-sub">GHL University</div>
+      </div>
+    </div>
+    <div class="topnav-tabs">
+      <button class="topnav-tab active" id="tab-core-setup" onclick="switchTopTab('core-setup')">⚙️ Core Setup</button>
+      <button class="topnav-tab" id="tab-launchpads"       onclick="switchTopTab('launchpads')">🚀 Launchpads</button>
+      <button class="topnav-tab locked" id="tab-marketing" onclick="switchTopTab('marketing')"><span class="lock-icon">🔒</span> Marketing</button>
+    </div>
+    <div class="topnav-right">
+      <div class="completion-ring" id="overall-completion">
+        <span id="overall-pct">0%</span> <span style="color:var(--w30)">complete</span>
+      </div>
+      <button class="cred-btn load-ghl-btn" id="btn-load-ghl" onclick="loadFromGHL()">↓ Load from GHL</button>
+      <span id="load-ghl-status" class="load-ghl-status"></span>
+      <button class="cred-btn" onclick="openCredModal()">⚙ Credentials</button>
+      <button class="cred-btn" onclick="doLogout()" style="border-color:rgba(255,71,87,0.3);color:rgba(255,71,87,0.7);" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='rgba(255,71,87,0.3)';this.style.color='rgba(255,71,87,0.7)'">⏻ Log Out</button>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div id="body">
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <div class="sidebar-section-label">Foundational Documents</div>
+      <button class="sidebar-item active" id="sib-business"  onclick="switchDoc('business')">
+        Business Profile <div class="item-status" id="dot-business"></div>
+      </button>
+      <button class="sidebar-item" id="sib-brand"     onclick="switchDoc('brand')">
+        Brand Guidelines <div class="item-status" id="dot-brand"></div>
+      </button>
+      <button class="sidebar-item" id="sib-audience"  onclick="switchDoc('audience')">
+        Audience Profile <div class="item-status" id="dot-audience"></div>
+      </button>
+      <button class="sidebar-item" id="sib-offers"    onclick="switchDoc('offers')">
+        Offers Portfolio <div class="item-status" id="dot-offers"></div>
+      </button>
+    </div>
+
+    <!-- Main -->
+    <div id="main">
+      <div id="page-content"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   FIELD DEFINITIONS
+═══════════════════════════════════════ */
+const DOCS = {
+
+  business: {
+    label: 'Business Profile',
+    icon: '🏢',
+    sub: 'Core identity, what you do, who you serve, and how your business operates.',
+    sections: [
+      {
+        label: 'Core Identity',
+        fields: [
+          { key:'biz_name',        name:'Business Name',         ghl:'Authority - Business Name',        desc:'Your primary brand name', placeholder:'e.g. GHL University', rows:1 },
+          { key:'biz_role',        name:'Your Role / Title',     ghl:'Authority - Founder Role',         desc:'How you position yourself', placeholder:'e.g. Authority Engineer & Systems Architect', rows:1 },
+          { key:'biz_what',        name:'What You Do',           ghl:'Authority - What You Do',          desc:'One clear sentence on what the business does', placeholder:'e.g. We help coaches turn their messy GHL into a clean Authority Operating System', rows:2 },
+          { key:'biz_who',         name:'Who You Serve',         ghl:'Authority - Who You Serve',        desc:'Your core target market', placeholder:'e.g. Already-monetized coaches and consultants doing $10k–$100k+/mo using GHL', rows:2 },
+          { key:'biz_mantra',      name:'Brand Mantra',          ghl:'Authority - Brand Mantra',         desc:'Your core operating principle', placeholder:'e.g. Structure over chaos. Authority installed.', rows:1 },
+        ]
+      },
+      {
+        label: 'Positioning',
+        fields: [
+          { key:'biz_positioning', name:'Primary Positioning Line', ghl:'Authority - Positioning Line', desc:'Your main external-facing statement', placeholder:'e.g. Turn GHL into a simple system that actually runs your business', rows:2 },
+          { key:'biz_clarifier',   name:'Clarifier',              ghl:'Authority - Clarifier',          desc:'A supporting sentence that expands on the positioning line', placeholder:'e.g. We install a clean Authority Operating System in Go High Level...', rows:2 },
+          { key:'biz_category',    name:'Category Label',         ghl:'Authority - Category',           desc:'How you define the category you compete in', placeholder:'e.g. Authority Systems & GHL Implementation Partner for Coaches', rows:1 },
+        ]
+      },
+      {
+        label: 'Ideal Buyer',
+        fields: [
+          { key:'biz_buyer_stage', name:'Buyer Stage / Revenue',  ghl:'Authority - Buyer Stage',        desc:'Where your ideal buyer is in their journey', placeholder:'e.g. Already monetized at $10k–$100k+/month with a proven offer', rows:1 },
+          { key:'biz_buyer_pain',  name:'Primary Pain Point',     ghl:'Authority - Primary Pain',       desc:'The #1 problem your ideal client is experiencing', placeholder:'e.g. Messy GHL, founder bottleneck, every launch feels like a rebuild', rows:2 },
+          { key:'biz_buyer_want',  name:'Desired Outcome',        ghl:'Authority - Desired Outcome',    desc:'What they ultimately want to achieve', placeholder:'e.g. One clean system that runs their business without them being the bottleneck', rows:2 },
+          { key:'biz_repels',      name:'Who You Repel',          ghl:'Authority - Who You Repel',      desc:'Who this is NOT for — be specific', placeholder:'e.g. Beginners without offers, hack hunters, anti-structure personalities', rows:2 },
+        ]
+      },
+    ]
+  },
+
+  brand: {
+    label: 'Brand Guidelines',
+    icon: '🎨',
+    sub: 'Voice, tone, visual identity, and communication standards.',
+    sections: [
+      {
+        label: 'Voice & Tone',
+        fields: [
+          { key:'brand_voice',      name:'Voice Attributes',      ghl:'Authority - Brand Voice',         desc:'Core adjectives that define how you communicate', placeholder:'e.g. Direct, Calm, Structured, Insightful, No-hype', rows:1 },
+          { key:'brand_tone',       name:'Tone Description',      ghl:'Authority - Brand Tone',          desc:'How the tone feels in practice', placeholder:'e.g. Operator-to-operator. Friendly but not chummy. Smart but not academic.', rows:2 },
+          { key:'brand_avoid',      name:'What To Avoid',         ghl:'Authority - Brand Avoid',         desc:'Language, phrases, and styles to never use', placeholder:'e.g. Hype income claims, bro-marketing, hustle culture, emoji spam', rows:2 },
+        ]
+      },
+      {
+        label: 'Messaging',
+        fields: [
+          { key:'brand_tagline',    name:'Primary Tagline',        ghl:'Authority - Tagline',             desc:'Your most repeatable short phrase', placeholder:'e.g. Authority · Systems · Scale', rows:1 },
+          { key:'brand_promise',    name:'Core Promise',           ghl:'Authority - Core Promise',        desc:'What you guarantee to deliver (not revenue)', placeholder:'e.g. A clean, documented Authority OS in GHL. Working systems guaranteed.', rows:2 },
+          { key:'brand_pillars',    name:'Messaging Pillars',      ghl:'Authority - Messaging Pillars',   desc:'The 3–5 recurring themes across all content', placeholder:'e.g. Authority-first · Simple scalable GHL builds · Virtual events as growth engine', rows:2 },
+          { key:'brand_enemy',      name:'The Enemy (The Old Way)', ghl:'Authority - Brand Enemy',        desc:'What you stand against — the chaos you replace', placeholder:'e.g. Duct-taped tools, random snapshots, personality-dependent businesses, heroic launches', rows:2 },
+        ]
+      },
+      {
+        label: 'Visual Identity',
+        fields: [
+          { key:'brand_colors',     name:'Brand Colors',           ghl:'Authority - Brand Colors',        desc:'Your official color palette with hex codes', placeholder:'e.g. Navy #01243D · Yellow #FFBB00 · Green #37CA37 · Blue #158AF6', rows:1 },
+          { key:'brand_fonts',      name:'Fonts',                  ghl:'Authority - Brand Fonts',         desc:'Typography choices for headings and body', placeholder:'e.g. Montserrat (headings/UI) · Century Gothic (logo only)', rows:1 },
+          { key:'brand_vibe',       name:'Design Vibe',            ghl:'Authority - Design Vibe',         desc:'How the visual aesthetic feels overall', placeholder:'e.g. Clean dashboard meets private equity deck. Dark navy, gold accents, generous whitespace.', rows:2 },
+        ]
+      },
+    ]
+  },
+
+  audience: {
+    label: 'Audience Profile',
+    icon: '👥',
+    sub: 'Detailed profiles of your four priority market segments.',
+    sections: [
+      {
+        label: 'Priority Segment 1 — Core Client (Messy GHL)',
+        fields: [
+          { key:'aud1_situation',   name:'Current Situation',      ghl:'Authority - Seg1 Situation',      desc:'Where they are right now', placeholder:'e.g. Monetized coach with messy GHL, layered snapshots, founder bottleneck', rows:2 },
+          { key:'aud1_triggers',    name:'Buying Triggers',        ghl:'Authority - Seg1 Triggers',       desc:'What makes them reach out and buy', placeholder:'e.g. Launch breaks, missed leads, VA touches something and it breaks, fear during events', rows:2 },
+          { key:'aud1_pains',       name:'Core Pains (VOC)',       ghl:'Authority - Seg1 Pains',          desc:'Exact language your client uses to describe their pain', placeholder:'e.g. "I can\'t scale if my backend keeps breaking." "Nobody else understands the system."', rows:3 },
+          { key:'aud1_outcomes',    name:'Desired Outcomes',       ghl:'Authority - Seg1 Outcomes',       desc:'What success looks like for them in 90 days', placeholder:'e.g. Clean pipelines, repeatable event engine, founder out of day-to-day tech', rows:2 },
+        ]
+      },
+      {
+        label: 'Priority Segment 2 — Migrating Expert',
+        fields: [
+          { key:'aud2_situation',   name:'Current Situation',      ghl:'Authority - Seg2 Situation',      desc:'Where they are right now', placeholder:'e.g. On Kajabi/ClickFunnels + Zapier, wants to consolidate into GHL', rows:2 },
+          { key:'aud2_triggers',    name:'Buying Triggers',        ghl:'Authority - Seg2 Triggers',       desc:'What pushes them to make a move', placeholder:'e.g. Integrations break, rising costs, peer running clean GHL, pre-launch desire to fix foundation', rows:2 },
+          { key:'aud2_objections',  name:'Key Objections',         ghl:'Authority - Seg2 Objections',     desc:'What holds them back from buying', placeholder:'e.g. Migration risk, losing data, "we can\'t pause launches", fear of downtime', rows:2 },
+        ]
+      },
+      {
+        label: 'Priority Segment 3 & 4 — Agency + DIY',
+        fields: [
+          { key:'aud3_agency',      name:'GHL Agency Profile',     ghl:'Authority - Seg3 Agency',         desc:'Who the GHL agency/implementer is and what they need', placeholder:'e.g. Builds for clients, inconsistent architecture, wants standardized launchpads and delivery', rows:2 },
+          { key:'aud4_diy',         name:'DIY Operator Profile',   ghl:'Authority - Seg4 DIY',            desc:'Who the self-directed learner is and what they need', placeholder:'e.g. Earlier stage, learning via YouTube/Skool, wants structured path, may upgrade later', rows:2 },
+        ]
+      },
+    ]
+  },
+
+  offers: {
+    label: 'Offers Portfolio',
+    icon: '💼',
+    sub: 'Your complete offer ladder, pricing, and delivery model.',
+    sections: [
+      {
+        label: 'Core Offers',
+        fields: [
+          { key:'offer_free',       name:'Free / DIY Offer',       ghl:'Authority - Offer Free',          desc:'Your free entry point and what it includes', placeholder:'e.g. GHL University (Free Skool) — level-gated classroom, community, occasional trainings', rows:2 },
+          { key:'offer_premium',    name:'Premium / Low-Ticket',   ghl:'Authority - Offer Premium',       desc:'Your paid entry offer with price and inclusions', placeholder:'e.g. GHL University Premium — $97/mo · Bi-weekly live sessions, replays, templates', rows:2 },
+          { key:'offer_standard',   name:'Standard Tier',          ghl:'Authority - Offer Standard',      desc:'Your core implementation offer', placeholder:'e.g. Authority Accelerator — $997/mo · Foundation build, Authority OS, Private WhatsApp + Basecamp', rows:2 },
+          { key:'offer_premium2',   name:'Premium Tier',           ghl:'Authority - Offer Premium Tier',  desc:'Your mid-level implementation offer', placeholder:'e.g. Authority Presence — $2,497/mo · Audience + authority build layer on top of Standard', rows:2 },
+          { key:'offer_vip',        name:'VIP / Partnership Tier', ghl:'Authority - Offer VIP',           desc:'Your highest-touch offer', placeholder:'e.g. Authority Mastery — $25k PIF or 6×$4,997 · 6-month partnership, weekly Zoom calls', rows:2 },
+        ]
+      },
+      {
+        label: 'Supporting Offers',
+        fields: [
+          { key:'offer_1on1',       name:'1:1 Session Offers',     ghl:'Authority - Offer 1on1',          desc:'Your standalone session offerings', placeholder:'e.g. Tech Support $347/45min · Deep Dive $697/90min · Bundle 4-pack $1,997', rows:2 },
+          { key:'offer_platform',   name:'Platform / Tool',        ghl:'Authority - Offer Platform',      desc:'Your implementation platform', placeholder:'e.g. AI Profit Launchpad — white-label GHL, included with any paid tier', rows:1 },
+        ]
+      },
+      {
+        label: 'Delivery & Guarantee',
+        fields: [
+          { key:'offer_promise',    name:'Core Promise',           ghl:'Authority - Offer Promise',       desc:'What you guarantee to deliver', placeholder:'e.g. We install a clean Authority OS in GHL so your programs fill without tech chaos', rows:2 },
+          { key:'offer_guarantee',  name:'Guarantee Language',     ghl:'Authority - Guarantee',           desc:'Your official guarantee statement (not revenue)', placeholder:'e.g. We guarantee implementation and working systems. We do not guarantee specific revenue or results.', rows:2 },
+          { key:'offer_exclusions', name:'What\'s Out of Scope',   ghl:'Authority - Exclusions',          desc:'What you explicitly do not provide', placeholder:'e.g. Ads management, full DFY copywriting, social management, beginner offer creation', rows:2 },
+        ]
+      },
+    ]
+  },
+};
+
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let currentDoc  = 'business';
+let currentTopTab = 'core-setup';
+let currentCoreSetupSection = 'ghl-checklist'; // 'ghl-checklist' | 'docs' | 'core'
+let currentCoreSection = 'dream-client';
+
+/* ═══════════════════════════════════════
+   STORAGE
+═══════════════════════════════════════ */
+const S = {
+  get:  (k, d=null) => { try { const v=localStorage.getItem(k); return v?JSON.parse(v):d; } catch { return d; } },
+  set:  (k, v)      => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  raw:  (k, d='')   => { try { return localStorage.getItem(k)||d; } catch { return d; } },
+  rset: (k, v)      => { try { localStorage.setItem(k, v); } catch {} },
+};
+
+function getField(key)      { return S.raw('aob_field_'+key); }
+function setField(key, val) {
+  const prev = S.raw('aob_field_'+key);
+  S.rset('aob_field_'+key, val);
+  if (val.trim() && val.trim() !== prev.trim()) _pushHistory(key, val.trim());
+}
+
+/* ═══════════════════════════════════════
+   AUTH & GATING SYSTEM
+   Powered by Supabase + Stripe
+   Worker: authority-os-api.brendan-c89.workers.dev
+═══════════════════════════════════════ */
+
+const _SUPABASE_URL  = 'https://tbjbviakpjcpacfaxigw.supabase.co';
+const _SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiamJ2aWFrcGpjcGFjZmF4aWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDI0MzEsImV4cCI6MjA4ODgxODQzMX0.0Rub6XGG7lN-MGc7NdpuVh4OKgC43LFC7_yymZqc37k';
+const _API_BASE      = 'https://authority-os-api.brendan-c89.workers.dev/api';
+const _SESSION_KEY   = 'aob_session';
+
+// Tier permissions — matches Supabase tier_enum
+const _TIERS = {
+  basic:  { docs:true, core:true, launchpads:false, marketing:false },
+  pro:    { docs:true, core:true, launchpads:true,  marketing:false },
+  agency: { docs:true, core:true, launchpads:true,  marketing:true  },
+  owner:  { docs:true, core:true, launchpads:true,  marketing:true  },
+};
+
+let _SESSION  = null;  // { access_token, refresh_token, expires_at }
+let _PROFILE  = null;  // Supabase profile row
+let _TIER     = 'basic';
+
+// ── Token storage ─────────────────────────────────────
+function _saveSession(s) {
+  _SESSION = s;
+  if (s) localStorage.setItem(_SESSION_KEY, JSON.stringify(s));
+  else   localStorage.removeItem(_SESSION_KEY);
+}
+function _loadSession() {
+  try { const r = localStorage.getItem(_SESSION_KEY); return r ? JSON.parse(r) : null; } catch { return null; }
+}
+function _isExpired() {
+  if (!_SESSION?.expires_at) return true;
+  return Date.now() > _SESSION.expires_at - 60000;
+}
+
+// ── Supabase auth calls ───────────────────────────────
+async function _sbAuth(path, body) {
+  const r = await fetch(`${_SUPABASE_URL}/auth/v1/${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', 'apikey': _SUPABASE_ANON },
+    body: JSON.stringify(body),
+  });
+  return r.json();
+}
+
+async function _refreshToken() {
+  const stored = _loadSession();
+  if (!stored?.refresh_token) return false;
+  const res = await _sbAuth('token?grant_type=refresh_token', { refresh_token: stored.refresh_token });
+  if (res.access_token) {
+    _saveSession({ access_token: res.access_token, refresh_token: res.refresh_token, expires_at: Date.now() + (res.expires_in * 1000) });
+    return true;
+  }
+  return false;
+}
+
+async function _ensureToken() {
+  if (_isExpired()) {
+    const ok = await _refreshToken();
+    if (!ok) { _saveSession(null); return false; }
+  }
+  return true;
+}
+
+async function _apiGet(path) {
+  const r = await fetch(`${_API_BASE}${path}`, {
+    headers: { 'Authorization': _SESSION?.access_token ? `Bearer ${_SESSION.access_token}` : '', 'Content-Type':'application/json' }
+  });
+  return r.json();
+}
+
+// ── Load profile + tier ───────────────────────────────
+async function _loadProfile() {
+  const valid = await _ensureToken();
+  if (!valid) return;
+  const res = await _apiGet('/me');
+  if (!res.ok) return;
+  _PROFILE = res.profile;
+  _TIER    = (res.tier || 'basic').toLowerCase();
+}
+
+// ── Handle OAuth/magic-link redirect ─────────────────
+function _handleRedirect() {
+  const hash = window.location.hash;
+  if (!hash) return false;
+  const p = new URLSearchParams(hash.slice(1));
+  const at = p.get('access_token');
+  const rt = p.get('refresh_token');
+  const ei = parseInt(p.get('expires_in') || '3600');
+  if (at) {
+    _saveSession({ access_token: at, refresh_token: rt, expires_at: Date.now() + ei * 1000 });
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    return true;
+  }
+  return false;
+}
+
+// ── Auth panel UI helpers ─────────────────────────────
+function showAuthPanel(panel) {
+  ['signin','signup','magic','verify'].forEach(p => {
+    const el = document.getElementById('auth-panel-' + p);
+    if (el) el.style.display = p === panel ? 'block' : 'none';
+  });
+  // Clear errors
+  ['lg-error','lg-error-up'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = ''; el.style.display = 'none'; }
+  });
+}
+
+function _authErr(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = '✗ ' + msg;
+  el.style.display = 'block';
+}
+
+function _setBtn(id, disabled, text) {
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  btn.disabled = disabled;
+  btn.textContent = text;
+}
+
+// ── Sign In ───────────────────────────────────────────
+async function handleSignIn() {
+  const email    = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  if (!email || !password) { _authErr('lg-error', 'Please enter your email and password.'); return; }
+
+  _setBtn('lg-btn', true, 'Signing in…');
+  const res = await _sbAuth('token?grant_type=password', { email, password });
+
+  if (res.access_token) {
+    _saveSession({ access_token: res.access_token, refresh_token: res.refresh_token, expires_at: Date.now() + (res.expires_in * 1000) });
+    await _loadProfile();
+    _onAuthSuccess();
+  } else {
+    _authErr('lg-error', res.error_description || 'Invalid email or password.');
+    _setBtn('lg-btn', false, 'Sign In →');
+  }
+}
+
+// ── Sign Up ───────────────────────────────────────────
+async function handleSignUp() {
+  const name     = document.getElementById('auth-name').value.trim();
+  const email    = document.getElementById('auth-email-up').value.trim();
+  const password = document.getElementById('auth-password-up').value;
+
+  if (!email || !password) { _authErr('lg-error-up', 'Please fill in all fields.'); return; }
+  if (password.length < 8) { _authErr('lg-error-up', 'Password must be at least 8 characters.'); return; }
+
+  _setBtn('lg-btn-up', true, 'Creating account…');
+  const res = await _sbAuth('signup', { email, password, data: { full_name: name } });
+
+  if (res.access_token) {
+    // Auto-confirmed (email confirmation disabled)
+    _saveSession({ access_token: res.access_token, refresh_token: res.refresh_token, expires_at: Date.now() + (res.expires_in * 1000) });
+    await _loadProfile();
+    _onAuthSuccess();
+  } else if (res.id || (res.identities && res.identities.length === 0)) {
+    // Email confirmation required
+    showAuthPanel('verify');
+  } else {
+    _authErr('lg-error-up', res.error_description || res.msg || 'Signup failed. Please try again.');
+    _setBtn('lg-btn-up', false, 'Create Account →');
+  }
+}
+
+// ── Google OAuth ─────────────────────────────────────
+async function handleGoogleSignIn() {
+  const redirectTo = window.location.origin + window.location.pathname;
+  const r = await fetch(`${_SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`, {
+    method: 'GET',
+    headers: { 'apikey': _SUPABASE_ANON },
+    redirect: 'manual'
+  });
+  // Supabase returns a redirect — extract URL from response or just redirect directly
+  const url = `${_SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`;
+  window.location.href = url;
+}
+
+// ── Magic Link ────────────────────────────────────────
+async function handleMagicLink() {
+  const email = document.getElementById('auth-email').value.trim();
+  if (!email) { _authErr('lg-error', 'Please enter your email first.'); return; }
+  await _sbAuth('magiclink', { email });
+  showAuthPanel('magic');
+}
+
+// ── On successful auth ────────────────────────────────
+function _onAuthSuccess() {
+  document.getElementById('license-gate').style.display = 'none';
+  document.getElementById('cred-modal').style.display   = 'flex';
+  _applyTierUI();
+}
+
+// ── Tab access control ────────────────────────────────
+const _TAB_GATES = {}; // stores lock messages per tab id
+
+function _setTabAccess(tabId, allowed, upgradeMsg, subMsg) {
+  const btn = document.getElementById(tabId);
+  if (!btn) return;
+  _TAB_GATES[tabId] = { allowed, upgradeMsg, subMsg };
+  if (allowed) {
+    btn.classList.remove('locked');
+    btn.innerHTML = btn.innerHTML.replace(/<span class="lock-icon">.*?<\/span>\s*/g, '');
+  } else {
+    btn.classList.add('locked');
+    if (!btn.querySelector('.lock-icon')) {
+      btn.innerHTML = '<span class="lock-icon">🔒</span> ' + btn.textContent.trim();
+    }
+  }
+}
+
+// ── Tier UI (replaces old _applyTierUI) ───────────────
+function _applyTierUI() {
+  const tier  = _TIER || 'basic';
+  const perms = _TIERS[tier] || _TIERS.basic;
+
+  _setTabAccess('tab-launchpads', perms.launchpads, 'Upgrade to PRO to access Launchpads', 'Launchpads auto-populate from your Core Setup answers');
+  _setTabAccess('tab-marketing',  perms.marketing,  'Upgrade to AGENCY to access Marketing', 'Full social campaigns & content engine');
+
+  const badge = document.getElementById('tier-badge');
+  if (badge) {
+    badge.className = `tier-badge tier-${tier}`;
+    badge.textContent = tier.toUpperCase();
+    badge.style.display = 'inline-flex';
+  }
+  // Show upgrade or manage plan button
+  const upgradeBtn = document.getElementById('upgrade-btn');
+  const billingBtn = document.getElementById('billing-btn');
+  if (upgradeBtn) upgradeBtn.style.display = (tier === 'agency' || tier === 'owner') ? 'none' : 'inline-block';
+  if (billingBtn) billingBtn.style.display = (tier === 'basic' && !_PROFILE?.stripe_customer_id) ? 'none' : 'inline-block';
+}
+
+// ── Allowed domains ───────────────────────────────────
+const _ALLOWED = ['dev.connectandbook.com','app.ghluniversity.com','dev.ghluniversity.com','jetpack.ghluniversity.com','localhost','127.0.0.1'];
+function _domainOk() {
+  const h = window.location.hostname;
+  return _ALLOWED.some(d => h === d || h.endsWith('.'+d));
+}
+
+// Boot sequence — auth check
+window.addEventListener('DOMContentLoaded', async () => {
+  // Domain check
+  if (!_domainOk()) {
+    document.getElementById('license-gate').innerHTML = '<div style="text-align:center;padding:60px 40px;max-width:400px"><div style="font-size:48px;margin-bottom:20px">🔒</div><div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:10px">Unauthorized Domain</div><div style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6">This tool is only authorized to run at<br><strong style="color:var(--yellow)">app.ghluniversity.com</strong><br><br>If you believe this is an error, contact support.</div></div>';
+    document.getElementById('license-gate').style.display = 'flex';
+    return;
+  }
+
+  // Handle magic link / OAuth redirect
+  const wasRedirect = _handleRedirect();
+
+  // Restore session
+  _SESSION = _loadSession();
+
+  if (_SESSION) {
+    const valid = await _ensureToken();
+    if (valid) {
+      await _loadProfile();
+      _onAuthSuccess();
+      return;
+    }
+  }
+
+  // No valid session — show auth gate
+  document.getElementById('license-gate').style.display = 'flex';
+
+  // Check post-checkout redirect
+  _checkCheckoutReturn();
+
+  // Auto-refresh token every 10 min
+  setInterval(async () => { if (_SESSION) await _ensureToken(); }, 10 * 60 * 1000);
+});
+
+
+
+/* ═══════════════════════════════════════
+   GHL CHECKLIST DATA
+═══════════════════════════════════════ */
+const GHL_CHECKLIST = [
+  { id:'ghl-1',  num:1,  label:'GHL Overview',              sub:'Getting started right',
+    video:'https://www.youtube.com/embed/ziyXGvSyDlQ',
+    link:null, linkLabel:'Open GHL Dashboard',
+    desc:'Watch this overview to understand the platform before diving in. This sets the foundation for everything else.' },
+  { id:'ghl-2',  num:2,  label:'Add Team Members',          sub:'Quickly add your staff',
+    video:'https://www.youtube.com/embed/6pqWVjMWJk8',
+    link:'settings/team', linkLabel:'Go to Team Settings',
+    desc:'Add your VA, assistant, or other team members so they have the right access from day one.' },
+  { id:'ghl-3',  num:3,  label:'Setup Business Profile',    sub:'Update your business details',
+    video:'https://www.youtube.com/embed/KknohLKikrc',
+    link:'settings/business-profile', linkLabel:'Go to Business Profile',
+    desc:'Fill in your business name, address, phone, and logo. This info populates throughout your funnels and emails.' },
+  { id:'ghl-4',  num:4,  label:'Setup Personal Profile',    sub:'Update your personal details',
+    video:'https://www.youtube.com/embed/zQ-rgh-pogg',
+    link:'settings/profile', linkLabel:'Go to Personal Profile',
+    desc:'Set your name, profile photo, and notification preferences.' },
+  { id:'ghl-5',  num:5,  label:'Setup Calendar',            sub:'Connect your calendar',
+    video:'https://www.youtube.com/embed/eOyEIqvOdeE',
+    link:'settings/calendars', linkLabel:'Go to Calendar Settings',
+    desc:'Connect Google or Outlook and configure your availability so booking links work correctly.' },
+  { id:'ghl-6',  num:6,  label:'Setup Email',               sub:'Configure your sending address',
+    video:'https://www.youtube.com/embed/NV5JzrQAWSE',
+    link:'settings/email', linkLabel:'Go to Email Settings',
+    desc:'Connect your sending domain and verify your email address so campaigns land in the inbox.' },
+  { id:'ghl-7',  num:7,  label:'Setup Phone Number',        sub:'Get your GHL number',
+    video:'https://www.youtube.com/embed/9QQ1cVQoBaU',
+    link:'settings/phone-numbers', linkLabel:'Go to Phone Settings',
+    desc:'Purchase and configure a phone number for SMS and call automations.' },
+  { id:'ghl-8',  num:8,  label:'Setup Payment Integration', sub:'Connect Stripe or another processor',
+    video:'https://www.youtube.com/embed/b_7Co26_29g',
+    link:'settings/integrations', linkLabel:'Go to Integrations',
+    desc:'Connect Stripe so you can collect payments through order forms, courses, and memberships.' },
+  { id:'ghl-9',  num:9,  label:'Website Domain',            sub:'Connect your custom domain',
+    video:'https://www.youtube.com/embed/sJEsVkyoS3A',
+    link:'settings/domains', linkLabel:'Go to Domain Settings',
+    desc:'Connect your custom domain so funnels and websites display your brand URL.' },
+  { id:'ghl-10', num:10, label:'Upload Contacts',           sub:'Import your existing list',
+    video:'https://www.youtube.com/embed/K6IJw0vEETM',
+    link:'contacts/import', linkLabel:'Go to Contact Import',
+    desc:'Upload your existing email list or CRM contacts so they are ready to use in automations.' },
+  { id:'ghl-11', num:11, label:'Install Mobile App',        sub:'GHL on your phone',
+    video:'https://www.youtube.com/embed/nsv6PlYxXDg',
+    link:null, linkLabel:'Download the App',
+    desc:'Download the LeadConnector app for iOS or Android to manage conversations on the go.' },
+  { id:'ghl-12', num:12, label:'Missed Call Settings',      sub:'Set up missed call text-back',
+    video:'https://www.youtube.com/embed/yEKgSrwiWqM',
+    link:'settings/missed-call', linkLabel:'Go to Missed Call Settings',
+    desc:'Configure automatic text-back when you miss a call — one of GHL\'s most powerful built-in automations.' },
+  { id:'ghl-13', num:13, label:'View Conversations',        sub:'Your unified inbox',
+    video:'https://www.youtube.com/embed/qujDN-oL5Gg',
+    link:'conversations', linkLabel:'Go to Conversations',
+    desc:'Understand the conversations view where all SMS, email, and DM activity lives in one place.' },
+  { id:'ghl-14', num:14, label:'Custom Fields',             sub:'Set up your custom values',
+    video:'https://www.youtube.com/embed/3lXjU-dO_Dc',
+    link:'settings/custom-fields', linkLabel:'Go to Custom Fields',
+    desc:'Learn how custom fields and custom values work — this is what GHL Jetpack writes to.' },
+  { id:'ghl-15', num:15, label:'Setup Billing',             sub:'Add your card on file',
+    video: null,
+    link:'settings/billing', linkLabel:'Go to Billing',
+    desc:'Add your card on file to ensure SMS and emails send as expected. Without this, your messages may be paused.' },
+  { id:'ghl-16', num:16, label:'Next Steps',                sub:'What comes after setup',
+    video:'https://www.youtube.com/embed/VSLdc5-ZYKc',
+    link:null, linkLabel:'Go to Dashboard',
+    desc:'You\'ve completed the foundation. Watch this to understand your next steps in building your Authority OS.' },
+];
+
+let _ghlChecked = {};
+let _activeChecklistItem = null;
+
+function loadChecklistState() { _ghlChecked = S.get('aob_ghl_checklist', {}); }
+function toggleChecklist(id) {
+  _ghlChecked[id] = !_ghlChecked[id];
+  S.set('aob_ghl_checklist', _ghlChecked);
+  renderCoreSetup();
+}
+function openChecklistItem(id) {
+  _activeChecklistItem = (_activeChecklistItem === id) ? null : id;
+  renderCoreSetup();
+}
+
+/* ═══════════════════════════════════════
+   CORE SETUP RENDERING
+═══════════════════════════════════════ */
+function buildCoreSetupSidebar() {
+  const done  = GHL_CHECKLIST.filter(s => _ghlChecked[s.id]).length;
+  const total = GHL_CHECKLIST.length;
+  return `
+    <div class="sidebar-section-label">GHL Setup Checklist</div>
+    <button class="sidebar-item${currentCoreSetupSection==='ghl-checklist'?' active':''}" onclick="switchCoreSetupSection('ghl-checklist')">
+      📋 GHL Checklist <div class="cs-progress-pill">${done}/${total}</div>
+    </button>
+    <div class="sidebar-section-label" style="margin-top:12px">Foundational Docs</div>
+    <button class="sidebar-item${currentDoc==='business'&&currentCoreSetupSection==='docs'?' active':''}" onclick="switchCoreSetupSection('docs','business')">Business Profile <div class="item-status" id="dot-business"></div></button>
+    <button class="sidebar-item${currentDoc==='brand'&&currentCoreSetupSection==='docs'?' active':''}" onclick="switchCoreSetupSection('docs','brand')">Brand Guidelines <div class="item-status" id="dot-brand"></div></button>
+    <button class="sidebar-item${currentDoc==='audience'&&currentCoreSetupSection==='docs'?' active':''}" onclick="switchCoreSetupSection('docs','audience')">Audience Profile <div class="item-status" id="dot-audience"></div></button>
+    <button class="sidebar-item${currentDoc==='offers'&&currentCoreSetupSection==='docs'?' active':''}" onclick="switchCoreSetupSection('docs','offers')">Offers Portfolio <div class="item-status" id="dot-offers"></div></button>`;
+}
+
+function switchCoreSetupSection(section, subKey) {
+  currentCoreSetupSection = section;
+  if (section === 'docs' && subKey) currentDoc = subKey;
+  document.getElementById('sidebar').innerHTML = buildCoreSetupSidebar();
+  renderCoreSetup();
+  updateSidebarDots();
+}
+
+function renderCoreSetup() {
+  if (currentCoreSetupSection === 'ghl-checklist') {
+    renderGHLChecklist();
+  } else if (currentCoreSetupSection === 'docs') {
+    renderDoc(currentDoc);
+  }
+}
+
+function renderGHLChecklist() {
+  const { loc, agencyUrl } = getCreds();
+  const ghlDomain = agencyUrl || 'app.gohighlevel.com';
+  const baseUrl = loc ? `https://${ghlDomain}/location/${loc}/` : null;
+  const done  = GHL_CHECKLIST.filter(s => _ghlChecked[s.id]).length;
+  const total = GHL_CHECKLIST.length;
+  const pct   = Math.round(done/total*100);
+
+  let html = `
+    <div class="page-header">
+      <div class="page-header-top">
+        <div class="page-title-row">
+          <span class="page-icon">⚙️</span>
+          <div>
+            <div class="page-title">GHL Setup Checklist</div>
+            <div class="page-sub">Complete these steps to set up your GHL account. Check each item once done.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      <div class="progress-label">${done} / ${total} steps complete · ${pct}%</div>
+    </div>
+    <div class="content"><div class="checklist-grid">`;
+
+  GHL_CHECKLIST.forEach(item => {
+    const checked = !!_ghlChecked[item.id];
+    const active  = _activeChecklistItem === item.id;
+    html += `
+      <div class="checklist-item${checked?' checked':''}${active?' expanded':''}" id="cli-${item.id}">
+        <div class="checklist-item-header" onclick="openChecklistItem('${item.id}')">
+          <div class="checklist-left">
+            <div class="checklist-checkbox${checked?' done':''}" onclick="event.stopPropagation();toggleChecklist('${item.id}')">${checked?'✓':''}</div>
+            <div class="checklist-num">${item.num}</div>
+            <div class="checklist-text">
+              <div class="checklist-label">${item.label}</div>
+              <div class="checklist-sub">${item.sub}</div>
+            </div>
+          </div>
+          <div class="checklist-chevron">${active?'▲':'▼'}</div>
+        </div>
+        ${active ? `
+        <div class="checklist-body">
+          <p class="checklist-desc">${item.desc}</p>
+          ${item.video ? `<div class="checklist-video-wrap"><iframe src="${item.video}?rel=0&modestbranding=1" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>` : ''}
+          <div class="checklist-actions">
+            ${item.link && baseUrl ? `<a class="checklist-link-btn" href="${baseUrl}${item.link}" target="_blank" rel="noopener">🔗 ${item.linkLabel} ↗</a>` : ''}
+            ${!checked ? `<button class="checklist-done-btn" onclick="toggleChecklist('${item.id}')">✓ Mark Complete</button>` : `<span class="checklist-complete-badge">✓ Completed</span>`}
+          </div>
+        </div>` : ''}
+      </div>`;
+  });
+
+  html += `</div></div>`;
+  document.getElementById('page-content').innerHTML = html;
+}
+
+/* ═══════════════════════════════════════
+   PRICING & CHECKOUT
+═══════════════════════════════════════ */
+
+const _PRICES = {
+  basic:  { mo: 'price_1T9p6kIfHbUBqIETVALD0ktp', yr: 'price_1T9p7eIfHbUBqIETlrzMwiwy', mo_amt:'$27', yr_amt:'$22', mo_full:'$27', yr_full:'$22' },
+  pro:    { mo: 'price_1T9p8PIfHbUBqIET1ejMXvSK', yr: 'price_1T9p8jIfHbUBqIETmY6XOQNs', mo_amt:'$67', yr_amt:'$54', mo_full:'$67', yr_full:'$54' },
+  agency: { mo: 'price_1T9pBpIfHbUBqIETqVYvWgPs', yr: 'price_1T9pCSIfHbUBqIETwsjIHeJK', mo_amt:'$147', yr_amt:'$118', mo_full:'$147', yr_full:'$118' },
+};
+
+let _billingAnnual = false;
+
+function toggleBilling() {
+  _billingAnnual = !_billingAnnual;
+  const track = document.getElementById('pm-toggle');
+  track.classList.toggle('annual', _billingAnnual);
+  document.getElementById('pm-lbl-mo').classList.toggle('active', !_billingAnnual);
+  document.getElementById('pm-lbl-yr').classList.toggle('active', _billingAnnual);
+
+  ['basic','pro','agency'].forEach(tier => {
+    const p = _PRICES[tier];
+    document.getElementById(`pm-price-${tier}`).textContent = _billingAnnual ? p.yr_amt : p.mo_amt;
+    document.getElementById(`pm-period-${tier}`).textContent = _billingAnnual ? '/mo billed annually' : '/mo';
+  });
+}
+
+function openPricing() {
+  // Highlight current tier
+  const cur = _TIER || 'basic';
+  ['basic','pro','agency'].forEach(tier => {
+    const btn = document.getElementById(`pm-btn-${tier}`);
+    if (!btn) return;
+    if (tier === cur) {
+      btn.textContent = 'Current Plan';
+      btn.className = 'pm-card-btn current';
+      btn.onclick = null;
+    } else {
+      btn.className = tier === 'pro' ? 'pm-card-btn primary' : 'pm-card-btn secondary';
+      btn.textContent = `Get ${tier.charAt(0).toUpperCase()+tier.slice(1)}`;
+      btn.onclick = () => startCheckout(tier);
+    }
+  });
+  document.getElementById('pricing-modal').classList.add('open');
+}
+
+function closePricing() {
+  document.getElementById('pricing-modal').classList.remove('open');
+}
+
+// Close on backdrop click
+document.addEventListener('click', e => {
+  const modal = document.getElementById('pricing-modal');
+  if (e.target === modal) closePricing();
+});
+
+async function startCheckout(tier) {
+  const btn = document.getElementById(`pm-btn-${tier}`);
+  if (btn) { btn.disabled = true; btn.textContent = 'Loading…'; }
+
+  const priceId = _billingAnnual ? _PRICES[tier].yr : _PRICES[tier].mo;
+
+  try {
+    const r = await fetch(`${_API_BASE}/stripe/checkout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_SESSION?.access_token}`
+      },
+      body: JSON.stringify({
+        price_id: priceId,
+        success_url: `${window.location.origin}${window.location.pathname}?checkout=success`,
+        cancel_url:  `${window.location.origin}${window.location.pathname}?checkout=cancel`,
+      })
+    });
+    const data = await r.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || 'Checkout failed');
+    }
+  } catch(e) {
+    alert('Could not start checkout: ' + e.message);
+    if (btn) { btn.disabled = false; btn.textContent = `Get ${tier.charAt(0).toUpperCase()+tier.slice(1)}`; }
+  }
+}
+
+async function openBillingPortal() {
+  try {
+    const r = await fetch(`${_API_BASE}/stripe/portal`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_SESSION?.access_token}`
+      },
+      body: JSON.stringify({ return_url: window.location.href })
+    });
+    const data = await r.json();
+    if (data.url) window.location.href = data.url;
+  } catch(e) {
+    alert('Could not open billing portal.');
+  }
+}
+
+// Handle post-checkout redirect
+function _checkCheckoutReturn() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('checkout') === 'success') {
+    history.replaceState(null, '', window.location.pathname);
+    // Reload profile to get updated tier
+    setTimeout(async () => {
+      await _loadProfile();
+      _applyTierUI();
+      _showToast('🎉 Welcome! Your plan has been activated.', 'green');
+    }, 2000);
+  }
+}
+
+function _showToast(msg, color) {
+  let t = document.getElementById('app-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'app-toast';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);border-radius:10px;padding:14px 24px;z-index:9999;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.4);font-size:12px;font-weight:700;font-family:var(--font);';
+    document.body.appendChild(t);
+  }
+  const bg = color === 'green' ? 'rgba(55,202,55,0.15)' : 'rgba(255,187,0,0.12)';
+  const bc = color === 'green' ? 'var(--green-b)' : 'var(--yellow-b)';
+  const tc = color === 'green' ? 'var(--green)' : 'var(--yellow)';
+  t.style.cssText += `;background:${bg};border:1px solid ${bc};color:${tc};`;
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.display = 'none', 5000);
+}
+
+function getCreds()         { return { claude: S.raw('aob_claude'), token: S.raw('aob_ghl_token'), loc: S.raw('aob_ghl_loc'), agencyUrl: S.raw('aob_ghl_url') }; }
+
+/* ── History (up to 8 snapshots per field) ── */
+const HIST_MAX = 8;
+function getHistory(key)       { return S.get('aob_hist_'+key, []); }
+function clearHistory(key)     { S.set('aob_hist_'+key, []); refreshHistBtn(key); }
+function _pushHistory(key, val) {
+  let h = getHistory(key);
+  if (h.length && h[0].v === val) return;
+  h.unshift({ v: val, t: Date.now() });
+  if (h.length > HIST_MAX) h = h.slice(0, HIST_MAX);
+  S.set('aob_hist_'+key, h);
+  refreshHistBtn(key);
+}
+function refreshHistBtn(key) {
+  const btn = document.getElementById('btn-hist-'+key);
+  if (!btn) return;
+  const h = getHistory(key);
+  btn.classList.toggle('has-history', h.length > 0);
+  btn.title = h.length ? `${h.length} saved version${h.length>1?'s':''}` : 'No history yet';
+  btn.textContent = h.length ? `⏱ ${h.length}` : '⏱';
+}
+function fmtTs(ts) {
+  const diff = Date.now() - ts;
+  if (diff < 60000)   return 'just now';
+  if (diff < 3600000) return Math.round(diff/60000)+'m ago';
+  if (diff < 86400000)return Math.round(diff/3600000)+'h ago';
+  return new Date(ts).toLocaleDateString()+' '+new Date(ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+}
+function toggleHistory(key) {
+  const dd = document.getElementById('hist-dd-'+key);
+  if (!dd) return;
+  // Close all other open dropdowns first
+  document.querySelectorAll('.history-dropdown.open').forEach(el => {
+    if (el.id !== 'hist-dd-'+key) el.classList.remove('open');
+  });
+  const h = getHistory(key);
+  dd.innerHTML = `
+    <div class="history-header">
+      <span>Version History</span>
+      ${h.length ? `<button class="btn-clear-history" onclick="clearHistory('${key}');document.getElementById('hist-dd-${key}').classList.remove('open')">Clear</button>` : ''}
+    </div>
+    ${!h.length ? '<div class="history-empty">No history yet.<br>Changes save automatically.</div>' :
+      h.map((item,i) => `
+        <div class="history-item" onclick="restoreHistory('${key}','${i}')">
+          <div class="history-item-text">${esc(item.v)}</div>
+          <div class="history-item-meta">
+            <span>${fmtTs(item.t)}</span>
+            <span class="history-item-use">↩ Restore</span>
+          </div>
+        </div>`).join('')
+    }`;
+  dd.classList.toggle('open');
+}
+function restoreHistory(key, idx) {
+  const h = getHistory(key);
+  const item = h[parseInt(idx)];
+  if (!item) return;
+  const inp = document.getElementById('finp-'+key);
+  if (inp) {
+    inp.value = item.v;
+    // Trigger as if user typed it
+    onFieldInput(key, item.v);
+  }
+  document.getElementById('hist-dd-'+key)?.classList.remove('open');
+}
+// Close dropdowns on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.history-wrap')) {
+    document.querySelectorAll('.history-dropdown.open').forEach(el => el.classList.remove('open'));
+  }
+});
+
+/* ═══════════════════════════════════════
+   CREDENTIALS
+═══════════════════════════════════════ */
+function toggleVis(id) {
+  const el = document.getElementById(id);
+  if (el) el.type = el.type==='password'?'text':'password';
+}
+
+window.addEventListener('load', () => {
+  const c = getCreds();
+  if (c.claude) document.getElementById('inp-claude').value = c.claude;
+  if (c.token)  document.getElementById('inp-ghl-token').value = c.token;
+  if (c.loc)    document.getElementById('inp-ghl-location').value = c.loc;
+  if (c.agencyUrl) document.getElementById('inp-ghl-url').value = c.agencyUrl;
+  if (c.claude && c.token && c.loc) {
+    launchApp();
+  }
+});
+
+async function verifyCreds() {
+  const claude     = document.getElementById('inp-claude').value.trim();
+  const token      = document.getElementById('inp-ghl-token').value.trim();
+  const loc        = document.getElementById('inp-ghl-location').value.trim();
+  const agencyUrl  = document.getElementById('inp-ghl-url').value.trim().replace(/^https?:\/\//i,'').replace(/\/+$/,'');
+  const errEl  = document.getElementById('cred-error');
+  const btn    = document.getElementById('btn-verify');
+  errEl.style.display = 'none';
+
+  if (!claude) { showCredErr('Claude API Key is required'); return; }
+  if (!claude.startsWith('sk-ant-')) { showCredErr('Claude key should start with sk-ant-'); return; }
+  if (!token)  { showCredErr('GHL Integration Token is required'); return; }
+  if (!loc)    { showCredErr('GHL Location ID is required'); return; }
+
+  btn.disabled = true; btn.textContent = '⏳ Verifying…';
+
+  // Test Claude
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json','x-api-key':claude,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:10, messages:[{role:'user',content:'ping'}] })
+    });
+    if (!r.ok) { const e=await r.json().catch(()=>{}); throw new Error('Claude: '+(e?.error?.message||`HTTP ${r.status}`)); }
+  } catch(e) {
+    btn.disabled=false; btn.textContent='Verify & Enter Builder →';
+    showCredErr(e.message); return;
+  }
+
+  // Test GHL
+  try {
+    const r = await fetch(`https://services.leadconnectorhq.com/locations/${loc}/customValues`,
+      { headers:{ 'Authorization':'Bearer '+token,'Content-Type':'application/json','Version':'2021-07-28' } });
+    if (!r.ok) { const e=await r.json().catch(()=>{}); throw new Error('GHL: '+(e?.message||`HTTP ${r.status}`)); }
+  } catch(e) {
+    btn.disabled=false; btn.textContent='Verify & Enter Builder →';
+    showCredErr(e.message); return;
+  }
+
+  S.rset('aob_claude', claude); S.rset('aob_ghl_token', token); S.rset('aob_ghl_loc', loc); S.rset('aob_ghl_url', agencyUrl);
+  btn.disabled=false; btn.textContent='Verify & Enter Builder →';
+  launchApp();
+}
+
+function showCredErr(msg) {
+  const el = document.getElementById('cred-error');
+  el.textContent = '✗ '+msg; el.style.display='block';
+}
+
+function openCredModal() {
+  document.getElementById('cred-modal').style.display='flex';
+  // Only show close button if the app is already open (i.e. user is editing creds, not first-time setup)
+  const closeBtn = document.getElementById('cred-close-btn');
+  if (closeBtn) closeBtn.style.display = document.getElementById('app').style.display === 'flex' ? 'block' : 'none';
+}
+
+function closeCredModal() {
+  document.getElementById('cred-modal').style.display='none';
+}
+
+function doLogout() {
+  if (!confirm('Log out and clear your saved credentials?')) return;
+  // Clear Supabase session
+  _saveSession(null);
+  // Clear GHL credentials
+  ['aob_claude','aob_ghl_token','aob_ghl_loc','aob_ghl_url'].forEach(k => {
+    try { localStorage.removeItem(k); } catch {}
+  });
+  // Reset UI and show auth gate
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('cred-modal').style.display = 'none';
+  document.getElementById('license-gate').style.display = 'flex';
+}
+
+function launchApp() {
+  document.getElementById('cred-modal').style.display='none';
+  document.getElementById('app').style.display='flex';
+  _applyTierUI(); // apply tier gating before any tab renders
+  document.getElementById('tab-core-setup').classList.add('active');
+  document.getElementById('sidebar').innerHTML = buildDocsSidebar();
+  loadChecklistState();
+  document.getElementById('sidebar').innerHTML = buildCoreSetupSidebar();
+  renderGHLChecklist();
+  updateSidebarDots();
+  updateSidebarDots();
+  updateOverallProgress();
+  // Auto-load current GHL values into all fields
+  loadFromGHL();
+}
+
+/* ═══════════════════════════════════════
+   LAUNCHPAD DATA
+═══════════════════════════════════════ */
+const LAUNCHPADS = {
+
+  masterclass: {
+    label: 'Masterclass Launchpad',
+    icon: '🎓',
+    color: '#7c3aed',
+    sections: {
+
+      'event-details': {
+        label: 'Event Details',
+        steps: [
+          { label: 'General Overview', fields: [
+            { key:'mc_event_name_long',  name:'Event Name Long',  ghl:'mc_01_event_details__01__event_name_long__ex_12_day_atomic_offer_masterclass',  type:'text', aiHint:'Full event title. Ex: 1/2 Day Cold To Clients Masterclass' },
+            { key:'mc_event_length',     name:'Event Length',     ghl:'mc_01_event_details__02__event_length__ex_12_day',     type:'text', aiHint:'Length prefix only. Ex: 1/2 Day' },
+            { key:'mc_event_name_only',  name:'Event Name Only',  ghl:'mc_01_event_details__03__event_name_only__ex_atomic_offer',  type:'text', aiHint:'Name without length or type. Ex: Cold To Clients' },
+            { key:'mc_event_type_only',  name:'Event Type Only',  ghl:'mc_01_event_details__04__event_type_only__ex_masterclass',  type:'text', aiHint:'Event type only. Ex: Masterclass' },
+            { key:'mc_vip_offered',      name:'VIP Offered (Yes / No)', ghl:'mc_01_event_details__0702__vip_offered__ex_yes__no', type:'dropdown', options:['Yes','No'], aiHint:'Will you offer a VIP upgrade at this event?' },
+          ]},
+          { label: 'Event Date & Time', fields: [
+            { key:'mc_event_day',        name:'Event Day',        ghl:'mc_01_event_details__05__event_day__ex_monday',        type:'dropdown', options:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], aiHint:'Day of the week the event takes place. Ex: Monday' },
+            { key:'mc_event_date',       name:'Event Date',       ghl:'mc_01_event_details__06__event_date__ex_jan_1',       type:'text', aiHint:'Display date. Ex: Oct 6th' },
+            { key:'mc_event_time',       name:'Event Time – General Session', ghl:'mc_01_event_details__07__event_time__ex_1pm_est', type:'text', aiHint:'Display time with timezone. Ex: 11am EST' },
+            { key:'mc_event_day_time_fmt', name:'Event Day Time Formatted (**IMPORTANT – MATCHES TIMEZONE IN YOUR BUSINESS PROFILE – U.S. FORMAT: MM-DD-YYYY | 12HR)', ghl:'mc_01_event_details__08__event_day_time_formatted__ex_01012024_100_pm', type:'text', aiHint:'GHL timestamp format. Ex: 10-06-2025 11:00 AM' },
+          ]},
+          { label: 'VIP Event Time', note: '(*Only required if VIP Offered = Yes)', fields: [
+            { key:'mc_vip_event_time',     name:'VIP Event Time',  ghl:'mc_01_event_details__0701__vip_event_time__ex_12pm_est', type:'text', aiHint:'VIP session display time. Ex: 12pm EST' },
+            { key:'mc_vip_event_time_fmt', name:'VIP Event Time Formatted (**IMPORTANT – MATCHES TIMEZONE IN YOUR BUSINESS PROFILE – U.S. FORMAT: MM-DD-YYYY | 12HR)', ghl:'mc_01_event_details__0801__vip_event_time_formatted__ex_01012024_1200_pm', type:'text', aiHint:'GHL timestamp format. Ex: 10-06-2025 12:00 PM' },
+          ]},
+          { label: 'Session 1', fields: [
+            { key:'mc_s1_title',  name:'Session 1 Title',          ghl:'mc_01_event_details__09__session_1_title__ex_the_turning_point',          type:'text', aiHint:'Ex: The Turning Point' },
+            { key:'mc_s1_theme',  name:'Session 1 Theme',          ghl:'mc_01_event_details__10__session_1_theme__ex_discover_the_painful_problem_this_system_was_built_to_solve_and_how_most_coaches_stay_stuck_trying_to_ducttape_their_way_to_highticket_success',          type:'textarea', aiHint:'1–2 sentence theme. Ex: Discover the painful problem this system was built to solve and how most coaches stay stuck trying to duct-tape their way to high-ticket success.' },
+            { key:'mc_s1_b1',     name:'Session 1 Breakthrough #01', ghl:'mc_01_event_details__11__session_1_breakthrough_01__ex_realize_why_most_offers_never_scale_past_wordofmouth', type:'text', aiHint:'Ex: Realize why most offers never scale past word-of-mouth' },
+            { key:'mc_s1_b2',     name:'Session 1 Breakthrough #02', ghl:'mc_01_event_details__12__session_1_breakthrough_02__ex_see_how_this_system_was_born_from_hitting_rock_bottom', type:'text', aiHint:'Ex: See how this system was born from hitting rock bottom' },
+            { key:'mc_s1_b3',     name:'Session 1 Breakthrough #03', ghl:'mc_01_event_details__13__session_1_breakthrough_03__ex_identify_the_real_reason_youre_not_getting_highticket_clients', type:'text', aiHint:'Ex: Identify the real reason you\'re not getting high-ticket clients' },
+            { key:'mc_s1_b4',     name:'Session 1 Breakthrough #04', ghl:'mc_01_event_details__14__session_1_breakthrough_04__ex_understand_what_separates_successful_coaches_from_burntout_ones', type:'text', aiHint:'Ex: Understand what separates successful coaches from burnt-out ones' },
+          ]},
+          { label: 'Session 2', fields: [
+            { key:'mc_s2_title',  name:'Session 2 Title',          ghl:'mc_01_event_details__15__session_2_title__ex_the_atomic_offer_system',          type:'text', aiHint:'Ex: The Atomic Offer System' },
+            { key:'mc_s2_theme',  name:'Session 2 Theme',          ghl:'mc_01_event_details__16__session_2_theme__ex_unveil_the_full_5step_framework_that_turns_your_knowledge_into_a_highconverting_scalable_offer_using_a_single_virtual_event',          type:'textarea', aiHint:'Ex: Unveil the full 5-step framework that turns your knowledge into a high-converting, scalable offer using a single virtual event.' },
+            { key:'mc_s2_b1',     name:'Session 2 Breakthrough #01', ghl:'mc_01_event_details__17__session_2_breakthrough_01__ex_learn_how_to_craft_a_premium_offer_that_sells_itself', type:'text', aiHint:'Ex: Learn how to craft a premium offer that sells itself' },
+            { key:'mc_s2_b2',     name:'Session 2 Breakthrough #02', ghl:'mc_01_event_details__18__session_2_breakthrough_02__ex_discover_how_to_position_yourself_as_the_obvious_choice', type:'text', aiHint:'Ex: Discover how to position yourself as the obvious choice' },
+            { key:'mc_s2_b3',     name:'Session 2 Breakthrough #03', ghl:'mc_01_event_details__19__session_2_breakthrough_03__ex_understand_the_full_system_without_the_tech_overwhelm', type:'text', aiHint:'Ex: Understand the full system without the tech overwhelm' },
+            { key:'mc_s2_b4',     name:'Session 2 Breakthrough #04', ghl:'mc_01_event_details__20__session_2_breakthrough_04__ex_see_how_one_event_can_unlock_consistent_income', type:'text', aiHint:'Ex: See how one event can unlock consistent income' },
+          ]},
+          { label: 'Session 3', fields: [
+            { key:'mc_s3_title',  name:'Session 3 Title',          ghl:'mc_01_event_details__21__session_3_title__ex_clearing_the_inner_blocks',          type:'text', aiHint:'Ex: Clearing the Inner Blocks' },
+            { key:'mc_s3_theme',  name:'Session 3 Theme',          ghl:'mc_01_event_details__22__session_3_theme__ex_address_the_internal_beliefs_fears_and_doubts_that_keep_coaches_from_stepping_into_a_higher_level_of_success',          type:'textarea', aiHint:'Ex: Address the internal beliefs, fears, and doubts that keep coaches from stepping into a higher level of success.' },
+            { key:'mc_s3_b1',     name:'Session 3 Breakthrough #01', ghl:'mc_01_event_details__23__session_3_breakthrough_01__ex_dismantle_the_belief_that_you_need_to_deserve_highticket_success', type:'text', aiHint:'Ex: Dismantle the belief that you need to "deserve" high-ticket success' },
+            { key:'mc_s3_b2',     name:'Session 3 Breakthrough #02', ghl:'mc_01_event_details__24__session_3_breakthrough_02__ex_replace_fear_of_selling_with_excitement_to_serve', type:'text', aiHint:'Ex: Replace fear of selling with excitement to serve' },
+            { key:'mc_s3_b3',     name:'Session 3 Breakthrough #03', ghl:'mc_01_event_details__25__session_3_breakthrough_03__ex_drop_the_idea_that_youre_not_ready_or_expert_enough', type:'text', aiHint:'Ex: Drop the idea that you\'re not ready or expert enough' },
+            { key:'mc_s3_b4',     name:'Session 3 Breakthrough #04', ghl:'mc_01_event_details__26__session_3_breakthrough_04__ex_build_unshakable_confidence_in_your_unique_value', type:'text', aiHint:'Ex: Build unshakable confidence in your unique value' },
+          ]},
+          { label: 'Session 4', fields: [
+            { key:'mc_s4_title',  name:'Session 4 Title',          ghl:'mc_01_event_details__27__session_4_title__ex_handling_the_external_noise',          type:'text', aiHint:'Ex: Handling the External Noise' },
+            { key:'mc_s4_theme',  name:'Session 4 Theme',          ghl:'mc_01_event_details__28__session_4_theme__ex_overcome_the_outside_excuses_and_circumstances_that_keep_you_stuck__from_audience_size_to_budget_to_time',          type:'textarea', aiHint:'Ex: Overcome the outside excuses and circumstances that keep you stuck — from audience size to budget to time.' },
+            { key:'mc_s4_b1',     name:'Session 4 Breakthrough #01', ghl:'mc_01_event_details__29__session_4_breakthrough_01__ex_learn_why_a_big_list_isnt_necessary_for_a_big_payday', type:'text', aiHint:'Ex: Learn why a big list isn\'t necessary for a big payday' },
+            { key:'mc_s4_b2',     name:'Session 4 Breakthrough #02', ghl:'mc_01_event_details__30__session_4_breakthrough_02__ex_see_how_to_run_events_without_spending_on_ads', type:'text', aiHint:'Ex: See how to run events without spending on ads' },
+            { key:'mc_s4_b3',     name:'Session 4 Breakthrough #03', ghl:'mc_01_event_details__31__session_4_breakthrough_03__ex_discover_why_tech_doesnt_matter_when_the_offer_is_right', type:'text', aiHint:'Ex: Discover why tech doesn\'t matter when the offer is right' },
+            { key:'mc_s4_b4',     name:'Session 4 Breakthrough #04', ghl:'mc_01_event_details__32__session_4_breakthrough_04__ex_gain_a_plan_that_works_even_if_youre_starting_from_scratch', type:'text', aiHint:'Ex: Gain a plan that works even if you\'re starting from scratch' },
+          ]},
+          { label: 'Replays', fields: [
+            { key:'mc_main_replay',  name:'Main Event Video Replay',  ghl:'mc_01_event_details__33__main_event_video_replay__ex_httpsyoutube_sdrmtxyz99',  type:'text', aiHint:'YouTube URL for the recorded main session. Ex: https://youtu.be/_sDrMtXyz99' },
+            { key:'mc_vip_replay',   name:'VIP Event Video Replay',   ghl:'mc_01_event_details__34__vip_event_video_replay__ex_httpsyoutube_sdrmtaqv45',   type:'text', aiHint:'YouTube URL for the recorded VIP session. Ex: https://youtu.be/_sDrMtAqv45' },
+          ]},
+        ]
+      },
+
+      'about-you': {
+        label: 'About You',
+        steps: [
+          { label: 'Host Details', fields: [
+            { key:'mc_host_names',           name:'Event Host Name(s)',         ghl:'mc_02_about_you__01__event_host_name_s__ex_john_smith',         type:'text', aiHint:'Ex: John Smith' },
+            { key:'mc_host_singular_plural',  name:'Host Singular vs Plural',   ghl:'mc_02_about_you__02__host_singular_vs_plural__ex_host_or_hosts',  type:'dropdown', options:['host','hosts'], aiHint:'Use "host" for solo, "hosts" for multiple' },
+            { key:'mc_biography',             name:'Biography',                  ghl:'mc_02_about_you__03__biography__ex_keep_to_a_few_paragraphs_that_highlights_your_expertise',                type:'textarea', aiHint:'A few paragraphs highlighting your expertise and story' },
+          ]},
+          { label: 'Pronouns', fields: [
+            { key:'mc_pro_04', name:'Pronoun – (Ex: "i" or "we")',          ghl:'mc_02_about_you__04__pronoun__ex_i_or_we', type:'dropdown', options:['i','we'],             aiHint:'Lowercase singular or plural first-person subject' },
+            { key:'mc_pro_05', name:'Pronoun – (Ex: "I" or "We")',          ghl:'mc_02_about_you__05__pronoun__ex_i_or_we', type:'dropdown', options:['I','We'],             aiHint:'Uppercase singular or plural first-person subject' },
+            { key:'mc_pro_06', name:'Pronoun – (Ex: "i\'m" or "we\'re")',   ghl:'mc_02_about_you__06__pronoun__ex_im_or_were', type:'dropdown', options:["i'm","we're"],       aiHint:'Lowercase contraction' },
+            { key:'mc_pro_07', name:'Pronoun – (Ex: "I\'m" or "We\'re")',   ghl:'mc_02_about_you__07__pronoun__ex_im_or_were', type:'dropdown', options:["I'm","We're"],       aiHint:'Uppercase contraction' },
+            { key:'mc_pro_08', name:'Pronoun – (Ex: "i\'m a" or "we are")', ghl:'mc_02_about_you__08__pronoun__ex_im_a_or_we_are', type:'dropdown', options:["i'm a","we are"],   aiHint:'Lowercase identifier phrase' },
+            { key:'mc_pro_09', name:'Pronoun – (Ex: "I\'m a" or "We are")', ghl:'mc_02_about_you__09__pronoun__ex_im_a_or_we_are', type:'dropdown', options:["I'm a","We are"],   aiHint:'Uppercase identifier phrase' },
+            { key:'mc_pro_10', name:'Pronoun – (Ex: "i was" or "we were")', ghl:'mc_02_about_you__10__pronoun__ex_i_was_or_we_were', type:'dropdown', options:["i was","we were"],   aiHint:'Lowercase past tense' },
+            { key:'mc_pro_11', name:'Pronoun – (Ex: "I was" or "We were")', ghl:'mc_02_about_you__11__pronoun__ex_i_was_or_we_were', type:'dropdown', options:["I was","We were"],   aiHint:'Uppercase past tense' },
+            { key:'mc_pro_12', name:'Pronoun – (Ex: "my" or "our")',        ghl:'mc_02_about_you__12__pronoun__ex_my_or_our', type:'dropdown', options:["my","our"],           aiHint:'Lowercase possessive' },
+            { key:'mc_pro_13', name:'Pronoun – (Ex: "My" or "Our")',        ghl:'mc_02_about_you__13__pronoun__ex_my_or_our', type:'dropdown', options:["My","Our"],           aiHint:'Uppercase possessive' },
+            { key:'mc_pro_14', name:'Pronoun – (Ex: "myself" or "ourselves")', ghl:'mc_02_about_you__14__pronoun__ex_myself_or_ourselves', type:'dropdown', options:["myself","ourselves"], aiHint:'Reflexive pronoun' },
+            { key:'mc_pro_15', name:'Pronoun – (Ex: "me" or "us")',         ghl:'mc_02_about_you__15__pronoun__ex_me_or_us', type:'dropdown', options:["me","us"],           aiHint:'Object pronoun' },
+            { key:'mc_pro_16', name:'Pronoun – (Ex: "has" or "have")',      ghl:'mc_02_about_you__16__pronoun__ex_has_or_have', type:'dropdown', options:["has","have"],         aiHint:'Singular or plural verb form' },
+            { key:'mc_pro_17', name:'Pronoun – (Ex: "am" or "are")',        ghl:'mc_02_about_you__17__pronoun__ex_am_or_are', type:'dropdown', options:["am","are"],           aiHint:'Singular or plural be-verb' },
+          ]},
+          { label: 'Company Details', fields: [
+            { key:'mc_company_name',   name:'Company Name',            ghl:'mc_02_about_you__18__company_name__ex_my_company_llc',             type:'text', aiHint:'Ex: My Company, LLC' },
+            { key:'mc_support_email',  name:'Customer Support Email',  ghl:'mc_02_about_you__19__customer_support_email__ex_supportmycompanycom',   type:'text', aiHint:'Ex: support@mycompany.com' },
+            { key:'mc_support_phone',  name:'Customer Support Phone',  ghl:'mc_02_about_you__20__customer_support_phone__ex_7571234567',   type:'text', aiHint:'Ex: 757-123-4567' },
+          ]},
+          { label: 'Send From Details', fields: [
+            { key:'mc_send_from_email', name:'Send From Email',       ghl:'mc_02_about_you__21__send_from_email__ex_memycompanycom',          type:'text', aiHint:'Email participants will see as sender. Ex: me@mycompany.com' },
+            { key:'mc_send_from_sig',   name:'Send From Signature',   ghl:'mc_02_about_you__22__send_from_signature__ex_john_s',      type:'text', aiHint:'Signature at bottom of emails/SMS. Ex: John S.' },
+          ]},
+          { label: 'Legal Details', fields: [
+            { key:'mc_legal_state', name:'Legal Action State', ghl:'mc_02_about_you__23__legal_action_state__ex_florida', type:'text', aiHint:'State for legal/terms language. Ex: Florida' },
+            { key:'mc_legal_city',  name:'Legal Action City',  ghl:'mc_02_about_you__24__legal_action_city__ex_west_palm_beach',  type:'text', aiHint:'City for legal/terms language. Ex: West Palm Beach' },
+          ]},
+        ]
+      },
+
+      'avatar': {
+        label: 'Avatar',
+        steps: [
+          { label: 'Customer Avatar', fields: [
+            { key:'mc_avatar_vertical',          name:'Main Vertical',    ghl:'mc_04_avatar__01__main_vertical__ex_speaking_business_relationships_etc',  type:'text',     aiHint:'Your niche/industry. Ex: Speaking business, Relationships, Health' },
+            { key:'mc_avatar_who',               name:'Your WHO',         ghl:'mc_04_avatar__02__your_who__ex_coaches_consultants__speakers',       type:'text',     aiHint:'Your target audience. Ex: coaches, consultants & speakers' },
+            { key:'mc_avatar_current_identity',  name:'Current Identity', ghl:'mc_04_avatar__03__current_identity__ex_credit_expert_online_trainer_etc', type:'text',   aiHint:'Who they are NOW (the struggle). Ex: Credit Expert, Online Trainer' },
+            { key:'mc_avatar_new_identity',      name:'New Identity',     ghl:'mc_04_avatar__04__new_identity__ex_credit_hero_online_fit_pro_etc',   type:'text',     aiHint:'Who they BECOME (the dream). Ex: Credit Hero, Online Fit Pro' },
+          ]},
+        ]
+      },
+
+      'links': {
+        label: 'Links',
+        steps: [
+          { label: 'Core Funnel Pages', fields: [
+            { key:'mc_link_reg_page',    name:'Registration Page',               ghl:'mc_03_links__01__registration_page__ex_httpswwwexamplecomjointhemasterclass',           type:'text', aiHint:'Main registration URL. Ex: https://www.Example.com/JoinTheMasterclass' },
+            { key:'mc_link_vip_page',    name:'VIP Experience Page',             ghl:'mc_03_links__02__vip_experience_page__ex_httpswwwexamplecomgovipexperience',         type:'text', aiHint:'VIP upsell page URL. Ex: https://www.Example.com/GoVIPExperience' },
+            { key:'mc_link_conf_gen',    name:'General Confirmation Page',       ghl:'mc_03_links__03__general_confirmation_page__ex_httpswwwexamplecommasterclassregistrationconfirmed',   type:'text', aiHint:'Confirmation page for general registrants. Ex: https://www.Example.com/MasterclassRegistrationConfirmed' },
+            { key:'mc_link_conf_vip',    name:'VIP Confirmation Page',           ghl:'mc_03_links__04__vip_confirmation_page__ex_httpswwwexamplecomvipmasterclassregistrationconfirmed',       type:'text', aiHint:'Confirmation page for VIP registrants. Ex: https://www.Example.com/VIPMasterclassRegistrationConfirmed' },
+            { key:'mc_link_dashboard',   name:'Dashboard',                       ghl:'mc_03_links__05__dashboard__ex_httpswwwexamplecom_dashboard',                   type:'text', aiHint:'Member dashboard URL. Ex: https://www.Example.com/_dashboard' },
+            { key:'mc_link_workbook',    name:'Workbook',                        ghl:'mc_03_links__06__workbook__ex_httpswwwdropboxcomsharedfolderexamplelink',                    type:'text', aiHint:'Shared folder or download link. Ex: https://www.Dropbox.com/SharedFolderExampleLink' },
+            { key:'mc_link_vip_delivered', name:'VIP Delivered Page',           ghl:'mc_03_links__07__vip_delivered_page__ex_httpswwwexamplecomvipdelivered',          type:'text', aiHint:'Page where VIP bonuses are delivered. Ex: https://www.Example.com/VIP-Delivered' },
+            { key:'mc_link_whitelist',   name:'Email Whitelist Instructions Page', ghl:'mc_03_links__15__whitelist_page__ex_httpswwwexamplecomwhitelist',            type:'text', aiHint:'How-to whitelist instructions page. Ex: https://www.Example.com/Whitelist' },
+            { key:'mc_link_waitlist_ty', name:'Waiting List Thank You Page',     ghl:'mc_03_links__12__post_challenge_waiting_list_page__ex_httpswwwexamplecomwaitinglistthankyou', type:'text', aiHint:'Post-event waiting list page. Ex: https://www.Example.com/WaitingListThankYou' },
+            { key:'mc_link_replays_upgrade', name:'Masterclass Replays Upgrade Page', ghl:'mc_03_links__16__masterclass_replays_upgrade_page__ex_httpswwwexamplecomlifetimereplays', type:'text', aiHint:'Lifetime replay upgrade offer page. Ex: https://www.Example.com/lifetime-replays' },
+            { key:'mc_link_terms',       name:'Terms & Conditions Page',         ghl:'mc_03_links__13__terms__conditions_page__ex_httpswwwexamplecomtermsconditions',      type:'text', aiHint:'Ex: https://www.Example.com/Terms-Conditions' },
+            { key:'mc_link_privacy',     name:'Privacy Policy Page',             ghl:'mc_03_links__14__privacy_policy_page__ex_httpswwwexamplecomprivacypolicy',         type:'text', aiHint:'Ex: https://www.Example.com/Privacy-Policy' },
+          ]},
+          { label: 'Application & Deposit', fields: [
+            { key:'mc_link_application',    name:'Application Page',             ghl:'mc_03_links__08__application_page__ex_httpswwwexamplecompickme',            type:'text', aiHint:'High-ticket application page. Ex: https://www.Example.com/Pick-Me' },
+            { key:'mc_link_app_calendar',   name:'Application Calendar Page',    ghl:'mc_03_links__09__application_calendar_page__ex_httpswwwexamplecompickmecalendar',   type:'text', aiHint:'Book-a-call page for applicants. Ex: https://www.Example.com/Pick-Me-Calendar' },
+            { key:'mc_link_deposit',        name:'Deposit Collection Page',      ghl:'mc_03_links__10__deposit_collection_page__ex_httpswwwexamplecomdeposit',     type:'text', aiHint:'Deposit payment page. Ex: https://www.Example.com/Deposit' },
+            { key:'mc_link_deposit_conf',   name:'Deposit Confirmation Page',    ghl:'mc_03_links__11__deposit_collection_confirmation__ex_httpswwwexamplecomdepositreceived', type:'text', aiHint:'Post-deposit confirmation. Ex: https://www.Example.com/Deposit-Received' },
+            { key:'mc_link_onboarding_cal', name:'Onboarding Calendar Page',     ghl:'mc_03_links__30__onboarding_call_page__ex_httpswwwexamplecomonboardingcalendar',        type:'text', aiHint:'Onboarding call booking page. Ex: https://www.Example.com/Onboarding-Calendar' },
+          ]},
+          { label: 'Community & Zoom', fields: [
+            { key:'mc_link_community',   name:'Community',                       ghl:'mc_03_links__17__community__ex_httpswwwfacebookcomgroupsyourfacebookgroup',                   type:'text', aiHint:'Facebook Group or community URL. Ex: https://www.Facebook.com/Groups/YourFacebookGroup' },
+            { key:'mc_link_zoom_main',   name:'Zoom Link – Main Session',        ghl:'mc_03_links__18__zoom_link_main_session__ex_httpszoomusj93979841472',      type:'text', aiHint:'Full Zoom join URL. Ex: https://zoom.us/j/93979841472' },
+            { key:'mc_link_zoom_id',     name:'Zoom Link – Main Session (ID Only)', ghl:'mc_03_links__19__zoom_link_main_session_id_only__ex_93979841472', type:'text', aiHint:'Numeric ID only. Ex: 93979841472' },
+          ]},
+          { label: 'Add to Calendar', fields: [
+            { key:'mc_link_cal_main',    name:'Add Main Event To Calendar',      ghl:'mc_03_links__26__add_main_event_to_calendar__ex_httpswwwaddeventcomeventpk18234502',  type:'text', aiHint:'AddEvent.com link. Ex: https://www.addevent.com/event/Pk18234502' },
+            { key:'mc_link_cal_vip',     name:'Add VIP Event To Calendar',       ghl:'mc_03_links__27__add_vip_event_to_calendar__ex_httpswwwaddeventcomeventpk18234503',   type:'text', aiHint:'AddEvent.com VIP link. Ex: https://www.addevent.com/event/Pk18234503' },
+            { key:'mc_link_cal_wp',      name:'Add Welcome Party Event To Calendar', ghl:'mc_03_links__31__add_welcome_party_event_to_calendar__ex_httpswwwaddeventcomeventpk18234504', type:'text', aiHint:'AddEvent.com Welcome Party link. Ex: https://www.addevent.com/event/Pk18234504' },
+          ]},
+          { label: 'High-Ticket Offer Docs', fields: [
+            { key:'mc_link_ht_doc',      name:'Core Offer Details Document',     ghl:'mc_03_links__29__core_offer_details_document__ex_httpsdocsgooglecomdocumentd1abcdefghijk', type:'text', aiHint:'Google Doc with offer details. Ex: https://docs.google.com/document/d/1AbCDeFgHiJk' },
+            { key:'mc_link_wire',        name:'Wire Instructions Document',      ghl:'mc_03_links__30__wire_instructions_document__ex_httpsdocsgooglecomdocumentd1xyzabcdefghij',  type:'text', aiHint:'Google Doc with wire transfer instructions. Ex: https://docs.google.com/document/d/1XyZaBcDeFgHiJ' },
+          ]},
+          { label: 'VIP Stack Delivery', note: '(*Enter the URL or text participants will see when each VIP bonus is delivered. Can be a link or instruction like "Gain access during VIP training".)', fields: [
+            { key:'mc_vip_del_01', name:'VIP Stack #01 Delivered', ghl:'mc_03_links__20__vip_stack_01_delivered__ex_gain_access_during_vip_training', type:'text', aiHint:'Ex: Gain access during VIP training' },
+            { key:'mc_vip_del_02', name:'VIP Stack #02 Delivered', ghl:'mc_03_links__21__vip_stack_02_delivered__ex_gain_access_during_vip_training', type:'text', aiHint:'Ex: Gain access during VIP training' },
+            { key:'mc_vip_del_03', name:'VIP Stack #03 Delivered', ghl:'mc_03_links__22__vip_stack_03_delivered__ex_httpswwwdropboxcomsharedfolderexamplelink', type:'text', aiHint:'Ex: https://www.Dropbox.com/SharedFolderExampleLink' },
+            { key:'mc_vip_del_04', name:'VIP Stack #04 Delivered', ghl:'mc_03_links__23__vip_stack_04_delivered__ex_gain_access_during_vip_training', type:'text', aiHint:'Ex: Gain access during VIP training' },
+            { key:'mc_vip_del_05', name:'VIP Stack #05 Delivered', ghl:'mc_03_links__24__vip_stack_05_delivered__ex_gain_access_during_vip_training', type:'text', aiHint:'Ex: Gain access during VIP training' },
+            { key:'mc_vip_del_06', name:'VIP Stack #06 Delivered', ghl:'mc_03_links__25__vip_stack_06_delivered__ex_httpsdocsgooglecomspreadsheetsexample', type:'text', aiHint:'Ex: https://docs.google.com/spreadsheets/example' },
+          ]},
+          { label: 'Replays Delivered', fields: [
+            { key:'mc_link_replays_del', name:'Masterclass Replays Delivered',   ghl:'mc_03_links__28__masterclass_replays_delivered__ex_httpswwwdropboxcomshx9gav4x4hbdmy1waadek1akabrxsjp3yqqzdzheadl0', type:'text', aiHint:'Dropbox or drive link to replay folder. Ex: https://www.dropbox.com/sh/x9gav4x4hbdmy1w/...' },
+          ]},
+        ]
+      },
+
+      'copy': {
+        label: 'Copy',
+        steps: [
+          { label: 'Promise', fields: [
+            { key:'mc_attention_stmt',   name:'Attention Statement (Pre-Headline)', ghl:'mc_06_copy__01__attention_statement__ex_coaches_ready_to_launch_a_scalable_highticket_offer_fast', type:'text', aiHint:'Short bold opener above the headline. Ex: Coaches looking to break $10k months' },
+            { key:'mc_promise',          name:'Headline (Masterclass Promise)',     ghl:'mc_06_copy__02__headline__ex_discover_how_to_craft_a_highticket_offer_that_fuels_a_milliondollar_coaching_businessusing_our_5step_virtual_event_framework',            type:'textarea', aiHint:'Main value proposition headline. Ex: Discover How to Craft a High-Ticket Offer That Fuels a Million-Dollar Coaching Business' },
+            { key:'mc_sub_headline',     name:'Subheadline',                        ghl:'mc_06_copy__03__subheadline__ex_without_the_overwhelm_burnout_or_wasted_time_trying_to_do_it_alone',         type:'text', aiHint:'Supporting line under headline. Ex: Without the Overwhelm, Burnout, or Wasted Time Trying to Do It Alone' },
+          ]},
+          { label: 'System', fields: [
+            { key:'mc_process_steps',    name:'Unique Process Steps',   ghl:'mc_06_copy__04__unique_process_steps__ex_5_step_framework',   type:'text', aiHint:'Step count and type. Ex: 5 Step Framework' },
+            { key:'mc_process_outcome',  name:'Unique Process Outcome', ghl:'mc_06_copy__05__unique_process_outcome__ex_high_ticket_success', type:'text', aiHint:'What the process achieves. Ex: High Ticket Success' },
+            { key:'mc_system_name',      name:'System Name',            ghl:'mc_06_copy__06__system_name__ex_atomic_offer_framework',    type:'text', aiHint:'Branded name of your method. Ex: Atomic Offer Framework' },
+            { key:'mc_problem_to_solve', name:'Problem To Solve',       ghl:'mc_06_copy__07__problem_to_solve__ex_generate_high_ticket_clients_without_spending_a_ton_of_money_on_ads_or_doing_1on1_calls',       type:'textarea', aiHint:'Core problem your system solves. Ex: generate high ticket clients without spending a ton of money on ads or doing 1-on-1 calls' },
+            { key:'mc_big_desire',       name:'Big Desire',             ghl:'mc_06_copy__18__big_desire__ex_launch_your_first_or_next_6figure_offer_using_a_single_virtual_event',             type:'textarea', aiHint:'Ultimate outcome your clients want. Ex: launch your first or next 6-figure offer using a single virtual event' },
+          ]},
+          { label: 'Belief Shifts', fields: [
+            { key:'mc_old_b1', name:'Old Belief #01', ghl:'mc_06_copy__08__old_belief_01__ex_chasing_clients_all_day', type:'text', aiHint:'Ex: Chasing clients all day' },
+            { key:'mc_new_b1', name:'New Belief #01', ghl:'mc_06_copy__09__new_belief_01__ex_clients_come_to_me_ready_to_buy', type:'text', aiHint:'Ex: Clients come to me ready to buy' },
+            { key:'mc_old_b2', name:'Old Belief #02', ghl:'mc_06_copy__10__old_belief_02__ex_sales_calls_all_week', type:'text', aiHint:'Ex: Sales calls all week' },
+            { key:'mc_new_b2', name:'New Belief #02', ghl:'mc_06_copy__11__new_belief_02__ex_one_offer_sells_to_many_at_once', type:'text', aiHint:'Ex: One offer sells to many at once' },
+            { key:'mc_old_b3', name:'Old Belief #03', ghl:'mc_06_copy__12__old_belief_03__ex_confusing_funnels_and_tactics', type:'text', aiHint:'Ex: Confusing funnels and tactics' },
+            { key:'mc_new_b3', name:'New Belief #03', ghl:'mc_06_copy__13__new_belief_03__ex_one_simple_system_that_works', type:'text', aiHint:'Ex: One simple system that works' },
+            { key:'mc_old_b4', name:'Old Belief #04', ghl:'mc_06_copy__14__old_belief_04__ex_lowticket_burnout', type:'text', aiHint:'Ex: Low-ticket burnout' },
+            { key:'mc_new_b4', name:'New Belief #04', ghl:'mc_06_copy__15__new_belief_04__ex_highticket_clarity_and_freedom', type:'text', aiHint:'Ex: High-ticket clarity and freedom' },
+            { key:'mc_old_b5', name:'Old Belief #05', ghl:'mc_06_copy__16__old_belief_05__ex_posting_endlessly_for_leads', type:'text', aiHint:'Ex: Posting endlessly for leads' },
+            { key:'mc_new_b5', name:'New Belief #05', ghl:'mc_06_copy__17__new_belief_05__ex_strategic_events_that_fill_your_calendar', type:'text', aiHint:'Ex: Strategic events that fill your calendar' },
+          ]},
+        ]
+      },
+
+      'design': {
+        label: 'Design',
+        steps: [
+          { label: 'Brand Color 01 (Funnel Background)', fields: [
+            { key:'mc_color_01_darkest', name:'Brand Color 01 Darkest', ghl:'mc_07_design__02__brand_color_01_darkest__ex_081d3a', type:'color', aiHint:'Ex: #081D3A' },
+            { key:'mc_color_01_dark',    name:'Brand Color 01 Dark',    ghl:'mc_07_design__03__brand_color_01_dark__ex_0f2c6a',    type:'color', aiHint:'Ex: #0F2C6A' },
+            { key:'mc_color_01_light',   name:'Brand Color 01 Light',   ghl:'mc_07_design__04__brand_color_01_light__ex_3d89c9',   type:'color', aiHint:'Ex: #3D89C9' },
+          ]},
+          { label: 'Brand Color 02 (Buttons & Icons)', fields: [
+            { key:'mc_color_02_dark',    name:'Brand Color 02 Dark',    ghl:'mc_07_design__05__brand_color_02_dark__ex_e6a21c',    type:'color', aiHint:'Ex: #E6A21C' },
+            { key:'mc_color_02_light',   name:'Brand Color 02 Light',   ghl:'mc_07_design__06__brand_color_02_light__ex_ffdc86',   type:'color', aiHint:'Ex: #FFDC86' },
+            { key:'mc_btn_color_text',   name:'Button Color Text',      ghl:'mc_07_design__07__button_color_text__ex_000000',      type:'color', aiHint:'Ex: #000000' },
+          ]},
+          { label: 'Logo & Images', fields: [
+            { key:'mc_offer_logo_light', name:'Offer Logo Light',       ghl:'mc_07_design__11__offer_logo_light__ex_httpsinsertimagelinkjpeg',       type:'upload', hint:'Light version of offer logo · JPG/PNG/JPEG · up to 50MB' },
+            { key:'mc_headshot_meet',    name:'Headshot – Meet Your Host(s)', ghl:'mc_07_design__16__meet_your_hosts_headshot__ex_httpsinsertimagelinkjpeg', type:'upload', hint:'Ideal 375px × 400px · JPG/PNG/JPEG · up to 50MB' },
+            { key:'mc_headshot_s1',      name:'Headshot – Session #01',  ghl:'mc_07_design__12__headshot_session_01__ex_httpsinsertimagelinkjpeg',   type:'upload', hint:'JPG/PNG/JPEG · up to 50MB' },
+            { key:'mc_headshot_s2',      name:'Headshot – Session #02',  ghl:'mc_07_design__13__headshot_session_02__ex_httpsinsertimagelinkjpeg',   type:'upload', hint:'JPG/PNG/JPEG · up to 50MB' },
+            { key:'mc_headshot_s3',      name:'Headshot – Session #03',  ghl:'mc_07_design__14__headshot_session_03__ex_httpsinsertimagelinkjpeg',   type:'upload', hint:'JPG/PNG/JPEG · up to 50MB' },
+            { key:'mc_headshot_s4',      name:'Headshot – Session #04',  ghl:'mc_07_design__15__headshot_session_04__ex_httpsinsertimagelinkjpeg',   type:'upload', hint:'JPG/PNG/JPEG · up to 50MB' },
+            { key:'mc_vip_3d_mockup',    name:'VIP Experience 3D Mockup', ghl:'mc_07_design__17__vip_experience_3d_mockup__ex_httpsinsertimagelinkjpeg', type:'upload', hint:'3D render of VIP bonuses · JPG/PNG/JPEG · up to 50MB' },
+          ]},
+          { label: 'Page Videos', fields: [
+            { key:'mc_video_reg',     name:'Registration Page Video',     ghl:'mc_07_design__18__registration_page_video__ex_httpsyoutube_sdrmtkxw34',     type:'text', aiHint:'YouTube embed URL. Ex: https://youtu.be/_sDrMtKxw34' },
+            { key:'mc_video_vip',     name:'VIP Experience Page Video',   ghl:'mc_07_design__19__vip_experience_page_video__ex_httpsyoutube_sdrmteztno',   type:'text', aiHint:'YouTube embed URL. Ex: https://youtu.be/_sDrMteztno' },
+            { key:'mc_video_app',     name:'Application Page Video',      ghl:'mc_07_design__20__application_page_video__ex_httpsyoutube_sdrmtbzq87',      type:'text', aiHint:'YouTube embed URL. Ex: https://youtu.be/_sDrMtBzq87' },
+            { key:'mc_video_deposit', name:'Deposit Page Video',          ghl:'mc_07_design__21__deposit_page_video__ex_httpsyoutube_sdrmtqv19z',          type:'text', aiHint:'YouTube embed URL. Ex: https://youtu.be/_sDrMtQv19z' },
+          ]},
+        ]
+      },
+
+      'communication': {
+        label: 'Communication',
+        steps: [
+          { label: 'External SMS', note: '(*Choose if you\'d like the system to send text messages to participants in addition to emails.)', fields: [
+            { key:'mc_sms_enabled',  name:'Send Text Messages In Addition To Emails?', ghl:'mc_08_communication__01__external_sms__ex_yes_no',        type:'dropdown', options:['Yes','No'], aiHint:'Ex: Yes or No' },
+            { key:'mc_sms_opt_out',  name:'SMS Opt Out Keyword (We Suggest "OUT". If You Change This You Must Also Update Workflow MC_09)', ghl:'mc_08_communication__01__sms_opt_out_keyword__ex_out', type:'text', aiHint:'Always use: OUT' },
+          ]},
+          { label: 'Internal Notifications – Contact', note: '(*The system will notify you when participants take action. Enter your best contact info below.)', fields: [
+            { key:'mc_notif_email', name:'Best Email', ghl:'mc_10_notifications__01__best_email__ex_exampleyourcompanycom', type:'text', aiHint:'Ex: example@yourcompany.com' },
+            { key:'mc_notif_text',  name:'Best Text',  ghl:'mc_10_notifications__02__best_text__ex_5554461316',  type:'text', aiHint:'Ex: 555-446-1316' },
+          ]},
+          { label: 'Internal Notifications – Options', note: '(*Choose how to receive each type of notification.)', fields: [
+            { key:'mc_notif_registrations', name:'Registrations',          ghl:'mc_10_notifications__03__registrations__ex_email_text_both_none',          type:'dropdown', options:['Email','Text','Both','None'], aiHint:'How to be notified of new registrations' },
+            { key:'mc_notif_vip',           name:'VIP',                    ghl:'mc_10_notifications__04__vip__ex_email_text_both_none',                    type:'dropdown', options:['Email','Text','Both','None'], aiHint:'How to be notified of VIP upgrades' },
+            { key:'mc_notif_applied',       name:'Applied',                ghl:'mc_10_notifications__05__applied__ex_email_text_both_none',                type:'dropdown', options:['Email','Text','Both','None'], aiHint:'How to be notified of applications' },
+            { key:'mc_notif_purchase',      name:'Purchase (Deposit)',     ghl:'mc_10_notifications__06__purchase_deposit__ex_email_text_both_none',       type:'dropdown', options:['Email','Text','Both','None'], aiHint:'How to be notified of deposits' },
+            { key:'mc_notif_app_waitlist',  name:'Application Waiting List', ghl:'mc_10_notifications__07__application_waiting_list__ex_email_text_both_none', type:'dropdown', options:['Email','Text','Both','None'], aiHint:'How to be notified of waitlist signups' },
+            { key:'mc_notif_next_event',    name:'Next Event Waiting List', ghl:'mc_10_notifications__08__next_event_waiting_list__ex_email_text_both_none', type:'dropdown', options:['Email','Text','Both','None'], aiHint:'How to be notified of next-event waitlist' },
+          ]},
+        ]
+      },
+
+      'vip-upgrade': {
+        label: 'VIP Upgrade',
+        steps: [
+          { label: 'VIP Stack #01', fields: [
+            { key:'mc_vip_s01_title',  name:'VIP Stack #01 Title',  ghl:'mc_05_vip__01__vip_stack_01_title__ex_1hour_additional_vip_training',  type:'text', aiHint:'Ex: 1-Hour Additional VIP Training' },
+            { key:'mc_vip_s01_result', name:'VIP Stack #01 Result', ghl:'mc_05_vip__02__vip_stack_01_result__ex_join_host_and_the_team', type:'text', aiHint:'Ex: Join HOST and the Team' },
+            { key:'mc_vip_del_s01',    name:'VIP Stack #01 Delivery', ghl:'mc_03_links__20__vip_stack_01_delivered__ex_gain_access_during_vip_training', type:'text', aiHint:'Ex: Gain access during VIP training' },
+          ]},
+          { label: 'VIP Stack #02', fields: [
+            { key:'mc_vip_s02_title',  name:'VIP Stack #02 Title',  ghl:'mc_05_vip__03__vip_stack_02_title__ex_priority_live_qa',  type:'text', aiHint:'Ex: Priority Live Q&A' },
+            { key:'mc_vip_s02_result', name:'VIP Stack #02 Result', ghl:'mc_05_vip__04__vip_stack_02_result__ex_vips_get_their_questions_answered_first', type:'text', aiHint:'Ex: VIPs Get Their Questions Answered First' },
+            { key:'mc_vip_del_s02',    name:'VIP Stack #02 Delivery', ghl:'mc_03_links__21__vip_stack_02_delivered__ex_gain_access_during_vip_training', type:'text', aiHint:'Ex: Gain access during VIP training' },
+          ]},
+          { label: 'VIP Stack #03', fields: [
+            { key:'mc_vip_s03_title',  name:'VIP Stack #03 Title',  ghl:'mc_05_vip__05__vip_stack_03_title__ex_vip_worksheet',  type:'text', aiHint:'Ex: VIP Worksheet' },
+            { key:'mc_vip_s03_result', name:'VIP Stack #03 Result', ghl:'mc_05_vip__06__vip_stack_03_result__ex_companion_worksheet_to_help_clarify__structure_your_desired_result', type:'text', aiHint:'Ex: Companion Worksheet To Help Clarify & Structure Your Desired Result' },
+            { key:'mc_vip_del_s03',    name:'VIP Stack #03 Delivery', ghl:'mc_03_links__22__vip_stack_03_delivered__ex_httpswwwdropboxcomsharedfolderexamplelink', type:'text', aiHint:'Ex: https://www.Dropbox.com/SharedFolderExampleLink' },
+          ]},
+          { label: 'VIP Stack #04', fields: [
+            { key:'mc_vip_del_s04', name:'VIP Stack #04 Delivery', ghl:'mc_03_links__23__vip_stack_04_delivered__ex_gain_access_during_vip_training', type:'text', aiHint:'Ex: Gain access during VIP training' },
+          ]},
+          { label: 'VIP Stack #05', fields: [
+            { key:'mc_vip_del_s05', name:'VIP Stack #05 Delivery', ghl:'mc_03_links__24__vip_stack_05_delivered__ex_gain_access_during_vip_training', type:'text', aiHint:'Ex: Gain access during VIP training' },
+          ]},
+          { label: 'VIP Stack #06', fields: [
+            { key:'mc_vip_del_s06', name:'VIP Stack #06 Delivery', ghl:'mc_03_links__25__vip_stack_06_delivered__ex_httpsdocsgooglecomspreadsheetsexample', type:'text', aiHint:'Ex: https://docs.google.com/spreadsheets/example' },
+          ]},
+          { label: 'VIP Price', fields: [
+            { key:'mc_vip_price_anchor', name:'VIP Experience Price Anchor', ghl:'mc_05_vip__offer__13__vip_experience_price_anchor__ex_497', type:'text', aiHint:'Crossed-out price. Ex: $497' },
+            { key:'mc_vip_price_final',  name:'VIP Experience Final Price',  ghl:'mc_05_vip__offer__14__vip_experience_final_price__ex_97',  type:'text', aiHint:'Actual charge. Ex: $97' },
+          ]},
+        ]
+      },
+
+      'application': {
+        label: 'Application',
+        steps: [
+          { label: 'Qualification Questions', fields: [
+            { key:'mc_app_q01', name:'Application Qualifying Question 01', ghl:'mc_05_vip__offer__15__application_qualifying_question_01__ex_whats_your_current_monthly_revenue', type:'textarea', aiHint:'Ex: What\'s your current monthly revenue?' },
+            { key:'mc_app_q02', name:'Application Qualifying Question 02', ghl:'mc_05_vip__offer__16__application_qualifying_question_02__ex_do_you_already_have_a_coaching_offer', type:'textarea', aiHint:'Ex: Do you already have a coaching offer?' },
+            { key:'mc_app_q03', name:'Application Qualifying Question 03', ghl:'mc_05_vip__offer__17__application_qualifying_question_03__ex_are_you_willing_to_follow_a_proven_system', type:'textarea', aiHint:'Ex: Are you willing to follow a proven system?' },
+          ]},
+          { label: 'Closing Date', note: '(**The formatted timestamp should be +1 calendar day at 12:00 AM from the actual closing date, which prevents GHL from closing the application prematurely.)', fields: [
+            { key:'mc_app_closing_day',  name:'Application Closing DAY',  ghl:'mc_05_vip__offer__25__application_disappearing_day__ex_sunday',  type:'dropdown', options:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], aiHint:'Ex: Sunday' },
+            { key:'mc_app_closing_date', name:'Application Closing DATE', ghl:'mc_05_vip__offer__26__application_disappearing_date__ex_jan_7', type:'text', aiHint:'Ex: Jan 7' },
+            { key:'mc_app_closing_time', name:'Application Closing TIME', ghl:'mc_05_vip__offer__27__application_disappearing_time__ex_midnight', type:'text', aiHint:'Ex: Midnight' },
+            { key:'mc_app_closing_fmt',  name:'Application Closing Formatted (**IMPORTANT – MM-DD-YYYY | 12HR – SET TO +1 DAY AT 12:00 AM)', ghl:'mc_05_vip__offer__28__application_disappearing_day_time_formatted__ex_01082024_1200_am', type:'text', aiHint:'GHL timestamp. Ex: 01-08-2024 12:00 AM' },
+          ]},
+        ]
+      },
+
+      'high-ticket-offer': {
+        label: 'High-Ticket Offer',
+        steps: [
+          { label: 'Offer Details', fields: [
+            { key:'mc_ht_title',   name:'High-Ticket Offer Title',   ghl:'mc_05_vip__offer__18__core_offer_title__ex_atomic_offer_accelerator',   type:'text',     aiHint:'Ex: Atomic Offer Accelerator' },
+            { key:'mc_ht_outcome', name:'High-Ticket Offer Outcome', ghl:'mc_05_vip__offer__19__core_offer_outcome__ex_learn_how_to_launch_your_next_six_figure_offer', type:'textarea', aiHint:'Ex: learn how to launch your next six figure offer!' },
+          ]},
+          { label: 'Pricing', fields: [
+            { key:'mc_ht_price_total',   name:'High-Ticket Offer Price Total',           ghl:'mc_05_vip__offer__20__core_offer_price_total__ex_10000',              type:'text', aiHint:'Ex: $10,000' },
+            { key:'mc_ht_price_deposit', name:'High-Ticket Offer Price Deposit',         ghl:'mc_05_vip__offer__21__core_offer_price_deposit__ex_1000',            type:'text', aiHint:'Ex: $1,000' },
+            { key:'mc_ht_balance_after', name:'High-Ticket Offer Balance After Deposit', ghl:'mc_05_vip__offer__2101__core_offer_balance_after_deposit__ex_9000',  type:'text', aiHint:'Ex: $9,000' },
+            { key:'mc_ht_balance_01',    name:'Balance Option 01',                       ghl:'mc_05_vip__offer__22__core_offer_balance_option_01__ex_we_have_a_finance_company',        type:'text', aiHint:'Ex: We have a finance company — contact michael@deposyt.com' },
+            { key:'mc_ht_balance_02',    name:'Balance Option 02',                       ghl:'mc_05_vip__offer__23__core_offer_balance_option_02__ex_you_can_borrow_money',        type:'text', aiHint:'Ex: You can borrow money from a credit card or personal loan' },
+            { key:'mc_ht_balance_03',    name:'Balance Option 03',                       ghl:'mc_05_vip__offer__24__core_offer_balance_option_03__ex_you_would_pay_12_payments',        type:'text', aiHint:'Ex: You would pay 12 payments of $X/month' },
+          ]},
+        ]
+      },
+
+      'testimonials': {
+        label: 'Testimonials',
+        steps: [
+          { label: 'Social Proof #01', fields: [
+            { key:'mc_sp01_video',       name:'Social Proof #01 YouTube Video',        ghl:'mc_09_testimonials__01__social_proof_01_youtube_video__ex_httpswwwyoutubecomwatchvq2v5tio3mdil',       type:'text', aiHint:'Ex: https://www.youtube.com/watch?v=Q2v5tio3mdil' },
+            { key:'mc_sp01_transcript',  name:'Social Proof #01 Brief Transcription',  ghl:'mc_09_testimonials__02__social_proof_01_brief_transcription__ex_in_just_one_afternoon_i_walked_away_with_a_highticket_offer_im_actually_excited_to_sell', type:'textarea', aiHint:'Ex: In just one afternoon, I walked away with a high-ticket offer I\'m actually excited to sell.' },
+            { key:'mc_sp01_name',        name:'Social Proof #01 Name',                 ghl:'mc_09_testimonials__03__social_proof_01_name__ex_daniel_r',                type:'text', aiHint:'First name + last initial. Ex: Daniel R.' },
+          ]},
+          { label: 'Social Proof #02', fields: [
+            { key:'mc_sp02_video',       name:'Social Proof #02 YouTube Video',        ghl:'mc_09_testimonials__04__social_proof_02_youtube_video__ex_httpswwwyoutubecomwatchvq2v5tio3mdil',       type:'text', aiHint:'Ex: https://www.youtube.com/watch?v=Q2v5tio3mdil' },
+            { key:'mc_sp02_transcript',  name:'Social Proof #02 Brief Transcription',  ghl:'mc_09_testimonials__05__social_proof_02_brief_transcription__ex_this_masterclass_gave_me_more_clarity_than_months_of_coaching', type:'textarea', aiHint:'Ex: This Masterclass gave me more clarity than months of coaching.' },
+            { key:'mc_sp02_name',        name:'Social Proof #02 Name',                 ghl:'mc_09_testimonials__06__social_proof_02_name__ex_chase_b',                type:'text', aiHint:'Ex: Chase B.' },
+          ]},
+          { label: 'Social Proof #03', fields: [
+            { key:'mc_sp03_video',       name:'Social Proof #03 YouTube Video',        ghl:'mc_09_testimonials__07__social_proof_03_youtube_video__ex_httpswwwyoutubecomwatchvq2v5tio3mdil',       type:'text', aiHint:'Ex: https://www.youtube.com/watch?v=Q2v5tio3mdil' },
+            { key:'mc_sp03_transcript',  name:'Social Proof #03 Brief Transcription',  ghl:'mc_09_testimonials__08__social_proof_03_brief_transcription__ex_i_finally_packaged_my_expertise_into_something_premium_clients_want_to_buy', type:'textarea', aiHint:'Ex: I finally packaged my expertise into something premium clients want to buy.' },
+            { key:'mc_sp03_name',        name:'Social Proof #03 Name',                 ghl:'mc_09_testimonials__09__social_proof_03_name__ex_elieen_w',                type:'text', aiHint:'Ex: Eileen W.' },
+          ]},
+          { label: 'Social Proof #04', fields: [
+            { key:'mc_sp04_video',       name:'Social Proof #04 YouTube Video',        ghl:'mc_09_testimonials__10__social_proof_04_youtube_video__ex_httpswwwyoutubecomwatchvq2v5tio3mdil',       type:'text', aiHint:'Ex: https://www.youtube.com/watch?v=Q2v5tio3mdil' },
+            { key:'mc_sp04_transcript',  name:'Social Proof #04 Brief Transcription',  ghl:'mc_09_testimonials__11__social_proof_04_brief_transcription__ex_i_launched_my_first_virtual_event_two_weeks_later__and_closed_18k_in_sales', type:'textarea', aiHint:'Ex: I launched my first virtual event two weeks later — and closed $18k in sales.' },
+            { key:'mc_sp04_name',        name:'Social Proof #04 Name',                 ghl:'mc_09_testimonials__12__social_proof_04_name__ex_leonard_p',                type:'text', aiHint:'Ex: Leonard P.' },
+          ]},
+        ]
+      },
+
+      'welcome-party': {
+        label: 'Welcome Party',
+        steps: [
+          { label: 'Welcome Party Details', fields: [
+            { key:'mc_wp_day',  name:'Welcome Party Event Day',  ghl:'mc_01_event_details__36__welcome_pary_event_day__ex_monday', type:'dropdown', options:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], aiHint:'Ex: Monday (note: GHL key has typo "pary" — use as-is)' },
+            { key:'mc_wp_date', name:'Welcome Party Event Date', ghl:'mc_01_event_details__37__welcome_party_event_date__ex_jan_15', type:'text', aiHint:'Ex: Jan 15' },
+            { key:'mc_wp_time', name:'Welcome Party Event Time', ghl:'mc_01_event_details__38__welcome_party_event_time__ex_8pm_est', type:'text', aiHint:'Ex: 8pm EST' },
+          ]},
+        ]
+      },
+
+    }
+  },
+
+  leadmagnet: {
+    label: 'Lead Magnet Launchpad',
+    icon: '🧲',
+    color: '#7daa22',
+    sections: {
+
+      'copy': {
+        label: 'Copy',
+        steps: [
+          { label: 'Promise', fields: [
+            { key:'lm_attention_stmt', name:'Attention Statement',  ghl:'lm_01_copy__01__attention_statement__ex_for_coaches__consultants_who_are_tired_of_chasing_clients', type:'text',     aiHint:'Ex: For Coaches & Consultants Who Are Tired of Chasing Clients' },
+            { key:'lm_headline',       name:'Headline',             ghl:'lm_01_copy__02__headline__ex_get_the_exact_blueprint',            type:'textarea', aiHint:'Ex: Get The Exact Blueprint We Use To Help Coaches Build Authority Fast, Nurture Trust on Autopilot, and Sell Your High-ticket Offer' },
+            { key:'lm_subheadline',    name:'Subheadline',          ghl:'lm_01_copy__03__subheadline__ex_without_chasing_burnout_or_tech_overwhelm',         type:'text',     aiHint:'Ex: Without chasing, burnout, or tech overwhelm!' },
+            { key:'lm_name',           name:'Lead Magnet Name',     ghl:'lm_01_copy__04__lead_magnet_name__ex_your_authority_ecosystem_blueprint',    type:'text',     aiHint:'Ex: Your Authority Ecosystem Blueprint' },
+          ]},
+          { label: 'Bullet Point #01', fields: [
+            { key:'lm_bp01_idea',    name:'Bullet Point #01 Idea',    ghl:'lm_01_copy__05__bullet_point_01_idea__ex_attract_dream_clients_on_demand',    type:'text',     aiHint:'Short punchy title. Ex: Attract Dream Clients on Demand' },
+            { key:'lm_bp01_details', name:'Bullet Point #01 Details', ghl:'lm_01_copy__06__bullet_point_01_details__ex_build_an_ecosystem', type:'textarea', aiHint:'Ex: Build an ecosystem that positions you as the go-to authority so ideal clients come to you, ready to buy.' },
+          ]},
+          { label: 'Bullet Point #02', fields: [
+            { key:'lm_bp02_idea',    name:'Bullet Point #02 Idea',    ghl:'lm_01_copy__07__bullet_point_02_idea__ex_build_trust_on_autopilot',    type:'text',     aiHint:'Ex: Build Trust on Autopilot' },
+            { key:'lm_bp02_details', name:'Bullet Point #02 Details', ghl:'lm_01_copy__08__bullet_point_02_details__ex_use_storydriven_systems', type:'textarea', aiHint:'Ex: Use story-driven systems that nurture prospects automatically and make them feel connected before you speak.' },
+          ]},
+          { label: 'Bullet Point #03', fields: [
+            { key:'lm_bp03_idea',    name:'Bullet Point #03 Idea',    ghl:'lm_01_copy__09__bullet_point_03_idea__ex_turn_followers_into_consistent_revenue', type:'text',     aiHint:'Ex: Turn Followers Into Consistent Revenue' },
+            { key:'lm_bp03_details', name:'Bullet Point #03 Details', ghl:'lm_01_copy__10__bullet_point_03_details__ex_transform_passive_followers', type:'textarea', aiHint:'Ex: Transform passive followers into loyal fans who join your programs and create predictable monthly income.' },
+          ]},
+        ]
+      },
+
+      'design': {
+        label: 'Design',
+        steps: [
+          { label: 'Lead Magnet Image', fields: [
+            { key:'lm_image', name:'Lead Magnet Image', ghl:'lm_02_design__01__lead_magnet_image__ex_httpsinsertimagelinkjpeg', type:'upload', hint:'JPG, PNG, JPEG · up to 50MB' },
+          ]},
+          { label: 'Brand Color 01', fields: [
+            { key:'lm_color_01_darkest', name:'Brand Color 01 Darkest', ghl:'lm_02_design__02__brand_color_01_darkest__ex_081d3a', type:'color', aiHint:'Ex: #081D3A' },
+            { key:'lm_color_01_dark',    name:'Brand Color 01 Dark',    ghl:'lm_02_design__03__brand_color_01_dark__ex_0f2c6a',    type:'color', aiHint:'Ex: #0F2C6A' },
+            { key:'lm_color_01_light',   name:'Brand Color 01 Light',   ghl:'lm_02_design__04__brand_color_01_light__ex_3d89c9',   type:'color', aiHint:'Ex: #3D89C9' },
+          ]},
+          { label: 'Brand Color 02', fields: [
+            { key:'lm_color_02_dark',  name:'Brand Color 02 Dark',  ghl:'lm_02_design__05__brand_color_02_dark__ex_e6a21c',  type:'color', aiHint:'Ex: #E6A21C' },
+            { key:'lm_color_02_light', name:'Brand Color 02 Light', ghl:'lm_02_design__06__brand_color_02_light__ex_ffdc86', type:'color', aiHint:'Ex: #FFDC86' },
+          ]},
+          { label: 'Logo', fields: [
+            { key:'lm_logo_dark',  name:'Brand Logo Dark',  ghl:'lm_02_design__07__brand_logo_dark__ex_httpsinsertimagelinkjpeg',  type:'upload', hint:'Dark version of logo · JPG, PNG, JPEG · up to 50MB' },
+            { key:'lm_logo_light', name:'Brand Logo Light', ghl:'lm_02_design__08__brand_logo_light__ex_httpsinsertimagelinkjpeg', type:'upload', hint:'Light version of logo · JPG, PNG, JPEG · up to 50MB' },
+          ]},
+        ]
+      },
+
+      'about-you': {
+        label: 'About You',
+        steps: [
+          { label: 'Company Details', fields: [
+            { key:'lm_company_name',  name:'Company Name',            ghl:'lm_03_about_you__01__company_name__ex_my_company_llc',             type:'text', aiHint:'Ex: My Company, LLC' },
+            { key:'lm_support_email', name:'Customer Support Email',  ghl:'lm_03_about_you__02__customer_support_email__ex_supportmycompanycom',   type:'text', aiHint:'Ex: support@mycompany.com' },
+            { key:'lm_support_phone', name:'Customer Support Phone',  ghl:'lm_03_about_you__03__customer_support_phone__ex_7571234567',   type:'text', aiHint:'Ex: 757-123-4567' },
+          ]},
+          { label: 'Legal', fields: [
+            { key:'lm_legal_state', name:'Legal Action State', ghl:'lm_03_about_you__04__legal_action_state__ex_florida', type:'text', aiHint:'Ex: Florida' },
+            { key:'lm_legal_city',  name:'Legal Action City',  ghl:'lm_03_about_you__05__legal_action_city__ex_west_palm_beach',  type:'text', aiHint:'Ex: West Palm Beach' },
+          ]},
+        ]
+      },
+
+      'links': {
+        label: 'Links',
+        steps: [
+          { label: 'Pages', fields: [
+            { key:'lm_privacy_page',   name:'Privacy Policy Page',     ghl:'lm_04_links__01__privacy_policy_page__ex_httpswwwexamplecomprivacypolicy',     type:'text', aiHint:'Ex: https://www.Example.com/Privacy-Policy' },
+            { key:'lm_terms_page',     name:'Terms & Conditions Page', ghl:'lm_04_links__02__terms__conditions_page__ex_httpswwwexamplecomtermsconditions',  type:'text', aiHint:'Ex: https://www.Example.com/Terms-Conditions' },
+            { key:'lm_download_link',  name:'Lead Magnet Download',    ghl:'lm_04_links__03__lead_magnet_download__ex_httpswwwexamplecomtermsconditions',    type:'text', aiHint:'Direct download or delivery URL for the lead magnet' },
+          ]},
+        ]
+      },
+
+    }
+  },
+
+  network: {
+    label: 'Network Launchpad',
+    icon: '🌐',
+    color: '#0e9aa7',
+    sections: {
+
+      'about-you': {
+        label: 'About You',
+        steps: [
+          { label: 'Name & Title', fields: [
+            { key:'net_full_name', name:'Full Name',     ghl:'nw_01_about_you__01__full_name__ex_john_doe', type:'text', aiHint:'Ex: Brendan McCauley' },
+            { key:'net_title',     name:'Title',         ghl:'nw_01_about_you__02__title__ex_founder',     type:'text', aiHint:'Ex: Business Development Engineer' },
+            { key:'net_tagline',   name:'Tagline',       ghl:'nw_01_about_you__03__tagline__ex_insert_tagline_here',   type:'text', aiHint:'Ex: Every expert deserves to be visible while remaining free from the backstage burden.' },
+          ]},
+          { label: 'Contact Info', fields: [
+            { key:'net_phone', name:'Phone', ghl:'nw_01_about_you__04__phone__ex_7571234567', type:'text', aiHint:'Ex: 757-123-4567' },
+            { key:'net_email', name:'Email', ghl:'nw_01_about_you__05__email__ex_namemycompanycom', type:'text', aiHint:'Ex: brendan@growingentrepreneur.com' },
+          ]},
+          { label: 'Company', fields: [
+            { key:'net_company_name', name:'Company Name', ghl:'nw_01_about_you__06__company_name__ex_my_company_llc', type:'text', aiHint:'Ex: My Company, LLC' },
+          ]},
+        ]
+      },
+
+      'buttons': {
+        label: 'Buttons',
+        steps: [
+          ...[1,2,3,4,5,6,7,8,9,10].map(n => {
+            const pad = String(n).padStart(2,'0');
+            const ti = (n-1)*2+1, li = (n-1)*2+2;
+            const tiPad = String(ti).padStart(2,'0'), liPad = String(li).padStart(2,'0');
+            return {
+              label: `Button Stack #${pad}`,
+              fields: [
+                { key:`net_btn${pad}_title`, name:`Button Stack #${pad} Title`, ghl:`nw_02_buttons__${tiPad}__button_stack_${pad}_title__ex_my_awesome_free_gift`, type:'text', aiHint:`Button label text. Ex: Join My Upcoming Masterclass` },
+                { key:`net_btn${pad}_link`,  name:`Button Stack #${pad} Link`,  ghl:`nw_02_buttons__${liPad}__button_stack_${pad}_link__ex_httpswwwexamplecomfreegift`,  type:'text', aiHint:`Full URL. Ex: https://masterclass.CoachUntangled.com` },
+              ]
+            };
+          })
+        ]
+      },
+
+      'online-presence': {
+        label: 'Online Presence',
+        steps: [
+          { label: 'Social', fields: [
+            { key:'net_linkedin',  name:'LinkedIn URL',  ghl:'nw_03_online_presence__01__linkedin_url__ex_httpswwwlinkedincominyourname',  type:'text', aiHint:'Ex: https://www.linkedin.com/in/theofficialbrendanm' },
+            { key:'net_facebook',  name:'Facebook URL',  ghl:'nw_03_online_presence__02__facebook_url__ex_httpswwwfacebookcomyourname',  type:'text', aiHint:'Ex: https://www.facebook.com/officialbrendanm' },
+            { key:'net_instagram', name:'Instagram URL', ghl:'nw_03_online_presence__03__instagram_url__ex_httpswwwinstagramcomyourname', type:'text', aiHint:'Ex: https://www.instagram.com/officialbrendanm' },
+            { key:'net_youtube',   name:'YouTube URL',   ghl:'nw_03_online_presence__04__youtube_url__ex_httpswwwyoutubecomchannelyourname',   type:'text', aiHint:'Ex: https://www.youtube.com/channel/UCf6mVw_tqiqkHTURQfxrWZg?sub_confirmation=1' },
+          ]},
+          { label: 'Website & Calendar', fields: [
+            { key:'net_website',  name:'Website',  ghl:'nw_03_online_presence__05__website__ex_httpsyoursitecom_',  type:'text', aiHint:'Ex: https://CoachUntangled.com' },
+            { key:'net_calendar', name:'Calendar', ghl:'nw_03_online_presence__06__calendar__ex_httpsyoursitecomvirtualcoffee', type:'text', aiHint:'Ex: https://schedulewithbrendan.com' },
+          ]},
+        ]
+      },
+
+      'design': {
+        label: 'Design',
+        steps: [
+          { label: 'Headshot', fields: [
+            { key:'net_headshot', name:'Headshot', ghl:'nw_04_design__01__headshot__ex_httpsinsertimagelinkjpeg', type:'upload', hint:'JPG, PNG, JPEG · up to 50MB' },
+          ]},
+          { label: 'Brand Color 01', fields: [
+            { key:'net_color_01_darkest', name:'Brand Color 01 Darkest', ghl:'nw_04_design__02__brand_color_01_darkest__ex_081d3a', type:'color', aiHint:'Ex: #081D3A' },
+            { key:'net_color_01_dark',    name:'Brand Color 01 Dark',    ghl:'nw_04_design__03__brand_color_01_dark__ex_0f2c6a',    type:'color', aiHint:'Ex: #0F2C6A' },
+            { key:'net_color_01_light',   name:'Brand Color 01 Light',   ghl:'nw_04_design__04__brand_color_01_light__ex_3d89c9',   type:'color', aiHint:'Ex: #3D89C9' },
+          ]},
+          { label: 'Brand Color 02', fields: [
+            { key:'net_color_02_dark',  name:'Brand Color 02 Dark',  ghl:'nw_04_design__05__brand_color_02_dark__ex_e6a21c',  type:'color', aiHint:'Ex: #E6A21C' },
+            { key:'net_color_02_light', name:'Brand Color 02 Light', ghl:'nw_04_design__06__brand_color_02_light__ex_ffdc86', type:'color', aiHint:'Ex: #FFDC86' },
+            { key:'net_btn_color_text', name:'Button Color Text',    ghl:'nw_04_design__07__button_color_text__ex_000000',    type:'color', aiHint:'Ex: #000000' },
+          ]},
+        ]
+      },
+
+      'qr-codes': {
+        label: 'QR Codes',
+        steps: [
+          { label: 'QR Code Links', fields: [
+            { key:'net_qr_link_hub', name:'Link To Link Hub',       ghl:'nw_05_qr_code__01__link_to_link_hub__ex_httpslinksaiprofitlaunchpadioqr5b7kfvrkqpk3',       type:'text', aiHint:'Ex: https://links.aiprofitlaunchpad.io/qr/5B7KFVrkqPK3' },
+            { key:'net_qr_vcard',    name:'Link To vCard Download', ghl:'nw_05_qr_code__02__link_to_vcard_download__ex_httpslinksaiprofitlaunchpadioqrectrmeumtlkk', type:'text', aiHint:'Ex: https://links.aiprofitlaunchpad.io/qr/EcTrmEumTLkK' },
+            { key:'net_qr_sms',      name:'Link To Direct SMS',     ghl:'nw_05_qr_code__03__link_to_direct_sms__ex_httpslinksaiprofitlaunchpadioqrowosmolwille',     type:'text', aiHint:'Ex: https://links.aiprofitlaunchpad.io/qr/iZI_kY3mf6S8' },
+          ]},
+        ]
+      },
+
+    }
+  },
+
+  authority: {
+    label: 'Authority Launchpad',
+    icon: '⭐',
+    color: '#FFBB00',
+    sections: {
+      'coming-soon': {
+        label: 'Coming Soon',
+        steps: [
+          { label: 'Authority Launchpad', fields: [
+            { key:'auth_placeholder', name:'Authority Launchpad — Coming Soon', ghl:'AUTH - Placeholder', type:'textarea' },
+          ]},
+        ]
+      }
+    }
+  },
+
+};
+
+/* ═══════════════════════════════════════
+   LAUNCHPAD STATE
+═══════════════════════════════════════ */
+let currentLaunchpad = 'masterclass';
+let currentLPSection = {};  // { launchpadKey: sectionKey }
+let currentLPStep    = {};  // { launchpadKey_sectionKey: stepIndex }
+
+function getLPSectionKey(lpKey) {
+  return currentLPSection[lpKey] || Object.keys(LAUNCHPADS[lpKey].sections)[0];
+}
+function getLPStepIdx(lpKey, secKey) {
+  return currentLPStep[lpKey+'_'+secKey] || 0;
+}
+
+/* ═══════════════════════════════════════
+   TOP TAB SWITCHING
+═══════════════════════════════════════ */
+function switchTopTab(tab) {
+  const tabId = 'tab-' + tab;
+  const gate = _TAB_GATES[tabId];
+
+  // Block access if locked
+  if (gate && !gate.allowed) {
+    // Still mark the tab visually active so user knows where they tried to go
+    document.querySelectorAll('.topnav-tab').forEach(b => b.classList.remove('active'));
+    const t = document.getElementById(tabId);
+    if (t) t.classList.add('active');
+    currentTopTab = tab;
+
+    // Show lock overlay in content area
+    document.getElementById('sidebar').innerHTML = '';
+    document.getElementById('page-content').innerHTML = `
+      <div style="position:relative;height:100%;min-height:400px;">
+        <div class="tab-locked-overlay">
+          <div style="font-size:36px;margin-bottom:4px">🔒</div>
+          <div class="lock-msg">${gate.upgradeMsg}</div>
+          <div class="lock-sub">${gate.subMsg}</div>
+          <button class="lock-upgrade" onclick="openPricing()">View Plans & Upgrade →</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  currentTopTab = tab;
+  document.querySelectorAll('.topnav-tab').forEach(b => b.classList.remove('active'));
+  const t = document.getElementById('tab-'+tab);
+  if(t) t.classList.add('active');
+
+  if (tab === 'core-setup') {
+    loadChecklistState();
+    document.getElementById('sidebar').innerHTML = buildCoreSetupSidebar();
+    renderCoreSetup();
+    updateSidebarDots();
+  } else if (tab === 'docs') {
+    document.getElementById('sidebar').innerHTML = buildDocsSidebar();
+    renderDoc(currentDoc);
+  } else if (tab === 'launchpads') {
+    document.getElementById('sidebar').innerHTML = buildLPSidebar();
+    renderLaunchpad(currentLaunchpad);
+  } else if (tab === 'marketing') {
+    document.getElementById('sidebar').innerHTML = '';
+    document.getElementById('page-content').innerHTML = `
+      <div class="welcome-state">
+        <div class="welcome-icon">📣</div>
+        <div class="welcome-title">Marketing — Coming Soon</div>
+        <div class="welcome-sub">This section will be unlocked in the next build phase.</div>
+      </div>`;
+  }
+}
+
+function buildDocsSidebar() {
+  return `
+    <div class="sidebar-section-label">Foundational Documents</div>
+    <button class="sidebar-item${currentDoc==='business'?' active':''}" id="sib-business" onclick="switchDoc('business')">Business Profile <div class="item-status" id="dot-business"></div></button>
+    <button class="sidebar-item${currentDoc==='brand'?' active':''}" id="sib-brand" onclick="switchDoc('brand')">Brand Guidelines <div class="item-status" id="dot-brand"></div></button>
+    <button class="sidebar-item${currentDoc==='audience'?' active':''}" id="sib-audience" onclick="switchDoc('audience')">Audience Profile <div class="item-status" id="dot-audience"></div></button>
+    <button class="sidebar-item${currentDoc==='offers'?' active':''}" id="sib-offers" onclick="switchDoc('offers')">Offers Portfolio <div class="item-status" id="dot-offers"></div></button>`;
+}
+
+function buildLPSidebar() {
+  let html = '<div class="sidebar-section-label">Launchpads</div>';
+  Object.entries(LAUNCHPADS).forEach(([lpKey, lp]) => {
+    const allF = getAllLPFields(lpKey);
+    const filled = allF.filter(f => getField(f.key).trim()).length;
+    let dotClass = 'item-status';
+    if (filled > 0 && filled < allF.length) dotClass = 'item-status partial';
+    else if (filled === allF.length && allF.length > 0) dotClass = 'item-status done';
+    html += `<button class="sidebar-item${currentLaunchpad===lpKey?' active':''}" id="sib-lp-${lpKey}" onclick="switchLaunchpad('${lpKey}')">
+      ${lp.icon} ${lp.label} <div class="${dotClass}" id="lpdot-${lpKey}"></div>
+    </button>`;
+  });
+  return html;
+}
+
+function getAllLPFields(lpKey) {
+  const lp = LAUNCHPADS[lpKey];
+  return Object.values(lp.sections).flatMap(sec => sec.steps.flatMap(st => st.fields));
+}
+
+function switchLaunchpad(lpKey) {
+  currentLaunchpad = lpKey;
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('sib-lp-'+lpKey);
+  if(btn) btn.classList.add('active');
+  renderLaunchpad(lpKey);
+}
+
+/* ═══════════════════════════════════════
+   RENDER LAUNCHPAD
+═══════════════════════════════════════ */
+function renderLaunchpad(lpKey) {
+  const lp = LAUNCHPADS[lpKey];
+  const secKey = getLPSectionKey(lpKey);
+  const stepIdx = getLPStepIdx(lpKey, secKey);
+
+  const allF = getAllLPFields(lpKey);
+  const filled = allF.filter(f => getField(f.key).trim()).length;
+  const pct = allF.length ? Math.round(filled/allF.length*100) : 0;
+
+  // Build sub-section buttons
+  const secButtons = Object.entries(lp.sections).map(([sk, sec]) => {
+    const secFields = sec.steps.flatMap(s=>s.fields);
+    const secFilled = secFields.filter(f=>getField(f.key).trim()).length;
+    const done = secFilled === secFields.length && secFields.length > 0;
+    const partial = secFilled > 0 && !done;
+    const indicator = done ? ' ✓' : partial ? ' ·' : '';
+    return `<button class="subtab${sk===secKey?' active':''}" onclick="switchLPSection('${lpKey}','${sk}')">${sec.label}${indicator}</button>`;
+  }).join('');
+
+  const sec = lp.sections[secKey];
+  const step = sec.steps[stepIdx] || sec.steps[0];
+
+  // Step panel
+  const stepItems = sec.steps.map((st, i) => {
+    const stFilled = st.fields.filter(f=>getField(f.key).trim()).length;
+    const stDone = stFilled === st.fields.length;
+    const isActive = i === stepIdx;
+    return `<div class="lp-step-item${isActive?' active':''}" onclick="switchLPStep('${lpKey}','${secKey}',${i})">
+      <div class="lp-step-num">${i+1}</div>
+      <div class="lp-step-label">${st.label}</div>
+      ${stDone ? '<div style="color:var(--green);font-size:9px;flex-shrink:0">✓</div>' : ''}
+    </div>`;
+  }).join('');
+
+  // Fields
+  let fieldsHtml = '';
+  if (step.note) {
+    fieldsHtml += `<div class="lp-step-note">${step.note}</div>`;
+  }
+  step.fields.forEach(field => {
+    const val = getField(field.key);
+    const hasVal = val.trim().length > 0;
+    let inputHtml = '';
+    if (field.type === 'color') {
+      inputHtml = `<div class="lp-color-row">
+        <input type="color" class="lp-color-swatch" id="finp-swatch-${field.key}" value="${val||'#000000'}" oninput="onLPColorInput('${field.key}',this.value)">
+        <input type="text" class="field-input lp-color-hex" id="finp-${field.key}" value="${esc(val)}" placeholder="#000000" oninput="onLPHexInput('${field.key}',this.value)">
+      </div>`;
+    } else if (field.type === 'upload') {
+      inputHtml = `<div class="lp-upload-zone" id="finp-${field.key}">
+        <div class="lp-upload-icon">📎</div>
+        <div class="lp-upload-text">Upload your file</div>
+        <div class="lp-upload-hint">${field.hint||'Supports images and videos up to 50MB (JPG, PNG, JPEG, MP4)'}</div>
+        ${val ? `<div class="lp-upload-val">✓ ${esc(val)}</div>` : ''}
+        <input type="text" class="field-input" style="margin-top:8px;background:rgba(255,255,255,0.05);padding:4px 8px;border-radius:4px;font-size:11px" id="finp-url-${field.key}" value="${esc(val)}" placeholder="Or paste URL here…" oninput="onFieldInput('${field.key}',this.value)">
+      </div>`;
+    } else if (field.type === 'dropdown') {
+      inputHtml = `<select class="field-input lp-select" id="finp-${field.key}" onchange="onFieldInput('${field.key}',this.value)">
+        <option value="">Please select an option</option>
+        ${val ? `<option value="${esc(val)}" selected>${esc(val)}</option>` : ''}
+      </select>`;
+    } else if (field.type === 'textarea') {
+      inputHtml = `<textarea class="field-input" id="finp-${field.key}" rows="3" placeholder="Enter ${esc(field.name)}…" oninput="onFieldInput('${field.key}',this.value)">${esc(val)}</textarea>`;
+    } else {
+      inputHtml = `<input class="field-input" type="text" id="finp-${field.key}" value="${esc(val)}" placeholder="Enter ${esc(field.name)}…" oninput="onFieldInput('${field.key}',this.value)">`;
+    }
+
+    fieldsHtml += `
+      <div class="lp-field-block${hasVal?' has-val':''}" id="fcard-${field.key}">
+        <div class="lp-field-label">${field.name}</div>
+        <div class="lp-field-input-wrap">${inputHtml}</div>
+        <div class="lp-field-footer">
+          <div class="field-status" id="fstatus-${field.key}">${hasVal?'● Saved':'○ Empty'}</div>
+          <button class="btn-sync" id="btn-sync-${field.key}" onclick="syncLPField('${field.key}','${field.ghl}')">⚡ Sync</button>
+        </div>
+      </div>`;
+  });
+
+  // Nav buttons
+  const isFirst = stepIdx === 0;
+  const isLast  = stepIdx === sec.steps.length - 1;
+  const navBtns = `
+    <div class="lp-nav-btns">
+      ${!isFirst ? `<button class="lp-btn-back" onclick="switchLPStep('${lpKey}','${secKey}',${stepIdx-1})">← Back</button>` : '<span></span>'}
+      <button class="lp-btn-save" onclick="saveLPStep('${lpKey}','${secKey}',${stepIdx})">Save</button>
+      ${!isLast ? `<button class="lp-btn-next" onclick="switchLPStep('${lpKey}','${secKey}',${stepIdx+1})">Next Step →</button>` : ''}
+    </div>`;
+
+  const html = `
+    <div class="page-header">
+      <div class="page-header-top">
+        <div class="page-title-row">
+          <span class="page-icon">${lp.icon}</span>
+          <div>
+            <div class="page-title">${lp.label}</div>
+            <div class="page-sub">${filled} / ${allF.length} fields complete · ${pct}%</div>
+          </div>
+        </div>
+        <button class="btn-sync-all" onclick="syncAllLPFields('${lpKey}')">⚡ Sync All to GHL</button>
+      </div>
+      <div class="subtabs">${secButtons}</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      <div class="progress-label">${filled} / ${allF.length} fields · ${pct}%</div>
+    </div>
+    <div class="lp-body">
+      <div class="lp-steps-panel">
+        <div class="lp-steps-title">Step ${stepIdx+1}</div>
+        ${stepItems}
+      </div>
+      <div class="lp-content-panel">
+        <div class="lp-content-title">${lp.label} – ${sec.label}</div>
+        <div class="lp-content-sub">${sec.label} – ${step.label}.</div>
+        ${fieldsHtml}
+        ${navBtns}
+      </div>
+    </div>`;
+
+  document.getElementById('page-content').innerHTML = html;
+}
+
+function switchLPSection(lpKey, secKey) {
+  currentLPSection[lpKey] = secKey;
+  renderLaunchpad(lpKey);
+}
+
+function switchLPStep(lpKey, secKey, idx) {
+  currentLPStep[lpKey+'_'+secKey] = idx;
+  renderLaunchpad(lpKey);
+}
+
+function saveLPStep(lpKey, secKey, idx) {
+  // Fields auto-save on input; this just gives visual feedback
+  const btn = document.querySelector('.lp-btn-save');
+  if (btn) { btn.textContent = '✓ Saved'; setTimeout(()=>{ btn.textContent='Save'; }, 1500); }
+  updateLPDots(lpKey);
+}
+
+function onLPColorInput(key, hex) {
+  const hexInp = document.getElementById('finp-'+key);
+  if (hexInp) hexInp.value = hex;
+  onFieldInput(key, hex);
+}
+
+function onLPHexInput(key, hex) {
+  const swatch = document.getElementById('finp-swatch-'+key);
+  if (swatch && /^#[0-9A-Fa-f]{6}$/.test(hex)) swatch.value = hex;
+  onFieldInput(key, hex);
+}
+
+function updateLPDots(lpKey) {
+  const allF = getAllLPFields(lpKey);
+  const filled = allF.filter(f => getField(f.key).trim()).length;
+  const dot = document.getElementById('lpdot-'+lpKey);
+  if (!dot) return;
+  if (filled === 0) dot.className = 'item-status';
+  else if (filled === allF.length) dot.className = 'item-status done';
+  else dot.className = 'item-status partial';
+}
+
+async function syncLPField(key, ghlName) {
+  const value = getField(key).trim();
+  const btn = document.getElementById('btn-sync-'+key);
+  const st  = document.getElementById('fstatus-'+key);
+  if (!value) { if(st){st.className='field-status err';st.textContent='✗ Nothing to sync — fill in a value first';} return; }
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';}
+  if(st){st.className='field-status busy';st.textContent='● Syncing…';}
+  try {
+    const result = await writeCV(ghlName, value);
+    const card = document.getElementById('fcard-'+key);
+    if(card){card.classList.add('synced');card.classList.remove('error');}
+    if(st){st.className='field-status ok';st.textContent=`✓ ${result==='created'?'Created':'Updated'} in GHL`;}
+    if(btn){btn.textContent='✓ Done';setTimeout(()=>{btn.textContent='⚡ Sync';btn.disabled=false;},2000);}
+  } catch(e) {
+    const card = document.getElementById('fcard-'+key);
+    if(card) card.classList.add('error');
+    if(st){st.className='field-status err';st.textContent='✗ '+e.message;}
+    if(btn){btn.textContent='Retry';btn.disabled=false;}
+  }
+}
+
+async function syncAllLPFields(lpKey) {
+  const allFields = getAllLPFields(lpKey);
+  _cvCache = null;
+  let created=0,updated=0,skipped=0,errors=0;
+  for (const field of allFields) {
+    const value = getField(field.key).trim();
+    if (!value) { skipped++; continue; }
+    try {
+      const r = await writeCV(field.ghl, value);
+      r==='created'?created++:updated++;
+      const card=document.getElementById('fcard-'+field.key);
+      if(card){card.classList.add('synced');card.classList.remove('error');}
+      const st=document.getElementById('fstatus-'+field.key);
+      if(st){st.className='field-status ok';st.textContent=`✓ ${r==='created'?'Created':'Updated'} in GHL`;}
+    } catch(e) {
+      errors++;
+      const card=document.getElementById('fcard-'+field.key);
+      if(card) card.classList.add('error');
+    }
+  }
+  alert(`Sync complete: ${created} created · ${updated} updated · ${skipped} skipped · ${errors} errors`);
+  updateLPDots(lpKey);
+}
+
+/* ═══════════════════════════════════════
+   SIDEBAR DOC SWITCHING
+═══════════════════════════════════════ */
+function switchDoc(doc) {
+  currentDoc = doc;
+  document.getElementById('sidebar').innerHTML = buildDocsSidebar();
+  updateSidebarDots();
+  renderDoc(doc);
+}
+
+/* ═══════════════════════════════════════
+   RENDER DOC
+═══════════════════════════════════════ */
+function renderDoc(docKey) {
+  const doc = DOCS[docKey];
+  const allFields = doc.sections.flatMap(s => s.fields);
+  const filled = allFields.filter(f => getField(f.key).trim()).length;
+  const pct = allFields.length ? Math.round(filled/allFields.length*100) : 0;
+
+  let html = `
+    <div class="page-header">
+      <div class="page-header-top">
+        <div class="page-title-row">
+          <span class="page-icon">${doc.icon}</span>
+          <div>
+            <div class="page-title">${doc.label}</div>
+            <div class="page-sub">${doc.sub}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      <div class="progress-label">${filled} / ${allFields.length} fields · ${pct}%</div>
+    </div>
+    <div class="content">`;
+
+  // Soft gate if other docs want launchpads
+  const overallPct = calcDocProgress();
+  if (overallPct < 25 && docKey !== 'business') {
+    html += `<div class="soft-gate">
+      <span class="soft-gate-icon">⚠️</span>
+      <div><strong>Tip:</strong> Start with Business Profile first — Claude uses all four Foundational Documents as context when generating answers. The more complete they are, the more tailored every AI output will be.</div>
+    </div>`;
+  }
+
+  doc.sections.forEach(section => {
+    html += `<div class="section-block">
+      <div class="section-label">${section.label}</div>`;
+
+    section.fields.forEach(field => {
+      const val = getField(field.key);
+      const hasVal = val.trim().length > 0;
+      const inputEl = field.rows > 1
+        ? `<textarea class="field-input" id="finp-${field.key}" rows="${field.rows}" placeholder="${esc(field.placeholder)}" oninput="onFieldInput('${field.key}',this.value)">${esc(val)}</textarea>`
+        : `<input class="field-input" type="text" id="finp-${field.key}" value="${esc(val)}" placeholder="${esc(field.placeholder)}" oninput="onFieldInput('${field.key}',this.value)">`;
+
+      html += `
+        <div class="field-card${hasVal?' has-val':''}" id="fcard-${field.key}">
+          <div class="field-header">
+            <div class="field-meta">
+              <div class="field-name">${field.name}</div>
+              <div class="field-desc">${field.desc}</div>
+              <div class="field-ghl-key">→ ${field.ghl}</div>
+            </div>
+            <div class="field-actions">
+              <button class="btn-ai" id="btn-ai-${field.key}" onclick="generateField('${field.key}')">
+                ✦ Generate
+              </button>
+              <button class="btn-sync" id="btn-sync-${field.key}" onclick="syncField('${field.key}')">
+                ⚡ Sync
+              </button>
+              <div class="history-wrap">
+                <button class="btn-history${getHistory(field.key).length?' has-history':''}" id="btn-hist-${field.key}" onclick="toggleHistory('${field.key}')" title="${getHistory(field.key).length?getHistory(field.key).length+' saved version(s)':'No history yet'}">⏱${getHistory(field.key).length?' '+getHistory(field.key).length:''}</button>
+                <div class="history-dropdown" id="hist-dd-${field.key}"></div>
+              </div>
+            </div>
+          </div>
+          <div class="field-body" id="fbody-${field.key}">${inputEl}</div>
+          <div class="ai-response" id="ai-resp-${field.key}">
+            <div class="ai-response-header">
+              <span>✦ Claude Suggestion</span>
+              <button class="btn-use-ai" onclick="useAISuggestion('${field.key}')">Use This →</button>
+            </div>
+            <div id="ai-resp-text-${field.key}"></div>
+          </div>
+          <div class="field-footer">
+            <div class="field-status" id="fstatus-${field.key}">${hasVal?'● Saved':'○ Empty'}</div>
+            <div class="char-count" id="fcount-${field.key}">${val.length} chars</div>
+          </div>
+        </div>`;
+    });
+
+    html += `</div>`;
+  });
+
+  // Section sync bar
+  html += `
+    <div class="section-sync-bar">
+      <div class="sync-summary">
+        <strong>${filled}</strong> of <strong>${allFields.length}</strong> fields ready to sync to GHL
+      </div>
+      <button class="btn-sync-all" id="btn-sync-all-${docKey}" onclick="syncAllFields('${docKey}')">
+        ⚡ Sync All to GHL
+      </button>
+    </div>
+    <div id="sync-log"></div>
+    </div>`;
+
+  document.getElementById('page-content').innerHTML = html;
+}
+
+/* ═══════════════════════════════════════
+   FIELD INTERACTION
+═══════════════════════════════════════ */
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+const _saveTimers = {};
+function onFieldInput(key, val) {
+  setField(key, val);
+  const st   = document.getElementById('fstatus-'+key);
+  const ct   = document.getElementById('fcount-'+key);
+  const card = document.getElementById('fcard-'+key);
+  const body = document.getElementById('fbody-'+key);
+  if (ct) ct.textContent = val.length + ' chars';
+  if (card) { card.classList.remove('synced'); card.classList.remove('error'); }
+  if (val.trim()) {
+    if (body) { body.classList.remove('save-flash'); void body.offsetWidth; body.classList.add('save-flash'); }
+    if (st) { st.className='field-status ok'; st.textContent='✓ Saved'; }
+    clearTimeout(_saveTimers[key]);
+    _saveTimers[key] = setTimeout(() => {
+      const s = document.getElementById('fstatus-'+key);
+      if (s && s.textContent === '✓ Saved') { s.className='field-status'; s.textContent='● Saved'; }
+    }, 2000);
+  } else {
+    if (st) { st.className='field-status'; st.textContent='○ Empty'; }
+  }
+  updateSidebarDots();
+  updateOverallProgress();
+}
+
+/* ═══════════════════════════════════════
+   AI GENERATION
+═══════════════════════════════════════ */
+function buildFoundationalContext() {
+  let ctx = '';
+  Object.entries(DOCS).forEach(([dk, doc]) => {
+    const allFields = doc.sections.flatMap(s=>s.fields);
+    const filled = allFields.filter(f=>getField(f.key).trim());
+    if (filled.length) {
+      ctx += `\n\n=== ${doc.label.toUpperCase()} ===\n`;
+      filled.forEach(f => { ctx += `${f.name}: ${getField(f.key)}\n`; });
+    }
+  });
+  return ctx.trim();
+}
+
+async function generateField(key) {
+  const { claude } = getCreds();
+  if (!claude) { alert('Add your Claude API key via ⚙ Credentials'); return; }
+
+  // Find field definition
+  let fieldDef = null;
+  Object.values(DOCS).forEach(doc => {
+    doc.sections.forEach(s => {
+      s.fields.forEach(f => { if(f.key===key) fieldDef=f; });
+    });
+  });
+  if (!fieldDef) return;
+
+  const btn = document.getElementById('btn-ai-'+key);
+  const respEl = document.getElementById('ai-resp-'+key);
+  const respText = document.getElementById('ai-resp-text-'+key);
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Generating…';
+  if(respEl) { respEl.classList.remove('show'); }
+
+  const context = buildFoundationalContext();
+  const currentVal = getField(key);
+
+  const systemPrompt = `You are an expert business strategist and copywriter for GHL University by Growing Entrepreneur, LLC. You help already-monetized coaches, consultants, and expert service providers build their Authority Operating System on GoHighLevel.
+
+Your tone is: Direct, Calm, Structured, Insightful, No-hype. Operator-to-operator. Never use bro-marketing, hype income claims, or passive income framing.
+
+The user is filling in their business profile fields. Generate a concise, specific, on-brand response for the field requested.${context ? `\n\nFOUNDATIONAL CONTEXT (use this to personalize):\n${context}` : ''}`;
+
+  const userPrompt = `Generate a concise, specific answer for this business profile field:
+
+Field: ${fieldDef.name}
+Description: ${fieldDef.desc}
+GHL Custom Value: ${fieldDef.ghl}
+${currentVal ? `Current value: "${currentVal}" (improve or refine this)` : 'No value yet — generate a strong starting point.'}
+
+Example format: ${fieldDef.placeholder}
+
+Respond with ONLY the field value itself — no preamble, no labels, no quotes. Just the answer, ready to use.`;
+
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json','x-api-key':claude,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:300, system:systemPrompt, messages:[{role:'user',content:userPrompt}] })
+    });
+    if (!r.ok) { const e=await r.json().catch(()=>{}); throw new Error(e?.error?.message||`HTTP ${r.status}`); }
+    const data = await r.json();
+    const text = data.content?.filter(b=>b.type==='text').map(b=>b.text).join('').trim()||'';
+
+    if(respEl && respText) {
+      respText.textContent = text;
+      respEl.classList.add('show');
+    }
+    btn.disabled=false; btn.innerHTML='✦ Generate';
+  } catch(e) {
+    btn.disabled=false; btn.innerHTML='✦ Generate';
+    const st = document.getElementById('fstatus-'+key);
+    if(st) { st.className='field-status err'; st.textContent='✗ '+e.message; }
+  }
+}
+
+function useAISuggestion(key) {
+  const text = document.getElementById('ai-resp-text-'+key)?.textContent||'';
+  if (!text) return;
+  const inp = document.getElementById('finp-'+key);
+  if (inp) {
+    inp.value = text;
+    onFieldInput(key, text); // saves + flashes + pushes history
+  }
+  const respEl = document.getElementById('ai-resp-'+key);
+  if(respEl) respEl.classList.remove('show');
+}
+
+/* ═══════════════════════════════════════
+   GHL SYNC
+═══════════════════════════════════════ */
+let _cvCache = null;
+
+async function ghlFetch(path, method='GET', body=null) {
+  const { token, loc } = getCreds();
+  if (!token||!loc) throw new Error('GHL credentials not configured');
+  const url = 'https://services.leadconnectorhq.com'+path.replace('{loc}',loc);
+  const opts = { method, headers:{ 'Authorization':'Bearer '+token,'Content-Type':'application/json','Version':'2021-07-28' } };
+  if (body) opts.body=JSON.stringify(body);
+  const r = await fetch(url, opts);
+  if (!r.ok) { const e=await r.json().catch(()=>{}); throw new Error(e?.message||`HTTP ${r.status}`); }
+  return r.json();
+}
+
+async function getCVs(bust=false) {
+  if (_cvCache && !bust) return _cvCache;
+  const d = await ghlFetch('/locations/{loc}/customValues');
+  _cvCache = d.customValues||[];
+  return _cvCache;
+}
+
+
+function _normKey(s) {
+  if (!s) return '';
+  let v = s.toLowerCase();
+  // Strip everything from ' - (ex:' or '__ex_' onwards
+  v = v.replace(/[_\s][-–—]?[_\s]*\(?ex[_:\s].*$/i, '');
+  v = v.replace(/__ex_.*$/, '');
+  // Normalize decimal sub-numbers: 07.01 → 0701, 07_01 → 0701
+  v = v.replace(/(\d+)[._](\d+)/g, '$1$2');
+  // Normalize remaining
+  return v
+    .replace(/[\[\]()#–—]/g,' ')
+    .replace(/[^a-z0-9\s_]/g,' ')
+    .replace(/\s+/g,'_')
+    .replace(/_+/g,'_')
+    .replace(/^_|_$/g,'');
+}
+
+async function loadFromGHL() {
+  const btn = document.getElementById('btn-load-ghl');
+  const status = document.getElementById('load-ghl-status');
+  if (btn) { btn.disabled=true; btn.textContent='⏳ Loading…'; }
+  if (status) { status.textContent=''; status.className=''; }
+  try {
+    const cvs = await getCVs(true); // bust cache, fresh pull
+
+    // DEBUG: log first 10 CV names to console so we can see what GHL returns
+    console.log('GHL returned', cvs.length, 'custom values');
+    console.log('First 10 CV names:', cvs.slice(0,10).map(cv=>cv.name));
+    console.log('Sample MC keys in app:', Object.values(LAUNCHPADS?.masterclass?.sections||{}).flatMap(s=>s.steps.flatMap(st=>st.fields.map(f=>f.ghl))).filter(Boolean).slice(0,5));
+
+    if (!cvs.length) {
+      if (status) { status.textContent='No custom values found in GHL for this location.'; status.className='load-ghl-warn'; }
+      return;
+    }
+    // Build lookup two ways: by exact name AND by normalised key
+    const lookup = {};
+    const lookupNorm = {};
+    cvs.forEach(cv => {
+      if (cv.name) {
+        lookup[cv.name] = cv.value||'';
+        lookupNorm[_normKey(cv.name)] = cv.value||'';
+      }
+    });
+
+    function _cvLookup(ghlKey) {
+      if (!ghlKey) return undefined;
+      // Try exact match first
+      if (lookup[ghlKey] !== undefined) return lookup[ghlKey];
+      // Try normalised match
+      const norm = _normKey(ghlKey);
+      if (lookupNorm[norm] !== undefined) return lookupNorm[norm];
+      return undefined;
+    }
+
+    // Debug: count how many app keys have ANY match (including empty)
+    let matchCount = 0, emptyCount = 0;
+    Object.values(LAUNCHPADS).forEach(lp => Object.values(lp.sections).forEach(sec => sec.steps.forEach(step => step.fields.forEach(field => {
+      if (!field.ghl) return;
+      const v = _cvLookup(field.ghl);
+      if (v !== undefined) { matchCount++; if (v === '') emptyCount++; }
+    }))));
+    console.log('Key matches (any):', matchCount, '| Empty values:', emptyCount, '| No match:', 255 - matchCount);
+
+    let populated = 0;
+    let attempted = 0;
+
+    // Populate LAUNCHPAD fields
+    Object.entries(LAUNCHPADS).forEach(([lpKey, lp]) => {
+      Object.entries(lp.sections).forEach(([, sec]) => {
+        sec.steps.forEach(step => {
+          step.fields.forEach(field => {
+            const val = _cvLookup(field.ghl);
+            if (field.ghl) attempted++;
+            if (val !== undefined && val !== '') {
+              setField(field.key, val);
+              // Update visible input/textarea/select
+              const el = document.getElementById('lp-field-'+field.key) || document.getElementById('field-'+field.key);
+              if (el) {
+                el.value = val;
+                // For color fields, also sync the swatch
+                if (field.type === 'color') {
+                  const picker = document.getElementById('picker-'+field.key);
+                  const hex    = document.getElementById('hex-'+field.key);
+                  if (picker) picker.value = val;
+                  if (hex)    hex.value    = val;
+                }
+              }
+              populated++;
+            }
+          });
+        });
+      });
+    });
+
+    // Populate DOCS fields
+    Object.entries(DOCS).forEach(([, doc]) => {
+      doc.sections.forEach(sec => {
+        sec.fields.forEach(field => {
+          const val = _cvLookup(field.ghl);
+          if (val !== undefined && val !== '') {
+            setField(field.key, val);
+            const el = document.getElementById('field-'+field.key);
+            if (el) el.value = val;
+            populated++;
+          }
+        });
+      });
+    });
+
+    console.log('GHL sync: attempted='+attempted+' populated='+populated);
+    // Refresh progress dots
+    Object.keys(LAUNCHPADS).forEach(lpKey => updateLPDots(lpKey));
+
+    if (status) {
+      status.textContent = `✓ ${populated} field${populated!==1?'s':''} loaded from GHL`;
+      status.className = 'load-ghl-ok';
+    }
+  } catch(e) {
+    if (status) { status.textContent = '✗ '+e.message; status.className = 'load-ghl-err'; }
+  } finally {
+    if (btn) { btn.disabled=false; btn.textContent='↓ Load from GHL'; }
+  }
+}
+
+async function writeCV(name, value) {
+  const cvs = await getCVs();
+  const found = cvs.find(cv=>cv.name===name) || cvs.find(cv=>_normKey(cv.name)===_normKey(name));
+  if (found) {
+    await ghlFetch(`/locations/{loc}/customValues/${found.id}`,'PUT',{name,value});
+    return 'updated';
+  } else {
+    await ghlFetch('/locations/{loc}/customValues','POST',{name,value});
+    _cvCache=null;
+    return 'created';
+  }
+}
+
+async function syncField(key) {
+  const value = getField(key).trim();
+  const btn   = document.getElementById('btn-sync-'+key);
+  const st    = document.getElementById('fstatus-'+key);
+  const card  = document.getElementById('fcard-'+key);
+
+  if (!value) {
+    if(st) { st.className='field-status err'; st.textContent='✗ Nothing to sync — fill in a value first'; }
+    return;
+  }
+
+  // Find ghl name
+  let ghlName='';
+  Object.values(DOCS).forEach(doc=>doc.sections.forEach(s=>s.fields.forEach(f=>{if(f.key===key)ghlName=f.ghl;})));
+  if(!ghlName) return;
+
+  if(btn) { btn.disabled=true; btn.innerHTML='<span class="spinner"></span>'; }
+  if(st)  { st.className='field-status busy'; st.textContent='● Syncing…'; }
+
+  try {
+    const result = await writeCV(ghlName, value);
+    if(card) { card.classList.add('synced'); card.classList.remove('error'); }
+    if(st)   { st.className='field-status ok'; st.textContent=`✓ ${result==='created'?'Created':'Updated'} in GHL`; }
+    if(btn)  { btn.textContent='✓ Done'; setTimeout(()=>{btn.textContent='⚡ Sync';btn.disabled=false;},2000); }
+  } catch(e) {
+    if(card) card.classList.add('error');
+    if(st)   { st.className='field-status err'; st.textContent='✗ '+e.message; }
+    if(btn)  { btn.textContent='Retry'; btn.disabled=false; }
+  }
+}
+
+async function syncAllFields(docKey) {
+  const doc = DOCS[docKey];
+  const allFields = doc.sections.flatMap(s=>s.fields);
+  const btn = document.getElementById('btn-sync-all-'+docKey);
+  const logEl = document.getElementById('sync-log');
+  if(btn) { btn.disabled=true; btn.textContent='⏳ Syncing…'; }
+  if(logEl) logEl.innerHTML='';
+  _cvCache=null;
+
+  let created=0,updated=0,skipped=0,errors=0;
+  const rows=[];
+
+  for(const field of allFields) {
+    const value = getField(field.key).trim();
+    if(!value) { skipped++; rows.push({s:'skip',n:field.name,m:'Skipped — empty'}); continue; }
+    const st = document.getElementById('fstatus-'+field.key);
+    const btn2 = document.getElementById('btn-sync-'+field.key);
+    if(st)  { st.className='field-status busy'; st.textContent='● Syncing…'; }
+    if(btn2){ btn2.disabled=true; btn2.innerHTML='<span class="spinner"></span>'; }
+    try {
+      const r = await writeCV(field.ghl, value);
+      r==='created'?created++:updated++;
+      rows.push({s:'ok',n:field.name,m:`${r==='created'?'Created':'Updated'} ✓`});
+      const card=document.getElementById('fcard-'+field.key);
+      if(card){card.classList.add('synced');card.classList.remove('error');}
+      if(st){st.className='field-status ok';st.textContent=`✓ ${r==='created'?'Created':'Updated'} in GHL`;}
+      if(btn2){btn2.textContent='✓ Done';setTimeout(()=>{btn2.textContent='⚡ Sync';btn2.disabled=false;},2000);}
+    } catch(e) {
+      errors++;
+      rows.push({s:'err',n:field.name,m:'Error: '+e.message});
+      const card=document.getElementById('fcard-'+field.key);
+      if(card)card.classList.add('error');
+      if(st){st.className='field-status err';st.textContent='✗ '+e.message;}
+      if(btn2){btn2.textContent='Retry';btn2.disabled=false;}
+    }
+  }
+
+  if(btn) { btn.disabled=false; btn.textContent=errors?'⚡ Retry Sync':'✓ Synced — Run Again'; }
+  if(logEl) {
+    logEl.innerHTML = `
+      <div style="padding:12px 0 4px;font-size:9px;font-weight:800;letter-spacing:0.2em;color:var(--w30);text-transform:uppercase">
+        Sync Results
+      </div>` +
+      rows.map(r=>`<div class="sync-log-row ${r.s}">
+        <span>${r.s==='ok'?'✓':r.s==='skip'?'○':'✗'}</span>
+        <span style="flex:1;font-weight:600">${r.n}</span>
+        <span style="opacity:0.7">${r.m}</span>
+      </div>`).join('') +
+      `<div style="margin-top:8px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:6px;font-size:10px;color:var(--w50);display:flex;gap:16px;flex-wrap:wrap">
+        ${created?`<span style="color:var(--green)">✓ ${created} created</span>`:''}
+        ${updated?`<span style="color:var(--blue)">↑ ${updated} updated</span>`:''}
+        ${skipped?`<span>○ ${skipped} skipped</span>`:''}
+        ${errors?`<span style="color:var(--red)">✗ ${errors} errors</span>`:''}
+        <span style="margin-left:auto;color:var(--w30)">${new Date().toLocaleTimeString()}</span>
+      </div>`;
+  }
+}
+
+/* ═══════════════════════════════════════
+   PROGRESS & STATUS
+═══════════════════════════════════════ */
+function calcDocProgress() {
+  let total=0, filled=0;
+  Object.values(DOCS).forEach(doc => {
+    doc.sections.forEach(s => {
+      s.fields.forEach(f => {
+        total++;
+        if(getField(f.key).trim()) filled++;
+      });
+    });
+  });
+  return total ? Math.round(filled/total*100) : 0;
+}
+
+function updateSidebarDots() {
+  Object.entries(DOCS).forEach(([dk, doc]) => {
+    const allFields = doc.sections.flatMap(s=>s.fields);
+    const filled = allFields.filter(f=>getField(f.key).trim()).length;
+    const dot = document.getElementById('dot-'+dk);
+    if(!dot) return;
+    if(filled===0) { dot.className='item-status'; }
+    else if(filled===allFields.length) { dot.className='item-status done'; }
+    else { dot.className='item-status partial'; }
+  });
+  Object.keys(LAUNCHPADS).forEach(lpKey => updateLPDots(lpKey));
+}
+
+function updateOverallProgress() {
+  const pct = calcDocProgress();
+  const el = document.getElementById('overall-pct');
+  if(el) el.textContent=pct+'%';
+}
+</script>
+</body>
+</html>
+<script src="js/index-docs.js"></script>
+<script src="js/index-checklist.js"></script>
+<script src="js/index-launchpads.js"></script>
+<script src="js/index-app.js"></script>

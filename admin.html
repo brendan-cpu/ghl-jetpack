@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · Dashboard</title>
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<!-- ══════════════════ AUTH SCREEN ══════════════════ -->
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <img src="assets/admin-logo.png" alt="Logo">
+    </div>
+    <div class="auth-badge">🔒 Admin Portal</div>
+    <div>
+      <div class="auth-title">Admin Dashboard</div>
+      <div class="auth-sub" style="margin-top:6px">Sign in with your admin account to manage users and subscriptions.</div>
+    </div>
+    <button class="btn-google" id="google-btn" onclick="doGoogleLogin()">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/>
+        <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/>
+        <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z" fill="#FBBC05"/>
+        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div class="auth-divider"><span>or sign in with email</span></div>
+
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="auth-email" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+    <button class="btn-primary" id="auth-btn" onclick="doLogin()">Sign In with Email →</button>
+    <div style="font-size:9px;color:var(--w30);text-align:center;font-family:var(--mono)">Admin access only · Requires is_admin = true on your profile</div>
+  </div>
+</div>
+
+<!-- ══════════════════ APP ══════════════════ -->
+<div id="app">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      <img src="assets/admin-logo.png" alt="Logo">
+      <div class="topbar-tier-row">
+        <span class="topbar-tier-badge tier-basic" id="topbar-tier-badge">BASIC</span>
+        <a class="topbar-upgrade" id="topbar-upgrade-link" href="#" style="display:none">↑ Upgrade</a>
+      </div>
+    </div>
+    <div class="topbar-admin">Admin</div>
+    <div class="topbar-right">
+      <div class="topbar-user" id="topbar-email"></div>
+      <button class="btn-ghost" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Setup Banner (shown if is_admin column doesn't exist yet) -->
+    <div class="setup-banner" id="setup-banner">
+      <div class="setup-banner-icon">⚙️</div>
+      <div class="setup-banner-text">
+        <strong>One-time setup needed:</strong> Add <code>is_admin boolean default false</code> to your <code>profiles</code> table in Supabase, then set <code>is_admin = true</code> for your own user row. <a href="https://supabase.com/dashboard" target="_blank" style="color:var(--yellow)">Open Supabase →</a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card stat-total"><div class="stat-label">Total Users</div><div class="stat-value" id="stat-total">—</div><div class="stat-sub">all accounts</div></div>
+      <div class="stat-card stat-basic"><div class="stat-label">Basic</div><div class="stat-value" id="stat-basic">—</div><div class="stat-sub">free tier</div></div>
+      <div class="stat-card stat-pro"><div class="stat-label">Pro</div><div class="stat-value" id="stat-pro">—</div><div class="stat-sub">launchpads</div></div>
+      <div class="stat-card stat-agency"><div class="stat-label">Agency</div><div class="stat-value" id="stat-agency">—</div><div class="stat-sub">full access</div></div>
+      <div class="stat-card stat-owner"><div class="stat-label">Owner</div><div class="stat-value" id="stat-owner">—</div><div class="stat-sub">staff access</div></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="search-wrap">
+        <input type="text" id="search-input" placeholder="Search by email or name…" oninput="handleSearch(this.value)">
+      </div>
+      <select class="filter-select" id="tier-filter" onchange="handleTierFilter(this.value)">
+        <option value="">All Tiers</option>
+        <option value="basic">Basic</option>
+        <option value="pro">Pro</option>
+        <option value="agency">Agency</option>
+        <option value="owner">Owner</option>
+      </select>
+      <div class="controls-right">
+        <div class="total-label" id="total-label"></div>
+        <button class="btn-ghost" onclick="loadUsers()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Tier</th>
+            <th>Subscription</th>
+            <th>Stripe Customer</th>
+            <th>Joined</th>
+          </tr>
+        </thead>
+        <tbody id="user-tbody">
+          <tr><td colspan="5" class="table-msg"><span class="spinner"></span> Loading users…</td></tr>
+        </tbody>
+      </table>
+      <div class="pagination" id="pagination" style="display:none">
+        <button class="page-btn" id="btn-prev" onclick="changePage(-1)">← Prev</button>
+        <div class="page-info" id="page-info"></div>
+        <button class="page-btn" id="btn-next" onclick="changePage(1)">Next →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── CONFIG — update these two values ─────────────────────────────────────────
+const SUPABASE_URL     = 'https://tbjbviakpjcpacfaxigw.supabase.co';
+const SUPABASE_ANON    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiamJ2aWFrcGpjcGFjZmF4aWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYyMTIzODAsImV4cCI6MjA2MTc4ODM4MH0.i2UfXPMgrSJupBKECrRCNNB8bDHBGJbm7wHmBzBMEF8';
+const API_BASE         = 'https://authority-os-api.brendan-c89.workers.dev';
+// ─────────────────────────────────────────────────────────────────────────────
+
+let _session = null;
+let _page    = 0;
+let _tier    = '';
+let _search  = '';
+let _searchTimer = null;
+let _totalUsers = 0;
+const LIMIT = 50;
+
+// ── GOOGLE OAUTH ─────────────────────────────────────────────────────────────
+function doGoogleLogin() {
+  const btn = document.getElementById('google-btn');
+  btn.disabled = true; btn.textContent = '⏳ Redirecting to Google…';
+  const redirectTo = window.location.origin + window.location.pathname;
+  window.location.href = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`;
+}
+
+// Handle OAuth redirect — parse token from URL hash on page load
+async function handleOAuthRedirect() {
+  const hash = window.location.hash;
+  if (!hash) return false;
+  const p = new URLSearchParams(hash.slice(1));
+  const access_token  = p.get('access_token');
+  const refresh_token = p.get('refresh_token');
+  if (!access_token) return false;
+
+  // Clean URL
+  history.replaceState(null, '', window.location.pathname);
+
+  _session = { access_token, refresh_token };
+
+  // Verify admin
+  try {
+    const meRes = await fetch(`${API_BASE}/api/admin/stats`, {
+      headers: { 'Authorization': `Bearer ${access_token}` }
+    });
+    const me = await meRes.json();
+    if (!meRes.ok || me.error) throw new Error('Access denied — you need is_admin = true on your profile');
+
+    // Get email from Supabase
+    const userRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${access_token}` }
+    });
+    const userData = await userRes.json();
+
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.getElementById('app').style.flexDirection = 'column';
+    document.getElementById('topbar-email').textContent = userData.email || 'Admin';
+    setTopbarTier(me.userTier || 'basic');
+    renderStats(me);
+    loadUsers();
+    return true;
+  } catch(e) {
+    showAuthErr(e.message);
+    return false;
+  }
+}
+
+// Run on page load
+handleOAuthRedirect();
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const email    = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const btn      = document.getElementById('auth-btn');
+  const errEl    = document.getElementById('auth-error');
+  errEl.style.display = 'none';
+
+  if (!email || !password) { showAuthErr('Email and password required'); return; }
+  btn.disabled = true; btn.textContent = '⏳ Signing in…';
+
+  try {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'apikey': SUPABASE_ANON },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await r.json();
+    if (!r.ok || data.error) throw new Error(data.error_description || data.error || 'Login failed');
+
+    _session = data;
+    // Verify admin via worker
+    const meRes = await fetch(`${API_BASE}/api/admin/stats`, {
+      headers: { 'Authorization': `Bearer ${_session.access_token}` }
+    });
+    const me = await meRes.json();
+    if (!meRes.ok || me.error) throw new Error('Access denied — you need is_admin = true on your profile');
+
+    // All good
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.getElementById('app').style.flexDirection = 'column';
+    document.getElementById('topbar-email').textContent = email;
+    setTopbarTier(me.userTier || 'basic');
+    renderStats(me);
+    loadUsers();
+
+  } catch(e) {
+    showAuthErr(e.message);
+    btn.disabled = false; btn.textContent = 'Sign In →';
+  }
+}
+
+document.getElementById('auth-password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+function setTopbarTier(tier) {
+  const badge = document.getElementById('topbar-tier-badge');
+  const link  = document.getElementById('topbar-upgrade-link');
+  if (!badge) return;
+  const t = (tier || 'basic').toLowerCase();
+  badge.textContent = t.toUpperCase();
+  badge.className = `topbar-tier-badge tier-${t}`;
+  // Show upgrade link for non-owner tiers
+  const tierOrder = ['basic','pro','agency','owner'];
+  const idx = tierOrder.indexOf(t);
+  if (idx < tierOrder.length - 1) {
+    link.style.display = 'inline';
+    link.href = '/upgrade'; // update to your upgrade page URL
+  } else {
+    link.style.display = 'none';
+  }
+}
+
+function showAuthErr(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+function doLogout() {
+  _session = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('auth-password').value = '';
+  document.getElementById('auth-error').style.display = 'none';
+}
+
+// ── STATS ────────────────────────────────────────────────────────────────────
+function renderStats(data) {
+  const t = data.tiers || {};
+  document.getElementById('stat-total').textContent  = t.total  ?? '—';
+  document.getElementById('stat-basic').textContent  = t.basic  ?? '—';
+  document.getElementById('stat-pro').textContent    = t.pro    ?? '—';
+  document.getElementById('stat-agency').textContent = t.agency ?? '—';
+  document.getElementById('stat-owner').textContent  = t.owner  ?? '—';
+}
+
+async function refreshStats() {
+  try {
+    const r = await fetch(`${API_BASE}/api/admin/stats`, {
+      headers: { 'Authorization': `Bearer ${_session.access_token}` }
+    });
+    const d = await r.json();
+    if (d.tiers) renderStats(d);
+  } catch {}
+}
+
+// ── USERS ────────────────────────────────────────────────────────────────────
+function handleSearch(val) {
+  clearTimeout(_searchTimer);
+  _searchTimer = setTimeout(() => { _search = val; _page = 0; loadUsers(); }, 350);
+}
+
+function handleTierFilter(val) {
+  _tier = val; _page = 0; loadUsers();
+}
+
+function changePage(dir) {
+  const maxPage = Math.ceil(_totalUsers / LIMIT) - 1;
+  _page = Math.max(0, Math.min(_page + dir, maxPage));
+  loadUsers();
+}
+
+async function loadUsers() {
+  const tbody = document.getElementById('user-tbody');
+  tbody.innerHTML = '<tr><td colspan="5" class="table-msg"><span class="spinner"></span> Loading…</td></tr>';
+  document.getElementById('pagination').style.display = 'none';
+
+  try {
+    const params = new URLSearchParams({ page: _page, limit: LIMIT });
+    if (_search) params.set('q', _search);
+    if (_tier)   params.set('tier', _tier);
+
+    const r = await fetch(`${API_BASE}/api/admin/users?${params}`, {
+      headers: { 'Authorization': `Bearer ${_session.access_token}` }
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Failed to load users');
+
+    _totalUsers = d.total || d.users?.length || 0;
+    renderUsers(d.users || []);
+    document.getElementById('total-label').textContent = `${_totalUsers} user${_totalUsers !== 1 ? 's' : ''}`;
+
+    // Pagination
+    if (_totalUsers > LIMIT) {
+      document.getElementById('pagination').style.display = 'flex';
+      const totalPages = Math.ceil(_totalUsers / LIMIT);
+      document.getElementById('page-info').textContent = `Page ${_page + 1} of ${totalPages}`;
+      document.getElementById('btn-prev').disabled = _page === 0;
+      document.getElementById('btn-next').disabled = _page >= totalPages - 1;
+    }
+
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="5" class="table-msg">⚠️ ${e.message}</td></tr>`;
+  }
+}
+
+function renderUsers(users) {
+  const tbody = document.getElementById('user-tbody');
+  if (!users.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="table-msg">No users found</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = users.map(u => {
+    const sub = Array.isArray(u.subscriptions) ? u.subscriptions[0] : null;
+    const subHtml = sub
+      ? `<span class="sub-status sub-${sub.status}">${sub.status}</span>
+         <span style="margin-left:6px;font-family:var(--mono);font-size:9px;color:var(--w30)">${sub.tier?.toUpperCase() || ''}</span>
+         ${sub.current_period_end ? `<span style="display:block;font-family:var(--mono);font-size:9px;color:var(--w30);margin-top:2px">renews ${fmtDate(sub.current_period_end)}</span>` : ''}`
+      : `<span class="sub-none">no subscription</span>`;
+
+    const stripeHtml = u.stripe_customer_id
+      ? `<a href="https://dashboard.stripe.com/customers/${u.stripe_customer_id}" target="_blank" rel="noopener">${u.stripe_customer_id.slice(0,18)}…</a>`
+      : `<span style="color:var(--w30)">—</span>`;
+
+    return `<tr>
+      <td class="td-email">
+        ${u.email || '—'}
+        ${u.full_name ? `<span>${u.full_name}</span>` : ''}
+        ${u.is_admin ? `<span class="td-admin">★ Admin</span>` : ''}
+      </td>
+      <td>
+        <select class="tier-select tier-${u.tier}" id="tier-sel-${u.id}"
+          onchange="setTier('${u.id}', this.value, this)">
+          <option value="basic"  ${u.tier==='basic'  ?'selected':''}>BASIC</option>
+          <option value="pro"    ${u.tier==='pro'    ?'selected':''}>PRO</option>
+          <option value="agency" ${u.tier==='agency' ?'selected':''}>AGENCY</option>
+          <option value="owner"  ${u.tier==='owner'  ?'selected':''}>OWNER</option>
+        </select>
+        <span class="save-flash" id="flash-${u.id}">✓ saved</span>
+      </td>
+      <td>${subHtml}</td>
+      <td class="td-stripe">${stripeHtml}</td>
+      <td class="td-date">${fmtDate(u.created_at)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── SET TIER ─────────────────────────────────────────────────────────────────
+async function setTier(userId, tier, selectEl) {
+  selectEl.disabled = true; selectEl.classList.add('saving');
+  try {
+    const r = await fetch(`${API_BASE}/api/admin/set-tier`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${_session.access_token}` },
+      body: JSON.stringify({ userId, tier }),
+    });
+    const d = await r.json();
+    if (!r.ok || !d.ok) throw new Error(d.error || 'Failed');
+
+    // Update select styling
+    selectEl.className = `tier-select tier-${tier}`;
+    // Flash confirmation
+    const flash = document.getElementById(`flash-${userId}`);
+    if (flash) {
+      flash.classList.add('show');
+      setTimeout(() => flash.classList.remove('show'), 2000);
+    }
+    toast(`Tier updated to ${tier.toUpperCase()}`, 'success');
+    refreshStats();
+
+  } catch(e) {
+    toast(e.message, 'error');
+    // Revert select
+    loadUsers();
+  } finally {
+    selectEl.disabled = false; selectEl.classList.remove('saving');
+  }
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+
+let _toastTimer;
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = (type === 'success' ? '✓ ' : '⚠ ') + msg;
+  el.className = `show ${type}`;
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.className = '', 3000);
+}
+</script>
+</body>
+</html>
+<script src="js/admin-app.js"></script>
