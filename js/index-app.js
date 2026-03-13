@@ -266,7 +266,16 @@ function _applyTierUI() {
 }
 
 // ── Allowed domains ───────────────────────────────────
-const _ALLOWED = ['dev.connectandbook.com','app.ghluniversity.com','dev.ghluniversity.com','jetpack.ghluniversity.com','localhost','127.0.0.1'];
+const _ALLOWED = [
+  'dev.connectandbook.com',
+  'app.jetpack.ghluniversity.com',
+  'jetpack.ghluniversity.com',
+  'embed.jetpack.ghluniversity.com',
+  'affiliates.jetpack.ghluniversity.com',
+  'dev.ghluniversity.com',
+  'localhost',
+  '127.0.0.1'
+];
 function _domainOk() {
   const h = window.location.hostname;
   return _ALLOWED.some(d => h === d || h.endsWith('.'+d));
@@ -276,7 +285,7 @@ function _domainOk() {
 window.addEventListener('DOMContentLoaded', async () => {
   // Domain check
   if (!_domainOk()) {
-    document.getElementById('license-gate').innerHTML = '<div style="text-align:center;padding:60px 40px;max-width:400px"><div style="font-size:48px;margin-bottom:20px">🔒</div><div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:10px">Unauthorized Domain</div><div style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6">This tool is only authorized to run at<br><strong style="color:var(--yellow)">app.ghluniversity.com</strong><br><br>If you believe this is an error, contact support.</div></div>';
+    document.getElementById('license-gate').innerHTML = '<div style="text-align:center;padding:60px 40px;max-width:400px"><div style="font-size:48px;margin-bottom:20px">🔒</div><div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:10px">Unauthorized Domain</div><div style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6">This tool is only authorized to run at<br><strong style="color:var(--yellow)">app.jetpack.ghluniversity.com</strong><br><br>If you believe this is an error, contact support.</div></div>';
     document.getElementById('license-gate').style.display = 'flex';
     return;
   }
