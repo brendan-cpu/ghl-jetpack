@@ -34,13 +34,13 @@ async function handleOAuthRedirect() {
 
   _session = { access_token, refresh_token };
 
-  // Verify admin
+  // Verify admin directly via Supabase profiles table
   try {
-    const meRes = await fetch(`${API_BASE}/api/admin/stats`, {
-      headers: { 'Authorization': `Bearer ${access_token}` }
+    const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=is_admin&limit=1`, {
+      headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${access_token}` }
     });
-    const me = await meRes.json();
-    if (!meRes.ok || me.error) throw new Error('Access denied — you need is_admin = true on your profile');
+    const profiles = await profileRes.json();
+    if (!profileRes.ok || !profiles[0]?.is_admin) throw new Error('Access denied — you need is_admin = true on your profile');
 
     // Get email from Supabase
     const userRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
@@ -52,6 +52,12 @@ async function handleOAuthRedirect() {
     document.getElementById('app').style.display = 'flex';
     document.getElementById('app').style.flexDirection = 'column';
     document.getElementById('topbar-email').textContent = userData.email || 'Admin';
+
+    // Load stats from worker (non-blocking)
+    const meRes = await fetch(`${API_BASE}/api/admin/stats`, {
+      headers: { 'Authorization': `Bearer ${access_token}` }
+    });
+    const me = meRes.ok ? await meRes.json() : {};
     setTopbarTier(me.userTier || 'basic');
     renderStats(me);
     loadUsers();
@@ -86,18 +92,24 @@ async function doLogin() {
     if (!r.ok || data.error) throw new Error(data.error_description || data.error || 'Login failed');
 
     _session = data;
-    // Verify admin via worker
-    const meRes = await fetch(`${API_BASE}/api/admin/stats`, {
-      headers: { 'Authorization': `Bearer ${_session.access_token}` }
+    // Verify admin directly via Supabase profiles table
+    const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=is_admin&limit=1`, {
+      headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${_session.access_token}` }
     });
-    const me = await meRes.json();
-    if (!meRes.ok || me.error) throw new Error('Access denied — you need is_admin = true on your profile');
+    const profiles = await profileRes.json();
+    if (!profileRes.ok || !profiles[0]?.is_admin) throw new Error('Access denied — you need is_admin = true on your profile');
 
     // All good
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     document.getElementById('app').style.flexDirection = 'column';
     document.getElementById('topbar-email').textContent = email;
+
+    // Load stats from worker (non-blocking)
+    const meRes = await fetch(`${API_BASE}/api/admin/stats`, {
+      headers: { 'Authorization': `Bearer ${_session.access_token}` }
+    });
+    const me = meRes.ok ? await meRes.json() : {};
     setTopbarTier(me.userTier || 'basic');
     renderStats(me);
     loadUsers();
