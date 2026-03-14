@@ -56,9 +56,9 @@ html, body {
   width:100%; overflow:hidden;
 }
 .brand {
-  display:flex; align-items:center; gap:10px;
+  display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:5px;
   width:var(--sidebar-w); min-width:var(--sidebar-w);
-  padding-right:16px;
+  padding:0 16px 0 0;
   border-right:1px solid var(--border);
   height:100%;
 }
