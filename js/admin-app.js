@@ -1,6 +1,6 @@
 // ── CONFIG — update these two values ─────────────────────────────────────────
 const SUPABASE_URL     = 'https://tbjbviakpjcpacfaxigw.supabase.co';
-const SUPABASE_ANON    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiamJ2aWFrcGpjcGFjZmF4aWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYyMTIzODAsImV4cCI6MjA2MTc4ODM4MH0.i2UfXPMgrSJupBKECrRCNNB8bDHBGJbm7wHmBzBMEF8';
+const SUPABASE_ANON    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiamJ2aWFrcGpjcGFjZmF4aWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDI0MzEsImV4cCI6MjA4ODgxODQzMX0.0Rub6XGG7lN-MGc7NdpuVh4OKgC43LFC7_yymZqc37k';
 const API_BASE         = 'https://authority-os-api.brendan-c89.workers.dev';
 // ─────────────────────────────────────────────────────────────────────────────
 
