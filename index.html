@@ -228,12 +228,13 @@
   <!-- Top Nav -->
   <div id="topnav">
     <div class="brand">
-      <div class="brand-icon"><img src="assets/index-logo.png" style="width:30px;height:30px;object-fit:contain;"></div>
-      <div>
-        <div class="brand-name">GHL Jetpack</div><span id="tier-badge" class="tier-badge" style="display:none;margin-left:8px"></span><button id="upgrade-btn" onclick="openPricing()" style="display:none;margin-left:10px;background:var(--yellow);color:#000;border:none;border-radius:6px;padding:4px 12px;font-size:9px;font-weight:800;font-family:var(--font);cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;">Upgrade</button><button id="billing-btn" onclick="openBillingPortal()" style="display:none;margin-left:6px;background:rgba(255,255,255,0.08);color:var(--w50);border:1px solid var(--border2);border-radius:6px;padding:4px 12px;font-size:9px;font-weight:700;font-family:var(--font);cursor:pointer;">Manage Plan</button>
-        <div class="brand-sub">GHL University</div>
-      </div>
-    </div>
+  <div><img src="assets/index-logo-horizontal-white.webp" style="max-width:160px;width:100%;height:auto;display:block;"></div>
+  <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+    <span id="tier-badge" class="tier-badge" style="display:none"></span>
+    <button id="upgrade-btn" onclick="openPricing()" style="display:none;background:var(--yellow);color:#000;border:none;border-radius:6px;padding:4px 12px;font-size:9px;font-weight:800;font-family:var(--font);cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;">Upgrade</button>
+    <button id="billing-btn" onclick="openBillingPortal()" style="display:none;background:rgba(255,255,255,0.08);color:var(--w50);border:1px solid var(--border2);border-radius:6px;padding:4px 12px;font-size:9px;font-weight:700;font-family:var(--font);cursor:pointer;">Manage Plan</button>
+  </div>
+</div>
     <div class="topnav-tabs">
       <button class="topnav-tab active" id="tab-core-setup" onclick="switchTopTab('core-setup')">⚙️ Core Setup</button>
       <button class="topnav-tab" id="tab-launchpads"       onclick="switchTopTab('launchpads')">🚀 Launchpads</button>
