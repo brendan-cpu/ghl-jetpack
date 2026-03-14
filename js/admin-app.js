@@ -5,6 +5,11 @@ const API_BASE         = 'https://authority-os-api.brendan-c89.workers.dev';
 // ─────────────────────────────────────────────────────────────────────────────
 
 let _session = null;
+
+// Decode JWT payload to extract user ID without an extra network call
+function _jwtUserId(token) {
+  try { return JSON.parse(atob(token.split('.')[1])).sub; } catch { return null; }
+}
 let _page    = 0;
 let _tier    = '';
 let _search  = '';
@@ -36,7 +41,9 @@ async function handleOAuthRedirect() {
 
   // Verify admin directly via Supabase profiles table
   try {
-    const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=is_admin&limit=1`, {
+    const userId = _jwtUserId(access_token);
+    if (!userId) throw new Error('Could not read user ID from token');
+    const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=is_admin&limit=1`, {
       headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${access_token}` }
     });
     const profiles = await profileRes.json();
@@ -93,7 +100,9 @@ async function doLogin() {
 
     _session = data;
     // Verify admin directly via Supabase profiles table
-    const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=is_admin&limit=1`, {
+    const userId = _jwtUserId(_session.access_token);
+    if (!userId) throw new Error('Could not read user ID from token');
+    const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=is_admin&limit=1`, {
       headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${_session.access_token}` }
     });
     const profiles = await profileRes.json();
