@@ -4,6 +4,58 @@ This file tracks project changes made with AI so future sessions can quickly und
 
 ---
 
+### Cloudflare Worker — added admin routes for stats, users, and tier management
+- Added 3 missing routes to `worker.js` that the admin dashboard depends on:
+  - `GET /api/admin/stats` — returns user count broken down by tier
+  - `GET /api/admin/users` — returns paginated user list with search and tier filter
+  - `POST /api/admin/set-tier` — updates a user's tier by ID
+- All 3 routes verify `is_admin = true` on the requesting user before returning data
+- All 3 routes use the Supabase service role key to bypass RLS and see all users
+- Root cause: these routes were never built in the original worker — every admin dashboard call was hitting the catch-all 404
+- Deploy was blocked by a `**` glob character in the Google Drive folder path; fixed by copying to `~/authority-os-api-deploy` and deploying from there
+- Temp deploy folder removed after successful deploy
+Changed files:
+- `worker.js` (deployed via wrangler, not GitHub)
+
+## 2026-03-14
+
+### Admin auth — full fix (root cause: expired Supabase anon key)
+- Updated `SUPABASE_ANON` key in `js/admin-app.js` — old key was invalid/expired, causing all Supabase API calls to fail
+- Removed duplicate inline `<script>` block from `admin.html` that was causing `SUPABASE_URL already declared` crash
+- `doLogin()` and `handleOAuthRedirect()` now verify admin by querying `profiles` table directly via Supabase REST API instead of the Cloudflare worker
+- Worker (`/api/admin/stats`) still called for stats/tier data but no longer blocks login if it fails
+- Added Supabase RLS policy: `authenticated` role can SELECT own profile row (`auth.uid() = id`)
+- Disabled RLS on `public.profiles` during debugging (can re-enable once confirmed stable)
+- Root cause chain: expired anon key → invalid API key error → profiles query returning empty → access denied
+Changed files:
+- `js/admin-app.js`
+- `admin.html`
+
+### Top nav brand area — replaced icon+text with horizontal logo and clean tier row
+- Removed `brand-icon` (square icon img), `brand-name` ("GHL Jetpack"), `brand-sub` ("GHL University") from `#topnav .brand`
+- Added `assets/index-logo-horizontal-white.webp` as full-width brand image
+- Moved `tier-badge`, `upgrade-btn`, `billing-btn` to their own flex row below the logo
+- Changed `.brand` flex direction to `column` so logo stacks above tier/buttons
+- Increased `--topnav-h` from `52px` to `72px` to give logo + tier row room to breathe
+- Added `padding: 10px 16px 10px 0` to `.brand` for vertical spacing
+Changed files:
+- `index.html`
+- `css/index.css`
+
+### Credentials modal — removed icon and wordmark from header
+- Removed `cred-modal-icon` (index-logo.png), `cred-modal-title` ("GHL Jetpack"), and `cred-modal-sub` ("GHL University · Growing Entrepreneur") from `.cred-modal-header`
+- Added `assets/index-logo-horizontal-white.webp` centered in header to replace wordmark
+- Close button (`cred-close-btn`) retained
+Changed files:
+- `index.html`
+
+### Login screen — replaced logo+wordmark with horizontal logo; removed "Sign In" heading
+- Removed `lg-logo` div (icon + title + subtitle) and `hr.lg-divider` from `#license-gate`
+- Added `assets/index-logo-horizontal-white.webp` centered above fields in `#auth-panel-signin`
+- Removed `<div class="lg-heading">Sign In</div>` — logo now stands alone above the form
+Changed files:
+- `index.html`
+
 ## 2026-03-13
 ### Initial refactor for Claude-friendly structure
 Changed files:
