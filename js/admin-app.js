@@ -6,10 +6,11 @@ const API_BASE         = 'https://authority-os-api.brendan-c89.workers.dev';
 
 let _session = null;
 
-// Decode JWT payload to extract user ID without an extra network call
-function _jwtUserId(token) {
-  try { return JSON.parse(atob(token.split('.')[1])).sub; } catch { return null; }
+// Decode JWT payload — returns full claims object
+function _jwtPayload(token) {
+  try { return JSON.parse(atob(token.split('.')[1])); } catch { return {}; }
 }
+function _jwtUserId(token) { return _jwtPayload(token).sub || null; }
 let _page    = 0;
 let _tier    = '';
 let _search  = '';
@@ -43,11 +44,18 @@ async function handleOAuthRedirect() {
   try {
     const userId = _jwtUserId(access_token);
     if (!userId) throw new Error('Could not read user ID from token');
-    const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=is_admin&limit=1`, {
-      headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${access_token}` }
-    });
-    const profiles = await profileRes.json();
-    if (!profileRes.ok || !profiles[0]?.is_admin) throw new Error('Access denied — you need is_admin = true on your profile');
+
+    // Check is_admin: try JWT app_metadata first (no RLS issue), then profiles table
+    const jwtClaims = _jwtPayload(access_token);
+    let isAdmin = jwtClaims?.app_metadata?.is_admin === true;
+    if (!isAdmin) {
+      const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=is_admin&limit=1`, {
+        headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${access_token}` }
+      });
+      const profiles = profileRes.ok ? await profileRes.json() : [];
+      isAdmin = profiles[0]?.is_admin === true;
+    }
+    if (!isAdmin) throw new Error('Access denied — you need is_admin = true on your profile');
 
     // Get email from Supabase
     const userRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
@@ -102,11 +110,18 @@ async function doLogin() {
     // Verify admin directly via Supabase profiles table
     const userId = _jwtUserId(_session.access_token);
     if (!userId) throw new Error('Could not read user ID from token');
-    const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=is_admin&limit=1`, {
-      headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${_session.access_token}` }
-    });
-    const profiles = await profileRes.json();
-    if (!profileRes.ok || !profiles[0]?.is_admin) throw new Error('Access denied — you need is_admin = true on your profile');
+
+    // Check is_admin: try JWT app_metadata first (no RLS issue), then profiles table
+    const jwtClaims = _jwtPayload(_session.access_token);
+    let isAdmin = jwtClaims?.app_metadata?.is_admin === true;
+    if (!isAdmin) {
+      const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=is_admin&limit=1`, {
+        headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${_session.access_token}` }
+      });
+      const profiles = profileRes.ok ? await profileRes.json() : [];
+      isAdmin = profiles[0]?.is_admin === true;
+    }
+    if (!isAdmin) throw new Error('Access denied — you need is_admin = true on your profile');
 
     // All good
     document.getElementById('auth-screen').style.display = 'none';
