@@ -1401,3 +1401,23 @@ input.field-input::placeholder { color:var(--w30); }
   color: #fff !important;
   border-left: none !important;
 }
+
+/* ═══════════════════════════════════════
+   SIDEBAR FIXES
+═══════════════════════════════════════ */
+
+/* Dashboard — match size and uppercase to phase headers */
+#sib-dashboard {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 12px 14px !important;
+}
+
+/* Dashboard — highlight on click same as phase items */
+#sib-dashboard.active {
+  background: linear-gradient(135deg, rgba(255,187,0,0.22), rgba(255,187,0,0.06)) !important;
+  box-shadow: 0 2px 16px rgba(255,187,0,0.22), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+  color: #fff !important;
+}
