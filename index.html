@@ -252,6 +252,11 @@
 
     <!-- Sidebar -->
    <div id="sidebar">
+    <!-- DASHBOARD -->
+      <button class="phase-sub-item active" id="sib-dashboard" onclick="renderDashboard();document.querySelectorAll('.phase-sub-item').forEach(b=>b.classList.remove('active'));this.classList.add('active')" style="padding:12px 16px;border-left:3px solid var(--yellow);background:var(--yellow-m);color:#fff">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
 
       <!-- SYNERGY -->
       <div class="phase-group" id="phase-synergy">
@@ -1259,17 +1264,95 @@ function doLogout() {
 function launchApp() {
   document.getElementById('cred-modal').style.display='none';
   document.getElementById('app').style.display='flex';
-  _applyTierUI(); // apply tier gating before any tab renders
-  document.getElementById('tab-core-setup').classList.add('active');
-  document.getElementById('sidebar').innerHTML = buildDocsSidebar();
+  _applyTierUI();
   loadChecklistState();
-  document.getElementById('sidebar').innerHTML = buildCoreSetupSidebar();
-  renderGHLChecklist();
   updateSidebarDots();
-  updateSidebarDots();
-  updateOverallProgress();
-  // Auto-load current GHL values into all fields
+  renderDashboard();
   loadFromGHL();
+}
+
+function renderDashboard() {
+  // Clear any active sidebar items
+  document.querySelectorAll('.phase-sub-item').forEach(b => b.classList.remove('active'));
+
+  const synPct  = calcDocProgress();
+  const fields  = Object.values(DOCS).flatMap(d => d.sections.flatMap(s => s.fields));
+  const filled  = fields.filter(f => getField(f.key).trim()).length;
+  const total   = fields.length;
+
+  document.getElementById('page-content').innerHTML = `
+    <div style="padding:28px 28px 40px">
+
+      <!-- Welcome -->
+      <div style="margin-bottom:24px">
+        <div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px">Your Authority Ecosystem</div>
+        <div style="font-size:12px;color:var(--w50)">Overview · Progress · Recommended Next Step</div>
+      </div>
+
+      <!-- Metric cards -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
+          <div style="font-size:8px;font-weight:800;color:var(--w30);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px">Synergy Progress</div>
+          <div style="font-size:22px;font-weight:800;color:#fff">${synPct}<span style="font-size:13px;color:var(--w30)">%</span></div>
+        </div>
+        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
+          <div style="font-size:8px;font-weight:800;color:var(--w30);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px">Fields Filled</div>
+          <div style="font-size:22px;font-weight:800;color:#fff">${filled}<span style="font-size:13px;color:var(--w30)">/${total}</span></div>
+        </div>
+        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
+          <div style="font-size:8px;font-weight:800;color:var(--w30);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px">GHL Status</div>
+          <div style="font-size:13px;font-weight:800;color:var(--green);margin-top:4px">● Synced</div>
+        </div>
+        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
+          <div style="font-size:8px;font-weight:800;color:var(--w30);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px">Systems Installed</div>
+          <div style="font-size:22px;font-weight:800;color:#fff">0<span style="font-size:13px;color:var(--w30)">/60</span></div>
+        </div>
+      </div>
+
+      <!-- Quick Start -->
+      <div style="font-size:8px;font-weight:800;color:var(--w30);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px">
+        Quick Start — pick your priority
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+
+        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='rgba(255,255,255,0.14)'" onmouseout="this.style.borderColor='var(--border)'" onclick="togglePhase('synergy');switchDoc('business')">
+          <div style="width:28px;height:28px;border-radius:7px;background:var(--yellow-m);display:flex;align-items:center;justify-content:center;margin-bottom:10px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFBB00" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>
+          </div>
+          <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:3px">Build Synergy</div>
+          <div style="font-size:10px;color:var(--w50);margin-bottom:12px;line-height:1.5">Define your authority foundation</div>
+          <button style="background:var(--navy-3);border:1px solid var(--border2);border-radius:5px;padding:5px 12px;font-size:9px;font-weight:700;color:var(--w70);cursor:pointer;font-family:var(--font)">Start →</button>
+        </div>
+
+        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='rgba(255,255,255,0.14)'" onmouseout="this.style.borderColor='var(--border)'" onclick="togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('leadmagnet')">
+          <div style="width:28px;height:28px;border-radius:7px;background:var(--blue-m);display:flex;align-items:center;justify-content:center;margin-bottom:10px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#158AF6" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+          </div>
+          <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:3px">Get More Leads</div>
+          <div style="font-size:10px;color:var(--w50);margin-bottom:12px;line-height:1.5">Launch Lead Magnet</div>
+          <button style="background:var(--navy-3);border:1px solid var(--border2);border-radius:5px;padding:5px 12px;font-size:9px;font-weight:700;color:var(--w70);cursor:pointer;font-family:var(--font)">Start →</button>
+        </div>
+
+        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='rgba(255,255,255,0.14)'" onmouseout="this.style.borderColor='var(--border)'" onclick="togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('masterclass')">
+          <div style="width:28px;height:28px;border-radius:7px;background:rgba(127,119,221,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:10px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7F77DD" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:3px">Launch an Event</div>
+          <div style="font-size:10px;color:var(--w50);margin-bottom:12px;line-height:1.5">Masterclass Engine</div>
+          <button style="background:var(--navy-3);border:1px solid var(--border2);border-radius:5px;padding:5px 12px;font-size:9px;font-weight:700;color:var(--w70);cursor:pointer;font-family:var(--font)">Start →</button>
+        </div>
+
+        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='rgba(255,255,255,0.14)'" onmouseout="this.style.borderColor='var(--border)'" onclick="togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('network')">
+          <div style="width:28px;height:28px;border-radius:7px;background:var(--yellow-m);display:flex;align-items:center;justify-content:center;margin-bottom:10px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFBB00" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:3px">Network &amp; Expand</div>
+          <div style="font-size:10px;color:var(--w50);margin-bottom:12px;line-height:1.5">Authority &amp; Reach</div>
+          <button style="background:var(--navy-3);border:1px solid var(--border2);border-radius:5px;padding:5px 12px;font-size:9px;font-weight:700;color:var(--w70);cursor:pointer;font-family:var(--font)">Start →</button>
+        </div>
+
+      </div>
+    </div>`;
 }
 
 /* ═══════════════════════════════════════
