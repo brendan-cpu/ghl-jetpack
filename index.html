@@ -903,108 +903,91 @@ function renderRightPanel() {
 
   el.innerHTML = `
 
-    <!-- Recommended Next -->
-    <button onclick="togglePhase('synergy')" style="
-      display:flex;align-items:center;justify-content:space-between;
-      width:100%;background:linear-gradient(135deg,#FFBB00,#e6a800);
-      border:none;border-radius:14px;padding:14px 18px;cursor:pointer;
-      box-shadow:0 4px 20px rgba(255,187,0,0.35);margin-bottom:4px;
-    ">
-      <div style="display:flex;align-items:center;gap:9px">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="#000" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <span style="font-size:13px;font-weight:800;color:#000;letter-spacing:0.02em">Recommended Next</span>
-      </div>
-      <span style="font-size:16px;color:#000;font-weight:700">→</span>
-    </button>
-
     <!-- Progress Card -->
     <div style="
       background:#fff;border-radius:18px;padding:20px 18px;
       box-shadow:0 4px 24px rgba(1,36,61,0.09),0 1px 4px rgba(1,36,61,0.06);
     ">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <span style="font-size:16px;font-weight:800;color:#01243D">Progress</span>
-        <span style="font-size:18px;color:rgba(1,36,61,0.3);cursor:pointer;letter-spacing:2px">···</span>
+      <!-- Phase dots -->
+      <div style="font-size:11px;font-weight:800;color:rgba(1,36,61,0.35);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px">Progress</div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;position:relative;margin-bottom:20px">
+        <div style="position:absolute;top:14px;left:32px;right:32px;height:1px;background:rgba(1,36,61,0.12)"></div>
+        ${[['S','Synergy','#FFBB00','#000',true],['S','Systems','transparent','rgba(1,36,61,0.3)',false],['S','Scalability','transparent','rgba(1,36,61,0.3)',false]].map(([l,n,bg,tc,ac])=>`
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;z-index:1">
+            <div style="width:30px;height:30px;border-radius:50%;background:${bg};border:2px solid ${ac?'#FFBB00':'rgba(1,36,61,0.2)'};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:${tc};box-shadow:${ac?'0 0 14px rgba(255,187,0,0.4)':'none'}">${l}</div>
+            <div style="font-size:10px;font-weight:700;color:${ac?'#FFBB00':'rgba(1,36,61,0.4)'}">${n}</div>
+          </div>`).join('')}
       </div>
 
-      <!-- Synergy bars -->
-      <div style="margin-bottom:14px">
-        <div style="height:8px;background:#f0f0f0;border-radius:8px;overflow:hidden;margin-bottom:5px">
-          <div style="height:100%;width:${synPct}%;background:linear-gradient(90deg,#FFBB00,#e6a800);border-radius:8px;transition:width 0.4s"></div>
-        </div>
-        <div style="height:8px;background:#f0f0f0;border-radius:8px;overflow:hidden;margin-bottom:6px">
-          <div style="height:100%;width:${Math.round(synPct*0.85)}%;background:linear-gradient(90deg,#c9a200,#a88200);border-radius:8px;opacity:0.6"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
+      <!-- Progress bars -->
+      <div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
           <span style="font-size:14px;font-weight:700;color:#01243D">Synergy</span>
           <span style="font-size:13px;color:rgba(1,36,61,0.4);font-weight:600">${synPct}%</span>
         </div>
+        <div style="height:7px;background:#f0f0f0;border-radius:8px;overflow:hidden">
+          <div style="height:100%;width:${synPct}%;background:linear-gradient(90deg,#FFBB00,#e6a800);border-radius:8px;transition:width 0.4s"></div>
+        </div>
       </div>
-
-      <!-- Systems bars -->
-      <div style="margin-bottom:14px">
-        <div style="height:8px;background:#f0f0f0;border-radius:8px;overflow:hidden;margin-bottom:5px">
-          <div style="height:100%;width:0%;background:linear-gradient(90deg,#158AF6,#0d6ecc);border-radius:8px"></div>
-        </div>
-        <div style="height:8px;background:#f0f0f0;border-radius:8px;overflow:hidden;margin-bottom:6px">
-          <div style="height:100%;width:0%;background:linear-gradient(90deg,#0d6ecc,#0a56a0);border-radius:8px;opacity:0.6"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
           <span style="font-size:14px;font-weight:700;color:#01243D">Systems</span>
           <span style="font-size:13px;color:rgba(1,36,61,0.4);font-weight:600">0%</span>
         </div>
-      </div>
-
-      <!-- Scalability bar -->
-      <div>
-        <div style="height:8px;background:#f0f0f0;border-radius:8px;overflow:hidden;margin-bottom:6px">
-          <div style="height:100%;width:0%;background:linear-gradient(90deg,#37CA37,#28a028);border-radius:8px"></div>
+        <div style="height:7px;background:#f0f0f0;border-radius:8px;overflow:hidden">
+          <div style="height:100%;width:0%;background:linear-gradient(90deg,#158AF6,#0d6ecc);border-radius:8px"></div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
+      </div>
+      <div style="margin-bottom:4px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
           <span style="font-size:14px;font-weight:700;color:#01243D">Scalability</span>
           <span style="font-size:13px;color:rgba(1,36,61,0.4);font-weight:600">0%</span>
+        </div>
+        <div style="height:7px;background:#f0f0f0;border-radius:8px;overflow:hidden">
+          <div style="height:100%;width:0%;background:linear-gradient(90deg,#37CA37,#28a028);border-radius:8px"></div>
         </div>
       </div>
 
       <!-- Divider -->
-      <div style="height:1px;background:rgba(1,36,61,0.07);margin:18px 0"></div>
+      <div style="height:1px;background:rgba(1,36,61,0.07);margin:16px 0"></div>
 
       <!-- Next Steps -->
-      <div style="font-size:16px;font-weight:800;color:#01243D;margin-bottom:14px">Next Steps</div>
+      <div style="font-size:16px;font-weight:800;color:#01243D;margin-bottom:12px">Next Steps</div>
       ${nextSteps.map((s,i) => `
-        <div style="display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid rgba(1,36,61,0.06)">
+        <div style="display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid rgba(1,36,61,0.06)">
           <div style="
             width:22px;height:22px;border-radius:50%;flex-shrink:0;
             display:flex;align-items:center;justify-content:center;
             background:${s.done ? s.color : 'transparent'};
-            border:2px solid ${s.done ? s.color : 'rgba(1,36,61,0.2)'};
-            box-shadow:${s.done ? `0 2px 8px ${s.color}55` : 'none'};
+            border:2px solid ${s.done ? s.color : (i===firstIncomplete ? '#FFBB00' : 'rgba(1,36,61,0.2)')};
+            box-shadow:${s.done ? `0 2px 8px ${s.color}55` : (i===firstIncomplete ? '0 0 8px rgba(255,187,0,0.3)' : 'none')};
           ">
-            ${s.done ? `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>` : (i===firstIncomplete ? `<div style="width:8px;height:8px;border-radius:50%;background:#FFBB00"></div>` : '')}
+            ${s.done
+              ? `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`
+              : (i===firstIncomplete ? `<div style="width:8px;height:8px;border-radius:50%;background:#FFBB00"></div>` : '')}
           </div>
-          <span style="font-size:13px;font-weight:600;color:${s.done ? 'rgba(1,36,61,0.4)' : '#01243D'};${s.done ? 'text-decoration:line-through' : ''}">${s.label}</span>
+          <span style="font-size:13px;font-weight:600;color:${s.done ? 'rgba(1,36,61,0.35)' : '#01243D'};${s.done ? 'text-decoration:line-through' : ''}">${s.label}</span>
         </div>`).join('')}
-
     </div>
 
-    <!-- Ask Jetpack AI -->
+    <!-- Ask Jetpack AI — pinned bottom -->
     <div style="
       background:#fff;border-radius:14px;padding:12px 14px;
       box-shadow:0 4px 20px rgba(1,36,61,0.08);
-      display:flex;align-items:center;gap:10px;
+      display:flex;align-items:center;gap:10px;margin-top:auto;
     ">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(1,36,61,0.35)" stroke-width="2" style="flex-shrink:0"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(1,36,61,0.3)" stroke-width="2" style="flex-shrink:0"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       <input type="text" placeholder="Ask Jetpack AI…" style="
         flex:1;border:none;outline:none;font-family:var(--font);
         font-size:13px;color:#01243D;background:transparent;
       "/>
       <button style="
-        width:32px;height:32px;border-radius:10px;
+        width:30px;height:30px;border-radius:9px;
         background:linear-gradient(135deg,#FFBB00,#e6a800);
         border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
-        box-shadow:0 2px 10px rgba(255,187,0,0.4);flex-shrink:0;
+        box-shadow:0 2px 10px rgba(255,187,0,0.35);flex-shrink:0;
       ">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
     </div>
 
