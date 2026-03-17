@@ -1464,3 +1464,17 @@ input.field-input::placeholder { color:var(--w30); }
   padding: 0 !important;
   height: auto !important;
 }
+
+/* ═══════════════════════════════════════
+   RIGHT PANEL — FIX AI INPUT TO BOTTOM
+═══════════════════════════════════════ */
+#right-panel {
+  height: calc(100vh - var(--topnav-h));
+}
+#right-panel-inner {
+  min-height: 100% !important;
+  height: 100% !important;
+}
+#right-panel-inner > div:last-child {
+  margin-top: auto !important;
+}
