@@ -951,7 +951,7 @@ input.field-input::placeholder { color:var(--w30); }
   background:transparent; border:none;
   border-left:3px solid transparent;
   padding:8px 16px 8px 28px;
-  font-family:var(--font); font-size:11px; font-weight:600;
+  font-family:var(--font); font-size:14px; font-weight:600;
   color:var(--w50); cursor:pointer;
   transition:all 0.15s;
   display:flex; align-items:center; justify-content:space-between;
@@ -1011,7 +1011,7 @@ input.field-input::placeholder { color:var(--w30); }
 .rp-next-item {
   display:flex; align-items:center; gap:9px;
   padding:6px 0; border-bottom:1px solid var(--border);
-  font-size:10px; color:var(--w70); line-height:1.4;
+  font-size:14px; color:var(--w70); line-height:1.4;
 }
 .rp-next-item:last-child { border-bottom:none; }
 .rp-check {
@@ -1047,7 +1047,7 @@ input.field-input::placeholder { color:var(--w30); }
 .phase-header {
   display:flex; align-items:center; justify-content:space-between;
   padding:13px 16px;
-  font-size:11px; font-weight:800; letter-spacing:0.14em;
+  font-size:13px; font-weight:800; letter-spacing:0.14em;
   text-transform:uppercase; color:var(--w30);
   cursor:pointer; transition:color 0.15s;
   background:transparent; border:none;
@@ -1065,7 +1065,7 @@ input.field-input::placeholder { color:var(--w30); }
   background:transparent; border:none;
   border-left:3px solid transparent;
   padding:9px 16px 9px 30px;
-  font-family:var(--font); font-size:13px; font-weight:600;
+  font-family:var(--font); font-size:14px; font-weight:600;
   color:var(--w50); cursor:pointer;
   transition:all 0.15s;
   display:flex; align-items:center; justify-content:space-between;
@@ -1090,7 +1090,7 @@ input.field-input::placeholder { color:var(--w30); }
 #right-panel-inner { padding:20px 16px; display:flex; flex-direction:column; gap:22px; height:100%; }
 
 .rp-label {
-  font-size:10px; font-weight:800; color:var(--w30);
+  font-size:11px; font-weight:800; color:var(--w30);
   letter-spacing:0.2em; text-transform:uppercase; margin-bottom:14px;
 }
 .rp-phase-dots {
@@ -1117,8 +1117,8 @@ input.field-input::placeholder { color:var(--w30); }
 
 .rp-bar-row { margin-bottom:10px; }
 .rp-bar-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
-.rp-bar-name { font-size:13px; font-weight:600; color:var(--w70); }
-.rp-bar-pct  { font-size:11px; font-weight:800; color:var(--w50); }
+.rp-bar-name { font-size:15px; font-weight:600; color:var(--w70); }
+.rp-bar-pct  { font-size:13px; font-weight:800; color:var(--w50); }
 .rp-bar-track { height:4px; background:var(--w15); border-radius:2px; }
 .rp-bar-fill  { height:100%; border-radius:2px; transition:width 0.4s; }
 
