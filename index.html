@@ -228,22 +228,18 @@
   <!-- Top Nav -->
   <div id="topnav">
     <div class="brand">
-  <div><img src="assets/index-logo-horizontal-white.webp" style="width:100%;height:auto;display:block;"></div>
-  <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
-    <span id="tier-badge" class="tier-badge" style="display:none"></span>
-    <button id="upgrade-btn" onclick="openPricing()" style="display:none;background:var(--yellow);color:#000;border:none;border-radius:6px;padding:4px 12px;font-size:9px;font-weight:800;font-family:var(--font);cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;">Upgrade</button>
-    <button id="billing-btn" onclick="openBillingPortal()" style="display:none;background:rgba(255,255,255,0.08);color:var(--w50);border:1px solid var(--border2);border-radius:6px;padding:4px 12px;font-size:9px;font-weight:700;font-family:var(--font);cursor:pointer;">Manage Plan</button>
-  </div>
-</div>
-    <div class="topnav-tabs">
-      <button class="topnav-tab active" id="tab-core-setup" onclick="switchTopTab('core-setup')">⚙️ Core Setup</button>
-      <button class="topnav-tab" id="tab-launchpads"       onclick="switchTopTab('launchpads')">🚀 Launchpads</button>
-      <button class="topnav-tab locked" id="tab-marketing" onclick="switchTopTab('marketing')"><span class="lock-icon">🔒</span> Marketing</button>
+      <div><img src="assets/index-logo-horizontal-white.webp" style="max-width:160px;width:100%;height:auto;display:block;"></div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+        <span id="tier-badge" class="tier-badge" style="display:none"></span>
+        <button id="upgrade-btn" onclick="openPricing()" style="display:none;background:var(--yellow);color:#000;border:none;border-radius:6px;padding:4px 12px;font-size:9px;font-weight:800;font-family:var(--font);cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;">Upgrade</button>
+        <button id="billing-btn" onclick="openBillingPortal()" style="display:none;background:rgba(255,255,255,0.08);color:var(--w50);border:1px solid var(--border2);border-radius:6px;padding:4px 12px;font-size:9px;font-weight:700;font-family:var(--font);cursor:pointer;">Manage Plan</button>
+      </div>
+    </div>
+    <div class="topnav-search">
+      <svg class="topnav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="topnav-search-input" type="text" placeholder="Search GHL Jetpack…" />
     </div>
     <div class="topnav-right">
-      <div class="completion-ring" id="overall-completion">
-        <span id="overall-pct">0%</span> <span style="color:var(--w30)">complete</span>
-      </div>
       <button class="cred-btn load-ghl-btn" id="btn-load-ghl" onclick="loadFromGHL()">↓ Load from GHL</button>
       <span id="load-ghl-status" class="load-ghl-status"></span>
       <button class="cred-btn" onclick="openCredModal()">⚙ Credentials</button>
