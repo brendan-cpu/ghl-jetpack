@@ -251,21 +251,62 @@
   <div id="body">
 
     <!-- Sidebar -->
-    <div id="sidebar">
-      <div class="sidebar-section-label">Foundational Documents</div>
-      <button class="sidebar-item active" id="sib-business"  onclick="switchDoc('business')">
-        Business Profile <div class="item-status" id="dot-business"></div>
-      </button>
-      <button class="sidebar-item" id="sib-brand"     onclick="switchDoc('brand')">
-        Brand Guidelines <div class="item-status" id="dot-brand"></div>
-      </button>
-      <button class="sidebar-item" id="sib-audience"  onclick="switchDoc('audience')">
-        Audience Profile <div class="item-status" id="dot-audience"></div>
-      </button>
-      <button class="sidebar-item" id="sib-offers"    onclick="switchDoc('offers')">
-        Offers Portfolio <div class="item-status" id="dot-offers"></div>
-      </button>
+   <div id="sidebar">
+
+      <!-- SYNERGY -->
+      <div class="phase-group" id="phase-synergy">
+        <button class="phase-header" onclick="togglePhase('synergy')">
+          <div class="phase-header-left">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            Synergy
+          </div>
+          <span class="phase-arrow">▶</span>
+        </button>
+        <div class="phase-items" id="phase-items-synergy">
+          <button class="phase-sub-item" id="sib-business" onclick="switchDoc('business')">Business Profile <div class="item-status" id="dot-business"></div></button>
+          <button class="phase-sub-item" id="sib-brand" onclick="switchDoc('brand')">Brand Guidelines <div class="item-status" id="dot-brand"></div></button>
+          <button class="phase-sub-item" id="sib-audience" onclick="switchDoc('audience')">Audience Profile <div class="item-status" id="dot-audience"></div></button>
+          <button class="phase-sub-item" id="sib-offers" onclick="switchDoc('offers')">Offers Portfolio <div class="item-status" id="dot-offers"></div></button>
+        </div>
+      </div>
+
+      <!-- SYSTEMS -->
+      <div class="phase-group" id="phase-systems">
+        <button class="phase-header" onclick="togglePhase('systems')">
+          <div class="phase-header-left">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+            Systems
+          </div>
+          <span class="phase-arrow">▶</span>
+        </button>
+        <div class="phase-items" id="phase-items-systems">
+          <button class="phase-sub-item" onclick="switchTopTab('core-setup')">GHL Core Setup <div class="item-status" id="dot-checklist"></div></button>
+          <button class="phase-sub-item" onclick="switchTopTab('launchpads');switchLaunchpad('leadmagnet')">Lead Magnet <div class="item-status" id="dot-lm"></div></button>
+          <button class="phase-sub-item" onclick="switchTopTab('launchpads');switchLaunchpad('network')">Network Launchpad <div class="item-status" id="dot-nw"></div></button>
+          <button class="phase-sub-item" onclick="switchTopTab('launchpads');switchLaunchpad('masterclass')">Masterclass <div class="item-status" id="dot-mc"></div></button>
+        </div>
+      </div>
+
+      <!-- SCALABILITY -->
+      <div class="phase-group" id="phase-scalability">
+        <button class="phase-header" onclick="togglePhase('scalability')">
+          <div class="phase-header-left">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+            Scalability
+          </div>
+          <span class="phase-arrow">▶</span>
+        </button>
+        <div class="phase-items" id="phase-items-scalability">
+          <button class="phase-sub-item locked">Zone of Genius</button>
+          <button class="phase-sub-item locked">Delegation</button>
+          <button class="phase-sub-item locked">MRR Engine</button>
+          <button class="phase-sub-item locked">Content &amp; Delivery</button>
+          <button class="phase-sub-item locked">Scale Multipliers</button>
+        </div>
+      </div>
+
     </div>
+
 
     <!-- Main -->
     <div id="main">
@@ -808,6 +849,23 @@ function openChecklistItem(id) {
 /* ═══════════════════════════════════════
    CORE SETUP RENDERING
 ═══════════════════════════════════════ */
+function togglePhase(phase) {
+  const phases = ['synergy','systems','scalability'];
+  phases.forEach(p => {
+    const header = document.querySelector(`#phase-${p} .phase-header`);
+    const items  = document.getElementById(`phase-items-${p}`);
+    if (!header || !items) return;
+    if (p === phase) {
+      const isOpen = items.classList.contains('open');
+      header.classList.toggle('open', !isOpen);
+      items.classList.toggle('open', !isOpen);
+    } else {
+      header.classList.remove('open');
+      items.classList.remove('open');
+    }
+  });
+}
+
 function buildCoreSetupSidebar() {
   const done  = GHL_CHECKLIST.filter(s => _ghlChecked[s.id]).length;
   const total = GHL_CHECKLIST.length;
