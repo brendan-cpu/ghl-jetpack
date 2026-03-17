@@ -1438,3 +1438,10 @@ input.field-input::placeholder { color:var(--w30); }
   font-size: 11px !important;
   letter-spacing: 0.14em !important;
 }
+
+/* ═══════════════════════════════════════
+   TOPNAV HEIGHT FIX — MATCH SIDEBAR
+═══════════════════════════════════════ */
+:root {
+  --topnav-h: 80px;
+}
