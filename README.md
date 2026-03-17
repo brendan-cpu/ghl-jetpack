@@ -40,3 +40,4 @@ For most changes, tell Claude exactly which file to edit:
 - Extract shared auth/session helpers into a shared `js/common/` folder.
 - Split `js/index-app.js` into `auth`, `render`, `ai`, and `ghl-sync` if it grows much larger.
 - Move environment/config constants to a dedicated config file.
+Test from Brendan
