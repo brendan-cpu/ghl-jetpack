@@ -1421,3 +1421,20 @@ input.field-input::placeholder { color:var(--w30); }
   box-shadow: 0 2px 16px rgba(255,187,0,0.22), inset 0 1px 0 rgba(255,255,255,0.12) !important;
   color: #fff !important;
 }
+
+/* ═══════════════════════════════════════
+   SIDEBAR FINAL FIXES
+═══════════════════════════════════════ */
+
+/* More space above the logo in the top bar */
+.brand {
+  padding-top: 28px !important;
+  padding-bottom: 16px !important;
+}
+
+/* Dashboard button — match exact height/padding of phase headers */
+#sib-dashboard {
+  padding: 13px 14px !important;
+  font-size: 11px !important;
+  letter-spacing: 0.14em !important;
+}
