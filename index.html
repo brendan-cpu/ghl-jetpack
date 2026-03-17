@@ -318,6 +318,11 @@
       <div id="page-content"></div>
     </div>
 
+    <!-- Right Progress Panel -->
+    <div id="right-panel">
+      <div id="right-panel-inner"></div>
+    </div>
+
   </div>
 </div>
 
@@ -854,6 +859,71 @@ function openChecklistItem(id) {
 /* ═══════════════════════════════════════
    CORE SETUP RENDERING
 ═══════════════════════════════════════ */
+function renderRightPanel() {
+  const el = document.getElementById('right-panel-inner');
+  if (!el) return;
+
+  const synPct = calcDocProgress();
+
+  const nextSteps = [
+    { label:'Complete Business Profile',  done: !!getField('biz_name').trim() },
+    { label:'Set Brand Guidelines',       done: !!getField('brand_voice').trim() },
+    { label:'Define Audience Profile',    done: !!getField('aud_who').trim() },
+    { label:'Build Offers Portfolio',     done: !!getField('offer_primary').trim() },
+    { label:'Fill Messaging',             done: !!getField('brand_tagline').trim() },
+  ];
+  const firstIncomplete = nextSteps.findIndex(s => !s.done);
+
+  el.innerHTML = `
+    <div>
+      <div class="rp-label">Progress</div>
+      <div class="rp-phase-dots">
+        <div class="rp-dot-wrap">
+          <div class="rp-dot active">S</div>
+          <div class="rp-dot-label active">Synergy</div>
+        </div>
+        <div class="rp-dot-wrap">
+          <div class="rp-dot">S</div>
+          <div class="rp-dot-label">Systems</div>
+        </div>
+        <div class="rp-dot-wrap">
+          <div class="rp-dot">S</div>
+          <div class="rp-dot-label">Scalability</div>
+        </div>
+      </div>
+      <div class="rp-bar-row">
+        <div class="rp-bar-top"><span class="rp-bar-name">Synergy</span><span class="rp-bar-pct">${synPct}%</span></div>
+        <div class="rp-bar-track"><div class="rp-bar-fill" style="width:${synPct}%;background:var(--yellow)"></div></div>
+      </div>
+      <div class="rp-bar-row">
+        <div class="rp-bar-top"><span class="rp-bar-name">Systems</span><span class="rp-bar-pct">0%</span></div>
+        <div class="rp-bar-track"><div class="rp-bar-fill" style="width:0%;background:var(--blue)"></div></div>
+      </div>
+      <div class="rp-bar-row">
+        <div class="rp-bar-top"><span class="rp-bar-name">Scalability</span><span class="rp-bar-pct">0%</span></div>
+        <div class="rp-bar-track"><div class="rp-bar-fill" style="width:0%;background:var(--green)"></div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="rp-label">Next Steps</div>
+      ${nextSteps.map((s,i) => `
+        <div class="rp-next-item">
+          <div class="rp-check ${s.done ? 'done' : i===firstIncomplete ? 'current' : 'pending'}">
+            ${s.done ? '✓' : ''}
+          </div>
+          ${s.label}
+        </div>`).join('')}
+    </div>
+
+    <div class="rp-ai-input">
+      <input type="text" placeholder="Ask Jetpack AI…"/>
+      <button class="rp-ai-send">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>`;
+}
+
 function togglePhase(phase) {
   const phases = ['synergy','systems','scalability'];
   phases.forEach(p => {
@@ -1268,6 +1338,7 @@ function launchApp() {
   loadChecklistState();
   updateSidebarDots();
   renderDashboard();
+  renderRightPanel();
   loadFromGHL();
 }
 
