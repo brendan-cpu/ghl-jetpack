@@ -1413,83 +1413,173 @@ function launchApp() {
 }
 
 function renderDashboard() {
-  // Clear any active sidebar items
   document.querySelectorAll('.phase-sub-item').forEach(b => b.classList.remove('active'));
+  const dash = document.getElementById('sib-dashboard');
+  if (dash) { dash.classList.add('active'); }
 
-  const synPct  = calcDocProgress();
-  const fields  = Object.values(DOCS).flatMap(d => d.sections.flatMap(s => s.fields));
-  const filled  = fields.filter(f => getField(f.key).trim()).length;
-  const total   = fields.length;
+  const synPct = calcDocProgress();
+  const fields = Object.values(DOCS).flatMap(d => d.sections.flatMap(s => s.fields));
+  const filled = fields.filter(f => getField(f.key).trim()).length;
+  const total  = fields.length;
+
+  // Node state helper
+  function node(label, icon, status, onclick, recommended) {
+    const colors = {
+      done:    { bg:'#e8faf0', border:'#37CA37', icon:'#37CA37', text:'#1a6b32' },
+      active:  { bg:'#fff',    border: recommended ? '#FFBB00' : '#e2e8f0', icon:'#158AF6', text:'#01243D' },
+      locked:  { bg:'#f8fafc', border:'#e2e8f0', icon:'rgba(1,36,61,0.25)', text:'rgba(1,36,61,0.35)' },
+    };
+    const c = colors[status] || colors.active;
+    const glow = recommended ? 'box-shadow:0 0 0 2px #FFBB00, 0 4px 16px rgba(255,187,0,0.3);' : 'box-shadow:0 1px 4px rgba(1,36,61,0.08);';
+    return `<div onclick="${onclick}" style="
+      display:flex;align-items:center;gap:8px;padding:9px 12px;
+      background:${c.bg};border:1.5px solid ${c.border};border-radius:10px;
+      cursor:${status==='locked'?'default':'pointer'};transition:all 0.18s;
+      margin-bottom:7px;${glow}
+    " onmouseover="if('${status}'!=='locked')this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="width:22px;height:22px;border-radius:6px;background:${c.bg};border:1px solid ${c.border};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        ${status==='done'
+          ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="${c.icon}" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`
+          : `<span style="font-size:11px">${icon}</span>`}
+      </div>
+      <span style="font-size:12px;font-weight:700;color:${c.text};line-height:1.2">${label}</span>
+    </div>`;
+  }
+
+  // Determine node states based on real data
+  const hasBiz     = !!getField('biz_name').trim();
+  const hasBrand   = !!getField('brand_voice').trim();
+  const hasAud     = !!getField('aud_who').trim();
+  const hasOffer   = !!getField('offer_primary').trim();
+  const hasMsg     = !!getField('brand_tagline').trim();
+  const synDone    = synPct > 60;
 
   document.getElementById('page-content').innerHTML = `
     <div style="padding:28px 28px 40px">
 
-      <!-- Welcome -->
-      <div style="margin-bottom:24px">
-        <div style="font-size:20px;font-weight:800;color:var(--w90);margin-bottom:4px">Your Authority Ecosystem</div>
-        <div style="font-size:12px;color:var(--w50)">Overview · Progress · Recommended Next Step</div>
+      <!-- Header -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px">
+        <div>
+          <div style="font-size:24px;font-weight:900;color:#01243D;margin-bottom:4px;letter-spacing:-0.02em">Your Authority Ecosystem</div>
+          <div style="font-size:13px;color:rgba(1,36,61,0.5)">Overview · Progress · Recommended Next Step</div>
+        </div>
+        <button onclick="renderDashboard()" style="display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:9px 16px;font-size:12px;font-weight:700;color:#01243D;cursor:pointer;font-family:var(--font);box-shadow:0 2px 8px rgba(1,36,61,0.06)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          View Full Map
+        </button>
+      </div>
+
+      <!-- Ecosystem Map -->
+      <div style="background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 16px rgba(1,36,61,0.08);margin-bottom:24px;overflow-x:auto">
+
+        <!-- Column headers -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px">
+          ${[['ATTRACT','rgba(55,202,55,0.12)','#28a028'],['ENGAGE','rgba(21,138,246,0.1)','#158AF6'],['CONVERT','rgba(124,58,237,0.1)','#7c3aed'],['OPERATE','rgba(1,36,61,0.06)','#01243D']].map(([label,bg,color])=>`
+          <div style="text-align:center;padding:6px 0;background:${bg};border-radius:8px">
+            <span style="font-size:9px;font-weight:900;letter-spacing:0.18em;color:${color}">${label}</span>
+          </div>`).join('')}
+        </div>
+
+        <!-- Nodes grid -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start">
+
+          <!-- ATTRACT -->
+          <div>
+            ${node('Authority Site','🌐', hasBiz?'done':'active', "togglePhase('synergy');switchDoc('business')", !hasBiz)}
+            ${node('Lead Magnet','📥', synDone?'done':'active', "togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('leadmagnet')", synDone&&!hasBrand)}
+            ${node('Quiz / VSL','🎥', 'locked', '', false)}
+            ${node('Network Page','🔗', 'active', "togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('network')", false)}
+          </div>
+
+          <!-- ENGAGE -->
+          <div>
+            ${node('Email Nurture','📧', 'locked', '', false)}
+            ${node('SOAP Sequence','✉️', 'locked', '', false)}
+            ${node('Seinfeld Emails','📝', 'locked', '', false)}
+            ${node('Community','👥', 'locked', '', false)}
+            ${node('Social Media','📱', 'locked', '', false)}
+            ${node('Content Engine','🎙️', 'locked', '', false)}
+          </div>
+
+          <!-- CONVERT -->
+          <div>
+            ${node('Masterclass','⭐', synDone?'active':'locked', "togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('masterclass')", synDone)}
+            ${node('High-Ticket Offer','💎', 'locked', '', false)}
+            ${node('Low-Ticket Offer','🎯', 'locked', '', false)}
+            ${node('Book A Call','📅', 'locked', '', false)}
+            ${node('Assessment / VSL','📋', 'locked', '', false)}
+          </div>
+
+          <!-- OPERATE -->
+          <div>
+            ${node('Dashboards','📊', 'locked', '', false)}
+            ${node('Pipelines','🔄', 'locked', '', false)}
+            ${node('Automation','⚡', 'locked', '', false)}
+            ${node('MRR Engine','💰', 'locked', '', false)}
+            ${node('Delegation','🤝', 'locked', '', false)}
+            ${node('SOPs','📋', 'locked', '', false)}
+          </div>
+
+        </div>
+
+        <!-- Legend -->
+        <div style="display:flex;gap:16px;margin-top:18px;padding-top:14px;border-top:1px solid rgba(1,36,61,0.07)">
+          <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#37CA37"></div><span style="font-size:10px;color:rgba(1,36,61,0.45);font-weight:600">Complete</span></div>
+          <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#FFBB00"></div><span style="font-size:10px;color:rgba(1,36,61,0.45);font-weight:600">Recommended Next</span></div>
+          <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#e2e8f0"></div><span style="font-size:10px;color:rgba(1,36,61,0.45);font-weight:600">Locked</span></div>
+        </div>
       </div>
 
       <!-- Metric cards -->
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px">
-        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
-          <div style="font-size:8px;font-weight:800;color:var(--w30);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px">Synergy Progress</div>
-          <div style="font-size:22px;font-weight:800;color:var(--w90)">${synPct}<span style="font-size:13px;color:var(--w30)">%</span></div>
+        <div style="background:#fff;border:1px solid rgba(1,36,61,0.07);border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(1,36,61,0.06)">
+          <div style="font-size:9px;font-weight:800;color:rgba(1,36,61,0.35);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px">Synergy Progress</div>
+          <div style="font-size:26px;font-weight:900;color:#01243D">${synPct}<span style="font-size:14px;color:rgba(1,36,61,0.35)">%</span></div>
         </div>
-        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
-          <div style="font-size:8px;font-weight:800;color:var(--w30);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px">Fields Filled</div>
-          <div style="font-size:22px;font-weight:800;color:var(--w90)">${filled}<span style="font-size:13px;color:var(--w30)">/${total}</span></div>
+        <div style="background:#fff;border:1px solid rgba(1,36,61,0.07);border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(1,36,61,0.06)">
+          <div style="font-size:9px;font-weight:800;color:rgba(1,36,61,0.35);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px">Fields Filled</div>
+          <div style="font-size:26px;font-weight:900;color:#01243D">${filled}<span style="font-size:14px;color:rgba(1,36,61,0.35)">/${total}</span></div>
         </div>
-        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
-          <div style="font-size:8px;font-weight:800;color:var(--w30);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px">GHL Status</div>
-          <div style="font-size:13px;font-weight:800;color:var(--green);margin-top:4px">● Synced</div>
+        <div style="background:#fff;border:1px solid rgba(1,36,61,0.07);border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(1,36,61,0.06)">
+          <div style="font-size:9px;font-weight:800;color:rgba(1,36,61,0.35);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px">GHL Status</div>
+          <div style="font-size:14px;font-weight:800;color:#37CA37;margin-top:6px">● Synced</div>
         </div>
-        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
-          <div style="font-size:8px;font-weight:800;color:var(--w30);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px">Systems Installed</div>
-          <div style="font-size:22px;font-weight:800;color:var(--w90)">0<span style="font-size:13px;color:var(--w30)">/60</span></div>
+        <div style="background:#fff;border:1px solid rgba(1,36,61,0.07);border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(1,36,61,0.06)">
+          <div style="font-size:9px;font-weight:800;color:rgba(1,36,61,0.35);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px">Systems Installed</div>
+          <div style="font-size:26px;font-weight:900;color:#01243D">0<span style="font-size:14px;color:rgba(1,36,61,0.35)">/60</span></div>
         </div>
       </div>
 
       <!-- Quick Start -->
-      <div style="font-size:8px;font-weight:800;color:var(--w30);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px">
-        Quick Start — pick your priority
-      </div>
+      <div style="font-size:10px;font-weight:800;color:rgba(1,36,61,0.35);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:14px">Quick Start — Pick Your Priority</div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
 
-        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='rgba(255,255,255,0.14)'" onmouseout="this.style.borderColor='var(--border)'" onclick="togglePhase('synergy');switchDoc('business')">
-          <div style="width:28px;height:28px;border-radius:7px;background:var(--yellow-m);display:flex;align-items:center;justify-content:center;margin-bottom:10px">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFBB00" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>
-          </div>
-          <div style="font-size:12px;font-weight:800;color:var(--w90);margin-bottom:3px">Build Synergy</div>
-          <div style="font-size:10px;color:var(--w50);margin-bottom:12px;line-height:1.5">Define your authority foundation</div>
-          <button style="background:var(--navy-3);border:1px solid var(--border2);border-radius:5px;padding:5px 12px;font-size:9px;font-weight:700;color:var(--w70);cursor:pointer;font-family:var(--font)">Start →</button>
+        <div style="background:#fff;border:1px solid rgba(1,36,61,0.07);border-radius:12px;padding:18px;cursor:pointer;transition:all 0.18s;box-shadow:0 2px 8px rgba(1,36,61,0.06)" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(1,36,61,0.12)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(1,36,61,0.06)'" onclick="togglePhase('synergy');switchDoc('business')">
+          <div style="width:32px;height:32px;border-radius:9px;background:rgba(255,187,0,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFBB00" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg></div>
+          <div style="font-size:13px;font-weight:800;color:#01243D;margin-bottom:4px">Build Synergy</div>
+          <div style="font-size:11px;color:rgba(1,36,61,0.5);margin-bottom:14px;line-height:1.5">Define your authority foundation</div>
+          <button style="background:rgba(1,36,61,0.05);border:1px solid rgba(1,36,61,0.1);border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;color:#01243D;cursor:pointer;font-family:var(--font)">Start →</button>
         </div>
 
-        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='rgba(255,255,255,0.14)'" onmouseout="this.style.borderColor='var(--border)'" onclick="togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('leadmagnet')">
-          <div style="width:28px;height:28px;border-radius:7px;background:var(--blue-m);display:flex;align-items:center;justify-content:center;margin-bottom:10px">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#158AF6" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-          </div>
-          <div style="font-size:12px;font-weight:800;color:var(--w90);margin-bottom:3px">Get More Leads</div>
-          <div style="font-size:10px;color:var(--w50);margin-bottom:12px;line-height:1.5">Launch Lead Magnet</div>
-          <button style="background:var(--navy-3);border:1px solid var(--border2);border-radius:5px;padding:5px 12px;font-size:9px;font-weight:700;color:var(--w70);cursor:pointer;font-family:var(--font)">Start →</button>
+        <div style="background:#fff;border:1px solid rgba(1,36,61,0.07);border-radius:12px;padding:18px;cursor:pointer;transition:all 0.18s;box-shadow:0 2px 8px rgba(1,36,61,0.06)" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(1,36,61,0.12)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(1,36,61,0.06)'" onclick="togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('leadmagnet')">
+          <div style="width:32px;height:32px;border-radius:9px;background:rgba(21,138,246,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#158AF6" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+          <div style="font-size:13px;font-weight:800;color:#01243D;margin-bottom:4px">Get More Leads</div>
+          <div style="font-size:11px;color:rgba(1,36,61,0.5);margin-bottom:14px;line-height:1.5">Launch Lead Magnet</div>
+          <button style="background:rgba(1,36,61,0.05);border:1px solid rgba(1,36,61,0.1);border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;color:#01243D;cursor:pointer;font-family:var(--font)">Start →</button>
         </div>
 
-        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='rgba(255,255,255,0.14)'" onmouseout="this.style.borderColor='var(--border)'" onclick="togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('masterclass')">
-          <div style="width:28px;height:28px;border-radius:7px;background:rgba(127,119,221,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:10px">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7F77DD" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
-          <div style="font-size:12px;font-weight:800;color:var(--w90);margin-bottom:3px">Launch an Event</div>
-          <div style="font-size:10px;color:var(--w50);margin-bottom:12px;line-height:1.5">Masterclass Engine</div>
-          <button style="background:var(--navy-3);border:1px solid var(--border2);border-radius:5px;padding:5px 12px;font-size:9px;font-weight:700;color:var(--w70);cursor:pointer;font-family:var(--font)">Start →</button>
+        <div style="background:#fff;border:1px solid rgba(1,36,61,0.07);border-radius:12px;padding:18px;cursor:pointer;transition:all 0.18s;box-shadow:0 2px 8px rgba(1,36,61,0.06)" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(1,36,61,0.12)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(1,36,61,0.06)'" onclick="togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('masterclass')">
+          <div style="width:32px;height:32px;border-radius:9px;background:rgba(124,58,237,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div style="font-size:13px;font-weight:800;color:#01243D;margin-bottom:4px">Launch an Event</div>
+          <div style="font-size:11px;color:rgba(1,36,61,0.5);margin-bottom:14px;line-height:1.5">Masterclass Engine</div>
+          <button style="background:rgba(1,36,61,0.05);border:1px solid rgba(1,36,61,0.1);border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;color:#01243D;cursor:pointer;font-family:var(--font)">Start →</button>
         </div>
 
-        <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='rgba(255,255,255,0.14)'" onmouseout="this.style.borderColor='var(--border)'" onclick="togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('network')">
-          <div style="width:28px;height:28px;border-radius:7px;background:var(--yellow-m);display:flex;align-items:center;justify-content:center;margin-bottom:10px">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFBB00" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <div style="font-size:12px;font-weight:800;color:var(--w90);margin-bottom:3px">Network &amp; Expand</div>
-          <div style="font-size:10px;color:var(--w50);margin-bottom:12px;line-height:1.5">Authority &amp; Reach</div>
-          <button style="background:var(--navy-3);border:1px solid var(--border2);border-radius:5px;padding:5px 12px;font-size:9px;font-weight:700;color:var(--w70);cursor:pointer;font-family:var(--font)">Start →</button>
+        <div style="background:#fff;border:1px solid rgba(1,36,61,0.07);border-radius:12px;padding:18px;cursor:pointer;transition:all 0.18s;box-shadow:0 2px 8px rgba(1,36,61,0.06)" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(1,36,61,0.12)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(1,36,61,0.06)'" onclick="togglePhase('systems');switchTopTab('launchpads');switchLaunchpad('network')">
+          <div style="width:32px;height:32px;border-radius:9px;background:rgba(255,187,0,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFBB00" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div style="font-size:13px;font-weight:800;color:#01243D;margin-bottom:4px">Network &amp; Expand</div>
+          <div style="font-size:11px;color:rgba(1,36,61,0.5);margin-bottom:14px;line-height:1.5">Authority &amp; Reach</div>
+          <button style="background:rgba(1,36,61,0.05);border:1px solid rgba(1,36,61,0.1);border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;color:#01243D;cursor:pointer;font-family:var(--font)">Start →</button>
         </div>
 
       </div>
