@@ -2057,19 +2057,15 @@ function switchTopTab(tab) {
   const t = document.getElementById('tab-'+tab);
   if(t) t.classList.add('active');
 
-  if (tab === 'core-setup') {
+   if (tab === 'core-setup') {
     loadChecklistState();
-    document.getElementById('sidebar').innerHTML = buildCoreSetupSidebar();
     renderCoreSetup();
     updateSidebarDots();
   } else if (tab === 'docs') {
-    document.getElementById('sidebar').innerHTML = buildDocsSidebar();
     renderDoc(currentDoc);
   } else if (tab === 'launchpads') {
-    document.getElementById('sidebar').innerHTML = buildLPSidebar();
     renderLaunchpad(currentLaunchpad);
   } else if (tab === 'marketing') {
-    document.getElementById('sidebar').innerHTML = '';
     document.getElementById('page-content').innerHTML = `
       <div class="welcome-state">
         <div class="welcome-icon">📣</div>
@@ -2330,7 +2326,9 @@ async function syncAllLPFields(lpKey) {
 ═══════════════════════════════════════ */
 function switchDoc(doc) {
   currentDoc = doc;
-  document.getElementById('sidebar').innerHTML = buildDocsSidebar();
+  document.querySelectorAll('.phase-sub-item').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('sib-'+doc);
+  if (btn) btn.classList.add('active');
   updateSidebarDots();
   renderDoc(doc);
 }
