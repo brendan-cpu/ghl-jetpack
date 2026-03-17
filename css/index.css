@@ -1220,3 +1220,97 @@ input.field-input::placeholder { color:var(--w30); }
   width: calc(100% - 16px) !important;
   border-radius: 8px !important;
 }
+
+/* ═══════════════════════════════════════
+   GLOSSY DEPTH — iOS GLASS EFFECT
+═══════════════════════════════════════ */
+
+/* Sidebar glass depth */
+#sidebar {
+  background: linear-gradient(160deg,
+    #0d3a6b 0%,
+    #012952 35%,
+    #01243D 70%,
+    #001d32 100%
+  );
+  box-shadow:
+    4px 0 32px rgba(0,0,0,0.45),
+    inset -1px 0 0 rgba(255,255,255,0.07),
+    inset 1px 0 0 rgba(255,255,255,0.03);
+}
+
+/* Top bar glass */
+#topnav {
+  background: linear-gradient(180deg, #01305e 0%, #012952 100%);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3), inset 0 -1px 0 rgba(255,255,255,0.06);
+  border-bottom: none;
+}
+
+/* Active phase header glow */
+.phase-header.open {
+  background: linear-gradient(135deg, rgba(255,187,0,0.14), rgba(255,187,0,0.04));
+  color: var(--yellow);
+  text-shadow: 0 0 20px rgba(255,187,0,0.4);
+}
+
+/* Active sub-item glow pill */
+#sidebar .phase-sub-item.active {
+  background: linear-gradient(135deg, rgba(255,187,0,0.22), rgba(255,187,0,0.06));
+  box-shadow:
+    0 2px 16px rgba(255,187,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(255,255,255,0.2);
+}
+
+/* Dashboard active button */
+#sib-dashboard.active {
+  background: linear-gradient(135deg, rgba(255,187,0,0.22), rgba(255,187,0,0.06)) !important;
+  box-shadow: 0 2px 16px rgba(255,187,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1) !important;
+}
+
+/* Main content cards — elevated glass */
+#main .field-card,
+#main > div > div {
+  border-radius: 14px;
+}
+
+/* Dashboard metric cards glass */
+#page-content [style*="background:var(--navy-2)"] {
+  background: #ffffff !important;
+  box-shadow: 0 2px 16px rgba(1,36,61,0.08), 0 1px 4px rgba(1,36,61,0.05) !important;
+  border: 0.5px solid rgba(1,36,61,0.08) !important;
+  border-radius: 14px !important;
+}
+
+/* Quick start cards hover lift */
+#page-content [style*="border-radius:10px"] {
+  box-shadow: 0 2px 12px rgba(1,36,61,0.07);
+  transition: box-shadow 0.2s, transform 0.2s !important;
+}
+#page-content [style*="border-radius:10px"]:hover {
+  box-shadow: 0 8px 28px rgba(1,36,61,0.14) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Right panel glass */
+#right-panel {
+  background: linear-gradient(180deg, #fafbfd 0%, #f5f7fb 100%) !important;
+  box-shadow: -2px 0 20px rgba(1,36,61,0.07);
+}
+
+/* Progress bar track — soft */
+.rp-bar-track {
+  background: rgba(1,36,61,0.06);
+  border-radius: 4px;
+  height: 6px;
+}
+.rp-bar-fill { height: 6px; }
+
+/* Phase dots — glass ring */
+.rp-dot {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.rp-dot.active {
+  box-shadow: 0 0 16px rgba(255,187,0,0.5), 0 2px 8px rgba(255,187,0,0.3);
+}
