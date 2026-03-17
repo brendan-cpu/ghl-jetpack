@@ -1153,3 +1153,70 @@ input.field-input::placeholder { color:var(--w30); }
   background:var(--yellow); border:none; cursor:pointer;
   display:flex; align-items:center; justify-content:center; flex-shrink:0;
 }
+
+/* ═══════════════════════════════════════
+   LIGHT THEME — MAIN + RIGHT PANEL
+═══════════════════════════════════════ */
+#main {
+  --navy:   #f0f4f8;
+  --navy-2: #ffffff;
+  --navy-3: #e4eaf2;
+  --navy-4: #dde4ef;
+  --border:  rgba(1,36,61,0.09);
+  --border2: rgba(1,36,61,0.16);
+  --w90: rgba(1,36,61,0.92);
+  --w70: rgba(1,36,61,0.70);
+  --w50: rgba(1,36,61,0.50);
+  --w30: rgba(1,36,61,0.35);
+  --w15: rgba(1,36,61,0.05);
+  background: #f0f4f8;
+}
+#right-panel {
+  --navy:   #f0f4f8;
+  --navy-2: #ffffff;
+  --navy-3: #e4eaf2;
+  --border:  rgba(1,36,61,0.09);
+  --border2: rgba(1,36,61,0.16);
+  --w90: rgba(1,36,61,0.92);
+  --w70: rgba(1,36,61,0.70);
+  --w50: rgba(1,36,61,0.50);
+  --w30: rgba(1,36,61,0.35);
+  --w15: rgba(1,36,61,0.05);
+  background: #ffffff;
+  border-left: 1px solid rgba(1,36,61,0.08);
+}
+
+/* ═══════════════════════════════════════
+   GLOSSY SIDEBAR — iOS STYLE
+═══════════════════════════════════════ */
+#sidebar {
+  background: linear-gradient(175deg, #013a70 0%, #012952 40%, #01243D 100%);
+  box-shadow: 2px 0 24px rgba(0,0,0,0.32), inset -1px 0 0 rgba(255,255,255,0.06);
+  border-right: none;
+}
+.phase-header:hover { background: rgba(255,255,255,0.05); }
+.phase-header.open {
+  background: rgba(255,187,0,0.08);
+  border-left: 3px solid var(--yellow);
+}
+#sidebar .phase-sub-item {
+  border-radius: 8px;
+  margin: 2px 8px;
+  width: calc(100% - 16px);
+  padding: 9px 10px 9px 14px;
+  border-left: 3px solid transparent;
+}
+#sidebar .phase-sub-item.active {
+  background: linear-gradient(135deg, rgba(255,187,0,0.2), rgba(255,187,0,0.08));
+  border-left-color: var(--yellow);
+  box-shadow: 0 2px 12px rgba(255,187,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+  color: #fff;
+}
+#sidebar .phase-sub-item:hover:not(.locked) {
+  background: rgba(255,255,255,0.07);
+}
+#sib-dashboard {
+  margin: 8px 8px 2px !important;
+  width: calc(100% - 16px) !important;
+  border-radius: 8px !important;
+}
