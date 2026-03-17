@@ -1445,3 +1445,22 @@ input.field-input::placeholder { color:var(--w30); }
 :root {
   --topnav-h: 80px;
 }
+
+/* ═══════════════════════════════════════
+   RIGHT PANEL — PREMIUM CARD STYLE
+═══════════════════════════════════════ */
+#right-panel {
+  background: #f0f4f8 !important;
+  padding: 16px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  overflow-y: auto !important;
+}
+#right-panel-inner {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  padding: 0 !important;
+  height: auto !important;
+}
