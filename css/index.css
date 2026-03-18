@@ -73,29 +73,26 @@ html, body {
 .topnav-search {
   flex:1; display:flex; align-items:center; gap:8px;
   margin:0 24px;
-  background:rgba(255,255,255,0.92);
-  border:1px solid rgba(255,255,255,0.6);
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
   border-radius:8px;
   padding:0 12px;
   height:32px;
   max-width:400px;
-  transition:all 0.2s;
-  box-shadow:0 2px 8px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1);
+  transition:border-color 0.2s;
 }
 .topnav-search:focus-within {
-  background:rgba(255,255,255,1);
-  border-color:rgba(255,255,255,0.9);
-  box-shadow:0 4px 14px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,1);
+  border-color:rgba(255,255,255,0.2);
 }
 .topnav-search-icon {
-  color:rgba(1,36,61,0.35); flex-shrink:0;
+  color:var(--w30); flex-shrink:0;
 }
 .topnav-search-input {
   flex:1; background:transparent; border:none; outline:none;
   font-family:var(--font); font-size:11px; font-weight:500;
-  color:rgba(1,36,61,0.80); letter-spacing:0.02em;
+  color:var(--w70); letter-spacing:0.02em;
 }
-.topnav-search-input::placeholder { color:rgba(1,36,61,0.35); }
+.topnav-search-input::placeholder { color:var(--w30); }
 
 .topnav-right {
   margin-left:auto; padding-right:16px;
@@ -1203,10 +1200,12 @@ input.field-input::placeholder { color:var(--w30); }
    SIDEBAR ROUNDED PILL CARDS — iOS STYLE
 ═══════════════════════════════════════ */
 
-/* Space above the logo */
+/* Logo area — centered, matches sidebar background for seamless left column */
 .brand {
   padding-top: 18px;
   align-items: center;
+  justify-content: center;
+  background: linear-gradient(175deg, #013a70 0%, #012952 40%, #01243D 100%);
 }
 
 /* All sidebar items get padding + rounded pills */
