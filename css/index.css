@@ -184,10 +184,13 @@ html, body {
 .user-dd-logout:hover { background:rgba(220,50,50,0.12); color:#ff8080; }
 
 /* Body */
-#body { display:flex; flex:1; overflow:hidden; min-width:0; width:100%; height:100%; }
+#body { display:flex; flex:1; overflow:hidden; min-width:0; height:100%; }
 
-/* Right column — topnav + content stacked vertically */
+/* Right column — topnav stacked above content */
 #right-col { display:flex; flex-direction:column; flex:1; overflow:hidden; min-width:0; }
+
+/* Content row — main + right-panel side by side */
+#content-row { display:flex; flex:1; overflow:hidden; min-width:0; }
 
 /* Sidebar */
 #sidebar {
@@ -197,7 +200,6 @@ html, body {
   display:flex; flex-direction:column;
   overflow-y:auto; overflow-x:hidden;
   flex-shrink:0;
-  height:100%;
 }
 #sidebar::-webkit-scrollbar { width:3px; }
 #sidebar::-webkit-scrollbar-track { background:transparent; }
