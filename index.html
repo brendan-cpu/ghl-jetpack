@@ -225,46 +225,6 @@
 <!-- ═══ MAIN APP ═══ -->
 <div id="app" style="display:none">
 
-  <!-- Top Nav -->
-  <div id="topnav">
-    <div class="topnav-search">
-      <svg class="topnav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="topnav-search-input" type="text" placeholder="Search GHL Jetpack…" />
-    </div>
-    <div class="topnav-right">
-      <button class="cred-btn load-ghl-btn" id="btn-load-ghl" onclick="loadFromGHL()">↓ Load from GHL</button>
-      <div class="ghl-sync-pill" id="ghl-sync-pill" style="display:none">
-        <span class="ghl-sync-dot" id="ghl-sync-dot"></span>
-        <span class="ghl-sync-label" id="ghl-sync-label">Syncing…</span>
-      </div>
-      <span id="load-ghl-status" class="load-ghl-status" style="display:none"></span>
-
-      <!-- User menu -->
-      <div class="user-menu-wrap" id="user-menu-wrap">
-        <button class="user-menu-btn" id="user-menu-btn" onclick="toggleUserMenu()">
-          <div class="user-avatar" id="user-avatar">?</div>
-          <span class="user-name" id="user-name">Loading…</span>
-          <svg class="user-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="user-dropdown" id="user-dropdown">
-          <button class="user-dd-item" onclick="closeUserMenu()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-            Profile
-          </button>
-          <button class="user-dd-item" onclick="openCredModal();closeUserMenu()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="3"/><path d="M11 2v2M11 20v2M2 11h2M20 11h2M4.93 4.93l1.41 1.41M16.66 16.66l1.41 1.41M4.93 17.07l1.41-1.41M16.66 7.34l1.41-1.41"/></svg>
-            Settings
-          </button>
-          <div class="user-dd-divider"></div>
-          <button class="user-dd-item user-dd-logout" onclick="doLogout();closeUserMenu()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            Log Out
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Body -->
   <div id="body">
 
@@ -362,6 +322,48 @@
 
     </div>
 
+    <!-- Right Column -->
+    <div id="right-col">
+
+    <!-- Top Nav -->
+    <div id="topnav">
+      <div class="topnav-search">
+        <svg class="topnav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="topnav-search-input" type="text" placeholder="Search GHL Jetpack…" />
+      </div>
+      <div class="topnav-right">
+        <button class="cred-btn load-ghl-btn" id="btn-load-ghl" onclick="loadFromGHL()">↓ Load from GHL</button>
+        <div class="ghl-sync-pill" id="ghl-sync-pill" style="display:none">
+          <span class="ghl-sync-dot" id="ghl-sync-dot"></span>
+          <span class="ghl-sync-label" id="ghl-sync-label">Syncing…</span>
+        </div>
+        <span id="load-ghl-status" class="load-ghl-status" style="display:none"></span>
+
+        <!-- User menu -->
+        <div class="user-menu-wrap" id="user-menu-wrap">
+          <button class="user-menu-btn" id="user-menu-btn" onclick="toggleUserMenu()">
+            <div class="user-avatar" id="user-avatar">?</div>
+            <span class="user-name" id="user-name">Loading…</span>
+            <svg class="user-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="user-dropdown" id="user-dropdown">
+            <button class="user-dd-item" onclick="closeUserMenu()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              Profile
+            </button>
+            <button class="user-dd-item" onclick="openCredModal();closeUserMenu()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="3"/><path d="M11 2v2M11 20v2M2 11h2M20 11h2M4.93 4.93l1.41 1.41M16.66 16.66l1.41 1.41M4.93 17.07l1.41-1.41M16.66 7.34l1.41-1.41"/></svg>
+              Settings
+            </button>
+            <div class="user-dd-divider"></div>
+            <button class="user-dd-item user-dd-logout" onclick="doLogout();closeUserMenu()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Log Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Main -->
     <div id="main">
@@ -372,6 +374,8 @@
     <div id="right-panel">
       <div id="right-panel-inner"></div>
     </div>
+
+    </div><!-- end #right-col -->
 
   </div>
 </div>
