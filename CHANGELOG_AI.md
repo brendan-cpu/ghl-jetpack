@@ -4,6 +4,20 @@ This file tracks project changes made with AI so future sessions can quickly und
 
 ---
 
+## 2026-03-18
+
+### index.css — dead code cleanup (no visual change)
+- Removed first duplicate of "Phase Sidebar Accordion" section (~33 lines) — was fully overridden by a second copy lower in the file
+- Removed first duplicate of "Right Progress Panel" section (~78 lines) — same reason
+- Removed 2 of 3 duplicate `#sib-dashboard.active` rules — only the final copy in "Sidebar Fixes" survives and applies
+- Moved `--topnav-h: 80px` directly into the main `:root` block; removed the standalone `:root { --topnav-h: 80px }` override block that was added later
+- Net result: 1,480 lines → 1,349 lines. 131 lines of dead/redundant CSS removed. Zero visual change.
+
+Changed files:
+- `css/index.css`
+
+---
+
 ### Cloudflare Worker — added admin routes for stats, users, and tier management
 - Added 3 missing routes to `worker.js` that the admin dashboard depends on:
   - `GET /api/admin/stats` — returns user count broken down by tier
