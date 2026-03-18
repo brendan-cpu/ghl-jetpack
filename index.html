@@ -236,7 +236,12 @@
     </div>
     <div class="topnav-right">
       <button class="cred-btn load-ghl-btn" id="btn-load-ghl" onclick="loadFromGHL()">↓ Load from GHL</button>
-      <span id="load-ghl-status" class="load-ghl-status"></span>
+      <div class="ghl-sync-pill" id="ghl-sync-pill" style="display:none">
+        <span class="ghl-sync-dot" id="ghl-sync-dot"></span>
+        <span class="ghl-sync-label" id="ghl-sync-label">Syncing…</span>
+      </div>
+      <span id="load-ghl-status" class="load-ghl-status" style="display:none"></span>
+
       <!-- User menu -->
       <div class="user-menu-wrap" id="user-menu-wrap">
         <button class="user-menu-btn" id="user-menu-btn" onclick="toggleUserMenu()">
@@ -769,6 +774,24 @@ function toggleUserMenu() {
 
 function closeUserMenu() {
   document.getElementById('user-dropdown')?.classList.remove('open');
+}
+
+function _setGhlSyncPill(state) {
+  const pill  = document.getElementById('ghl-sync-pill');
+  const dot   = document.getElementById('ghl-sync-dot');
+  const label = document.getElementById('ghl-sync-label');
+  if (!pill) return;
+  pill.style.display = 'flex';
+  if (state === 'live') {
+    dot.className   = 'ghl-sync-dot ghl-sync-green';
+    label.textContent = 'Live';
+  } else if (state === 'error') {
+    dot.className   = 'ghl-sync-dot ghl-sync-red';
+    label.textContent = 'Disconnected';
+  } else {
+    dot.className   = 'ghl-sync-dot ghl-sync-yellow';
+    label.textContent = 'Syncing…';
+  }
 }
 
 document.addEventListener('click', e => {
@@ -2793,6 +2816,7 @@ async function loadFromGHL() {
   const status = document.getElementById('load-ghl-status');
   if (btn) { btn.disabled=true; btn.textContent='⏳ Loading…'; }
   if (status) { status.textContent=''; status.className=''; }
+  _setGhlSyncPill('syncing');
   try {
     const cvs = await getCVs(true); // bust cache, fresh pull
 
@@ -2888,8 +2912,10 @@ async function loadFromGHL() {
       status.textContent = `✓ ${populated} field${populated!==1?'s':''} loaded from GHL`;
       status.className = 'load-ghl-ok';
     }
+    _setGhlSyncPill('live');
   } catch(e) {
     if (status) { status.textContent = '✗ '+e.message; status.className = 'load-ghl-err'; }
+    _setGhlSyncPill('error');
   } finally {
     if (btn) { btn.disabled=false; btn.textContent='↓ Load from GHL'; }
   }
