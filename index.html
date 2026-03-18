@@ -731,10 +731,10 @@ function _onAuthSuccess() {
 }
 
 function updateUserMenu() {
-  const name    = _PROFILE?.full_name || (_SESSION?.email ? _SESSION.email.split('@')[0] : 'User');
-  const photo   = _PROFILE?.avatar_url || null;
-  const nameEl  = document.getElementById('user-name');
-  const avatarEl= document.getElementById('user-avatar');
+  const name     = _PROFILE?.full_name || (_SESSION?.email ? _SESSION.email.split('@')[0] : 'User');
+  const photo    = _PROFILE?.avatar_url || null;
+  const nameEl   = document.getElementById('user-name');
+  const avatarEl = document.getElementById('user-avatar');
   if (nameEl) nameEl.textContent = name;
   if (avatarEl) {
     if (photo) {
@@ -749,7 +749,18 @@ function updateUserMenu() {
 }
 
 function toggleUserMenu() {
-  document.getElementById('user-dropdown')?.classList.toggle('open');
+  const dropdown = document.getElementById('user-dropdown');
+  const btn      = document.getElementById('user-menu-btn');
+  if (!dropdown || !btn) return;
+  const isOpen = dropdown.classList.contains('open');
+  if (isOpen) {
+    dropdown.classList.remove('open');
+  } else {
+    const rect = btn.getBoundingClientRect();
+    dropdown.style.top  = (rect.bottom + 6) + 'px';
+    dropdown.style.right = (window.innerWidth - rect.right) + 'px';
+    dropdown.classList.add('open');
+  }
 }
 
 function closeUserMenu() {

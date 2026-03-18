@@ -53,7 +53,7 @@ html, body {
   padding:0 0 0 16px;
   gap:0; flex-shrink:0;
   position:relative; z-index:100;
-  width:100%; overflow:hidden;
+  width:100%; overflow:visible;
 }
 .brand {
   display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:5px;
@@ -73,26 +73,29 @@ html, body {
 .topnav-search {
   flex:1; display:flex; align-items:center; gap:8px;
   margin:0 24px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid var(--border);
+  background:rgba(255,255,255,0.92);
+  border:1px solid rgba(255,255,255,0.6);
   border-radius:8px;
   padding:0 12px;
   height:32px;
   max-width:400px;
-  transition:border-color 0.2s;
+  transition:all 0.2s;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1);
 }
 .topnav-search:focus-within {
-  border-color:rgba(255,255,255,0.2);
+  background:rgba(255,255,255,1);
+  border-color:rgba(255,255,255,0.9);
+  box-shadow:0 4px 14px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,1);
 }
 .topnav-search-icon {
-  color:var(--w30); flex-shrink:0;
+  color:rgba(1,36,61,0.35); flex-shrink:0;
 }
 .topnav-search-input {
   flex:1; background:transparent; border:none; outline:none;
   font-family:var(--font); font-size:11px; font-weight:500;
-  color:var(--w70); letter-spacing:0.02em;
+  color:rgba(1,36,61,0.80); letter-spacing:0.02em;
 }
-.topnav-search-input::placeholder { color:var(--w30); }
+.topnav-search-input::placeholder { color:rgba(1,36,61,0.35); }
 
 .topnav-right {
   margin-left:auto; padding-right:16px;
@@ -136,17 +139,14 @@ html, body {
   overflow:hidden; text-overflow:ellipsis;
 }
 .user-chevron { color:var(--w50); flex-shrink:0; transition:transform 0.18s; }
-.user-dropdown.open ~ * .user-chevron,
-.user-menu-wrap:has(.user-dropdown.open) .user-chevron { transform:rotate(180deg); }
-
 .user-dropdown {
-  position:absolute; top:calc(100% + 8px); right:0;
+  position:fixed;
   width:180px;
   background:linear-gradient(145deg, #013a70, #012952);
   border:1px solid rgba(255,255,255,0.12);
   border-radius:10px; overflow:hidden;
   box-shadow:0 12px 32px rgba(0,0,0,0.4);
-  display:none; z-index:500;
+  display:none; z-index:9999;
 }
 .user-dropdown.open { display:block; }
 .user-dd-item {
