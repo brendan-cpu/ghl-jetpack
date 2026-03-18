@@ -125,16 +125,15 @@ html, body {
 /* GHL Sync Pill */
 .ghl-sync-pill {
   display:flex; align-items:center; gap:6px;
-  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);
-  border-radius:20px; padding:4px 10px;
+  background:rgba(1,36,61,0.06); border:1px solid rgba(1,36,61,0.12);
+  border-radius:20px; padding:5px 12px 5px 8px;
+  cursor:pointer; transition:all 0.18s; font-family:var(--font);
 }
-.ghl-sync-dot {
-  width:8px; height:8px; border-radius:50%; flex-shrink:0;
-}
-.ghl-sync-green  { background:#4ade80; box-shadow:0 0 6px rgba(74,222,128,0.6); }
-.ghl-sync-red    { background:#f87171; box-shadow:0 0 6px rgba(248,113,113,0.6); }
-.ghl-sync-yellow { background:var(--yellow); box-shadow:0 0 6px rgba(255,187,0,0.5); }
-.ghl-sync-label  { font-size:11px; font-weight:700; color:var(--w90); font-family:var(--font); letter-spacing:0.02em; }
+.ghl-sync-pill:hover { background:rgba(1,36,61,0.10); border-color:rgba(1,36,61,0.2); }
+.ghl-sync-pill:disabled { opacity:0.6; cursor:wait; }
+.ghl-sync-label-prefix { font-size:11px; font-weight:600; color:rgba(1,36,61,0.45); letter-spacing:0.01em; }
+.ghl-sync-icon { display:flex; align-items:center; flex-shrink:0; }
+.ghl-sync-label { font-size:11px; font-weight:700; color:rgba(1,36,61,0.75); letter-spacing:0.01em; }
 
 /* ── User Menu ───────────────────────────────────────── */
 .user-menu-wrap { position:relative; }

@@ -332,11 +332,13 @@
         <input class="topnav-search-input" type="text" placeholder="Search GHL Jetpack…" />
       </div>
       <div class="topnav-right">
-        <button class="cred-btn load-ghl-btn" id="btn-load-ghl" onclick="loadFromGHL()">↓ Load from GHL</button>
-        <div class="ghl-sync-pill" id="ghl-sync-pill" style="display:none">
-          <span class="ghl-sync-dot" id="ghl-sync-dot"></span>
-          <span class="ghl-sync-label" id="ghl-sync-label">Syncing…</span>
-        </div>
+        <button class="ghl-sync-pill" id="ghl-sync-pill" onclick="loadFromGHL()" title="Click to refresh GHL sync">
+          <span class="ghl-sync-label-prefix">GHL Sync:</span>
+          <span class="ghl-sync-icon" id="ghl-sync-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#d1d5db"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="ghl-sync-label" id="ghl-sync-label">Checking…</span>
+        </button>
         <span id="load-ghl-status" class="load-ghl-status" style="display:none"></span>
         <!-- User menu -->
         <div class="user-menu-wrap" id="user-menu-wrap">
@@ -788,19 +790,21 @@ function closeUserMenu() {
 
 function _setGhlSyncPill(state) {
   const pill  = document.getElementById('ghl-sync-pill');
-  const dot   = document.getElementById('ghl-sync-dot');
+  const icon  = document.getElementById('ghl-sync-icon');
   const label = document.getElementById('ghl-sync-label');
   if (!pill) return;
-  pill.style.display = 'flex';
   if (state === 'live') {
-    dot.className   = 'ghl-sync-dot ghl-sync-green';
+    icon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     label.textContent = 'Live';
+    label.style.color = 'rgba(1,36,61,0.75)';
   } else if (state === 'error') {
-    dot.className   = 'ghl-sync-dot ghl-sync-red';
-    label.textContent = 'Disconnected';
+    icon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#ef4444"/><path d="M15 9l-6 6M9 9l6 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+    label.textContent = 'Offline';
+    label.style.color = '#ef4444';
   } else {
-    dot.className   = 'ghl-sync-dot ghl-sync-yellow';
+    icon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#f59e0b"/><path d="M12 7v5l3 3" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>`;
     label.textContent = 'Syncing…';
+    label.style.color = 'rgba(1,36,61,0.75)';
   }
 }
 
@@ -2822,9 +2826,9 @@ function _normKey(s) {
 }
 
 async function loadFromGHL() {
-  const btn = document.getElementById('btn-load-ghl');
+  const pill = document.getElementById('ghl-sync-pill');
   const status = document.getElementById('load-ghl-status');
-  if (btn) { btn.disabled=true; btn.textContent='⏳ Loading…'; }
+  if (pill) pill.disabled = true;
   if (status) { status.textContent=''; status.className=''; }
   _setGhlSyncPill('syncing');
   try {
@@ -2927,7 +2931,7 @@ async function loadFromGHL() {
     if (status) { status.textContent = '✗ '+e.message; status.className = 'load-ghl-err'; }
     _setGhlSyncPill('error');
   } finally {
-    if (btn) { btn.disabled=false; btn.textContent='↓ Load from GHL'; }
+    if (pill) pill.disabled = false;
   }
 }
 
