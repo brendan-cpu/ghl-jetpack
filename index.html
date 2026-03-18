@@ -237,8 +237,25 @@
     <div class="topnav-right">
       <button class="cred-btn load-ghl-btn" id="btn-load-ghl" onclick="loadFromGHL()">↓ Load from GHL</button>
       <span id="load-ghl-status" class="load-ghl-status"></span>
-      <button class="cred-btn" onclick="openCredModal()">⚙ Credentials</button>
-      <button class="cred-btn" onclick="doLogout()" style="border-color:rgba(255,71,87,0.3);color:rgba(255,71,87,0.7);" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='rgba(255,71,87,0.3)';this.style.color='rgba(255,71,87,0.7)'">⏻ Log Out</button>
+      <!-- User menu -->
+      <div class="user-menu-wrap" id="user-menu-wrap">
+        <button class="user-menu-btn" id="user-menu-btn" onclick="toggleUserMenu()">
+          <div class="user-avatar" id="user-avatar">?</div>
+          <span class="user-name" id="user-name">Loading…</span>
+          <svg class="user-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="user-dropdown" id="user-dropdown">
+          <button class="user-dd-item" onclick="openCredModal();closeUserMenu()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            Profile &amp; Settings
+          </button>
+          <div class="user-dd-divider"></div>
+          <button class="user-dd-item user-dd-logout" onclick="doLogout();closeUserMenu()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Log Out
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -710,7 +727,39 @@ function _onAuthSuccess() {
   document.getElementById('license-gate').style.display = 'none';
   document.getElementById('cred-modal').style.display   = 'flex';
   _applyTierUI();
+  updateUserMenu();
 }
+
+function updateUserMenu() {
+  const name    = _PROFILE?.full_name || (_SESSION?.email ? _SESSION.email.split('@')[0] : 'User');
+  const photo   = _PROFILE?.avatar_url || null;
+  const nameEl  = document.getElementById('user-name');
+  const avatarEl= document.getElementById('user-avatar');
+  if (nameEl) nameEl.textContent = name;
+  if (avatarEl) {
+    if (photo) {
+      avatarEl.innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      avatarEl.style.background = 'transparent';
+    } else {
+      const parts    = name.trim().split(' ');
+      const initials = parts.length >= 2 ? parts[0][0] + parts[parts.length-1][0] : name.slice(0,2);
+      avatarEl.textContent = initials.toUpperCase();
+    }
+  }
+}
+
+function toggleUserMenu() {
+  document.getElementById('user-dropdown')?.classList.toggle('open');
+}
+
+function closeUserMenu() {
+  document.getElementById('user-dropdown')?.classList.remove('open');
+}
+
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('user-menu-wrap');
+  if (wrap && !wrap.contains(e.target)) closeUserMenu();
+});
 
 // ── Tab access control ────────────────────────────────
 const _TAB_GATES = {}; // stores lock messages per tab id
