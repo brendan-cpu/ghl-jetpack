@@ -1128,19 +1128,8 @@ input.field-input::placeholder { color:var(--w30); }
 /* Top bar glass */
 #topnav {
   background: linear-gradient(180deg, #01305e 0%, #012952 100%);
-  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3), inset 0 -1px 0 rgba(255,255,255,0.06);
   border-bottom: none;
-  position: relative;
-}
-/* Bottom border only on the right side — keeps dark left column uninterrupted */
-#topnav::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: var(--sidebar-w);
-  right: 0;
-  height: 1px;
-  background: rgba(255,255,255,0.08);
 }
 
 /* Active phase header glow */
@@ -1211,10 +1200,11 @@ input.field-input::placeholder { color:var(--w30); }
    SIDEBAR ROUNDED PILL CARDS — iOS STYLE
 ═══════════════════════════════════════ */
 
-/* Space above the logo */
+/* Space above the logo — matches sidebar background exactly for seamless left column */
 .brand {
   padding-top: 18px;
   align-items: center;
+  background: linear-gradient(175deg, #013a70 0%, #012952 40%, #01243D 100%);
 }
 
 /* All sidebar items get padding + rounded pills */
