@@ -29,7 +29,7 @@
   --font:      'Montserrat', sans-serif;
   --mono:      'JetBrains Mono', monospace;
   --sidebar-w: 250px;
-  --topnav-h:  80px;
+  --topnav-h:  56px;
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html, body {
@@ -69,7 +69,12 @@ html, body {
 }
 .brand-name { font-size:11px; font-weight:800; color:#fff; letter-spacing:0.04em; line-height:1.2; }
 .brand-sub  { font-size:8px; color:var(--yellow); letter-spacing:0.18em; text-transform:uppercase; font-weight:600; }
-
+.sidebar-logo {
+  display:flex; align-items:center; justify-content:center;
+  padding:20px 16px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  flex-shrink:0;
+}
 .topnav-search {
   flex:1; display:flex; align-items:center; gap:8px;
   margin:0 24px;
@@ -102,13 +107,13 @@ html, body {
   display:flex; align-items:center; gap:10px;
 }
 .cred-btn {
-  background:var(--w15); border:1px solid var(--border2);
+  background:rgba(1,36,61,0.06); border:1px solid rgba(1,36,61,0.15);
   border-radius:6px; padding:5px 10px;
-  color:var(--w70); font-size:10px; font-weight:700;
+  color:rgba(1,36,61,0.65); font-size:10px; font-weight:700;
   font-family:var(--font); cursor:pointer; transition:all 0.2s;
   letter-spacing:0.06em; text-transform:uppercase;
 }
-.cred-btn:hover { border-color:var(--yellow-b); color:var(--yellow); }
+.cred-btn:hover { border-color:var(--navy); color:var(--navy); }
 .load-ghl-btn { border-color:var(--accent-b); color:var(--accent); }
 .load-ghl-btn:hover { border-color:var(--accent); color:#fff; background:var(--accent-b); }
 .load-ghl-btn:disabled { opacity:0.5; cursor:wait; }
@@ -149,7 +154,7 @@ html, body {
   box-shadow:0 2px 8px rgba(0,0,0,0.3);
 }
 .user-name {
-  font-size:13px; font-weight:700; color:#fff;
+  font-size:13px; font-weight:700; color:rgba(1,36,61,0.85);
   font-family:var(--font); white-space:nowrap; max-width:160px;
   overflow:hidden; text-overflow:ellipsis;
   letter-spacing:0.01em;
@@ -1189,10 +1194,10 @@ input.field-input::placeholder { color:var(--w30); }
     inset 1px 0 0 rgba(255,255,255,0.03);
 }
 
-/* Top bar glass */
+/* Top bar — white glossy */
 #topnav {
-  background: linear-gradient(180deg, #01305e 0%, #012952 100%);
-  box-shadow: 0 2px 20px rgba(0,0,0,0.3), inset 0 -1px 0 rgba(255,255,255,0.06);
+  background: linear-gradient(180deg, #ffffff 0%, #f0f4f8 100%);
+  box-shadow: 0 2px 16px rgba(1,36,61,0.10), inset 0 -1px 0 rgba(1,36,61,0.07);
   border-bottom: none;
 }
 
@@ -1264,11 +1269,7 @@ input.field-input::placeholder { color:var(--w30); }
    SIDEBAR ROUNDED PILL CARDS — iOS STYLE
 ═══════════════════════════════════════ */
 
-/* Space above the logo */
-.brand {
-  padding-top: 18px;
-  align-items: center;
-}
+
 
 /* All sidebar items get padding + rounded pills */
 #sidebar {
@@ -1366,11 +1367,7 @@ input.field-input::placeholder { color:var(--w30); }
    SIDEBAR FINAL FIXES
 ═══════════════════════════════════════ */
 
-/* More space above the logo in the top bar */
-.brand {
-  padding-top: 28px !important;
-  padding-bottom: 16px !important;
-}
+
 
 /* Dashboard button — match exact height/padding of phase headers */
 #sib-dashboard {
