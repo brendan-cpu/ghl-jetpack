@@ -245,9 +245,13 @@
           <svg class="user-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="user-dropdown" id="user-dropdown">
-          <button class="user-dd-item" onclick="openCredModal();closeUserMenu()">
+          <button class="user-dd-item" onclick="closeUserMenu()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-            Profile &amp; Settings
+            Profile
+          </button>
+          <button class="user-dd-item" onclick="openCredModal();closeUserMenu()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="3"/><path d="M11 2v2M11 20v2M2 11h2M20 11h2M4.93 4.93l1.41 1.41M16.66 16.66l1.41 1.41M4.93 17.07l1.41-1.41M16.66 7.34l1.41-1.41"/></svg>
+            Settings
           </button>
           <div class="user-dd-divider"></div>
           <button class="user-dd-item user-dd-logout" onclick="doLogout();closeUserMenu()">
