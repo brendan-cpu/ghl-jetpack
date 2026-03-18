@@ -227,9 +227,6 @@
 
   <!-- Top Nav -->
   <div id="topnav">
-   <div class="brand">
-      <img src="assets/index-logo-horizontal-white.webp" style="max-width:160px;width:100%;height:auto;display:block;">
-    </div>
     <div class="topnav-search">
       <svg class="topnav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input class="topnav-search-input" type="text" placeholder="Search GHL Jetpack…" />
@@ -273,6 +270,11 @@
 
     <!-- Sidebar -->
        <div id="sidebar">
+
+      <!-- LOGO -->
+      <div class="sidebar-logo">
+        <img src="assets/index-logo-horizontal-white.webp" style="max-width:140px;width:100%;height:auto;display:block;">
+      </div>
 
       <!-- DASHBOARD -->
       <button class="phase-sub-item active" id="sib-dashboard" onclick="renderDashboard();document.querySelectorAll('.phase-sub-item').forEach(b=>b.classList.remove('active'));this.classList.add('active')">
